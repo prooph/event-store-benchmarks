@@ -10,7 +10,9 @@ Requirements
 - PDO_PGSQL Extension
 
 For MariaDB you need server vesion >= 10.2.6.
+
 For MySQL you need server version >= 5.7.9.
+
 For Postgres you need server version >= 9.4.
 
 ## Test Results
