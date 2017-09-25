@@ -1,0 +1,29 @@
+{
+  "name": "prooph/event-store-benchmarks",
+  "license": "BSD-3-Clause",
+  "require":{
+    "prooph/pdo-event-store":"^1.5.1",
+    "psr/container":"^1.0",
+    "zendframework/zend-servicemanager":"^3.3",
+    "vlucas/phpdotenv": "^2.4"
+  },
+  "require-dev":{
+    "malukenho/docheader": "^0.1.4",
+    "prooph/php-cs-fixer-config": "^0.1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Prooph\\EventStoreBenchmarks\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ProophTest\\EventStore\\": "vendor/prooph/event-store/tests/"
+    }
+  },
+  "config": {
+    "preferred-install": {
+      "prooph/*": "source"
+    }
+  }
+}
