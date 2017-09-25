@@ -13,6 +13,12 @@ For MariaDB you need server vesion >= 10.2.6.
 For MySQL you need server version >= 5.7.9.
 For Postgres you need server version >= 9.4.
 
+## Test Results
+
+You can check our [test results here](https://gist.github.com/prolic/22ddcace2364be40e569cccecb0fe142).
+
+They were running a notebook with Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz
+
 ## Usage
 
 1) Have MySQL, MariaDB and Postgres installed and running
