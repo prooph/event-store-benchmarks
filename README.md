@@ -15,6 +15,8 @@ For MySQL you need server version >= 5.7.9.
 
 For Postgres you need server version >= 9.4.
 
+For ArangoDB you need server version >= 3.2.
+
 ## Test Results
 
 You can check our [test results here](https://gist.github.com/prolic/22ddcace2364be40e569cccecb0fe142).
@@ -23,7 +25,7 @@ They were running a notebook with Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz
 
 ## Usage
 
-1) Have MySQL, MariaDB and Postgres installed and running
+1) Have MySQL, MariaDB, Postgres, ArangoDB installed and running
 2) Edit `.env` file and change your db settings
 3) run `php src/benchmark.php`
 4) enjoy

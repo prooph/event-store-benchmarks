@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace Prooph\EventStoreBenchmarks;
 
+use ArangoDBClient\Connection;
+use ArangoDBClient\ConnectionOptions;
+use ArangoDBClient\UpdatePolicy;
+use ArangoDBClient\Urls;
 use PDO;
 use Prooph\Common\Messaging\FQCNMessageFactory;
+use function Prooph\EventStore\ArangoDb\Fn\eventStreamsBatch;
+use function Prooph\EventStore\ArangoDb\Fn\execute;
+use function Prooph\EventStore\ArangoDb\Fn\projectionsBatch;
+use Prooph\EventStore\ArangoDb\Type\DeleteCollection;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStore\Pdo\MariaDbEventStore;
 use Prooph\EventStore\Pdo\MySqlEventStore;
@@ -19,6 +27,9 @@ use Prooph\EventStore\Pdo\Projection\PostgresProjectionManager;
 use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStore\StreamName;
 use ProophTest\EventStore\Mock\TestDomainEvent;
+use Prooph\EventStore\ArangoDb\Projection\ProjectionManager as ArangoDbProjectionManager;
+use Prooph\EventStore\ArangoDb\EventStore as ArangoDbEventStore;
+use Prooph\EventStore\ArangoDb\PersistenceStrategy\AggregateStreamStrategy as ArangoDbAggregateStreamStrategy;
 
 function testDatabases(): array
 {
@@ -26,6 +37,7 @@ function testDatabases(): array
         'mysql' => getenv('MYSQL_DB'),
         'mariadb' => getenv('MARIADB_DB'),
         'postgres' => getenv('POSTGRES_DB'),
+        'arangodb' => getenv('ARANGODB_DBNAME'),
     ];
 }
 
@@ -59,22 +71,56 @@ function createConnection(string $driver)
             $password = getenv('POSTGRES_PASSWORD');
 
             return new PDO("pgsql:host=$host;port=$port;dbname=$dbName;options='--client_encoding=\"$charset\"'", $username, $password);
+        case 'arangodb':
+            return new Connection(
+                [
+                    ConnectionOptions::OPTION_AUTH_TYPE => 'Basic',
+                    ConnectionOptions::OPTION_CONNECTION => 'Close',
+                    ConnectionOptions::OPTION_TIMEOUT => 3,
+                    ConnectionOptions::OPTION_RECONNECT => false,
+                    ConnectionOptions::OPTION_CREATE => false,
+                    ConnectionOptions::OPTION_UPDATE_POLICY => UpdatePolicy::LAST,
+                    ConnectionOptions::OPTION_AUTH_USER => getenv('ARANGODB_USERNAME'),
+                    ConnectionOptions::OPTION_AUTH_PASSWD => getenv('ARANGODB_PASSWORD'),
+                    ConnectionOptions::OPTION_ENDPOINT => getenv('ARANGODB_HOST'),
+                    ConnectionOptions::OPTION_DATABASE => getenv('ARANGODB_DBNAME'),
+                ]
+            );
     }
 }
 
-function recreateDatabase(Pdo $pdo, string $driver, string $dbName): void
+function recreateDatabase($connection, string $driver, string $dbName): void
 {
     switch (strtolower($driver)) {
         case 'mysql':
         case 'mariadb':
         case 'postgres':
-            $pdo->exec("DROP DATABASE IF EXISTS $dbName");
-            $pdo->exec("CREATE DATABASE $dbName");
-            $pdo->exec("use $dbName");
+            $connection->exec("DROP DATABASE IF EXISTS $dbName");
+            $connection->exec("CREATE DATABASE $dbName");
+            $connection->exec("use $dbName");
             $path = '../vendor/prooph/pdo-event-store/scripts/' . $driver . '/';
-            $pdo->exec(file_get_contents($path . '01_event_streams_table.sql'));
-            $pdo->exec(file_get_contents($path . '02_projections_table.sql'));
+            $connection->exec(file_get_contents($path . '01_event_streams_table.sql'));
+            $connection->exec(file_get_contents($path . '02_projections_table.sql'));
             break;
+        case 'arangodb':
+            $result = $connection->get(Urls::URL_COLLECTION . '?excludeSystem=1');
+
+            $collections = json_decode($result->getBody(), true);
+
+            if (count($collections['result']) > 1) {
+                execute($connection,
+                    null,
+                    ...array_map(function ($col) {
+                        return DeleteCollection::with($col['name']);
+                    }, $collections['result'])
+                );
+            }
+
+            eventStreamsBatch($connection)->process();
+            projectionsBatch($connection)->process();
+            break;
+        default:
+            throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));
     }
 }
 
@@ -99,6 +145,12 @@ function createEventStore(string $driver, $connection): EventStore
                 $connection,
                 new PostgresAggregateStreamStrategy()
             );
+        case 'arangodb':
+            return new ArangoDbEventStore(
+                new FQCNMessageFactory(),
+                $connection,
+                new ArangoDbAggregateStreamStrategy()
+            );
     }
 }
 
@@ -120,6 +172,11 @@ function createProjectionManager(EventStore $eventStore, string $driver, $connec
                 $eventStore,
                 $connection
             );
+        case 'arangodb':
+            return new ArangoDbProjectionManager(
+                $eventStore,
+                $connection
+            );
     }
 }
 
@@ -129,6 +186,7 @@ function createConnections(): array
         'mysql' => createConnection('mysql'),
         'mariadb' => createConnection('mariadb'),
         'postgres' => createConnection('postgres'),
+        'arangodb' => createConnection('arangodb'),
     ];
 }
 
@@ -138,6 +196,7 @@ function createEventStores(array $connections): array
         'mysql' => createEventStore('mysql', $connections['mysql']),
         'mariadb' => createEventStore('mariadb', $connections['mariadb']),
         'postgres' => createEventStore('postgres', $connections['postgres']),
+        'arangodb' => createEventStore('arangodb', $connections['arangodb']),
     ];
 }
 
@@ -147,6 +206,7 @@ function createProjectionManagers(array $eventStores, array $connections): array
         'mysql' => createProjectionManager($eventStores['mysql'], 'mysql', $connections['mysql']),
         'mariadb' => createProjectionManager($eventStores['mariadb'], 'mariadb', $connections['mariadb']),
         'postgres' => createProjectionManager($eventStores['postgres'], 'postgres', $connections['postgres']),
+        'arangodb' => createProjectionManager($eventStores['arangodb'], 'arangodb', $connections['arangodb']),
     ];
 }
 

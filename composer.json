@@ -3,6 +3,7 @@
   "license": "BSD-3-Clause",
   "require":{
     "prooph/pdo-event-store":"^1.5.1",
+    "prooph/arangodb-event-store":"dev-master",
     "psr/container":"^1.0",
     "zendframework/zend-servicemanager":"^3.3",
     "vlucas/phpdotenv": "^2.4"
@@ -25,5 +26,11 @@
     "preferred-install": {
       "prooph/*": "source"
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/sandrokeil/arangodb-event-store.git"
+    }
+  ]
 }
