@@ -31,25 +31,31 @@ class StreamCreator extends \Thread
         $id = $this->getThreadId();
         echo "Writer $id started\n";
 
-        $connection = createConnection($this->driver);
-        $eventStore = createEventStore($this->driver, $connection);
+        try {
+            $connection = createConnection($this->driver);
 
-        $start = microtime(true);
+            $eventStore = createEventStore($this->driver, $connection);
 
-        for ($i = 0; $i < $this->executions; $i++) {
-            $streamName = $this->category . '-' . Uuid::uuid4()->toString();
-            $events = createTestEvents(testPayload(), $this->numberOfEvents);
+            $start = microtime(true);
 
-            $eventStore->create(new Stream(new StreamName($streamName), new ArrayIterator($events)));
-            $this->eventsWritten += $this->numberOfEvents;
+            for ($i = 0; $i < $this->executions; $i++) {
+                $streamName = $this->category . '-' . Uuid::uuid4()->toString();
+                $events = createTestEvents(testPayload(), $this->numberOfEvents);
+
+                $eventStore->create(new Stream(new StreamName($streamName), new ArrayIterator($events)));
+
+                $this->eventsWritten += $this->numberOfEvents;
+            }
+
+            $end = microtime(true);
+
+            $time = $end - $start;
+            $avg = ($this->executions * $this->numberOfEvents) / $time;
+
+            echo "Writer $id wrote $this->eventsWritten events\n";
+            echo "Writer $id used $time seconds, avg $avg events/second\n";
+        } catch (\Throwable $e) {
+            echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
         }
-
-        $end = microtime(true);
-
-        $time = $end - $start;
-        $avg = ($this->executions * $this->numberOfEvents) / $time;
-
-        echo "Writer $id wrote $this->eventsWritten events\n";
-        echo "Writer $id used $time seconds, avg $avg events/second\n";
     }
 }

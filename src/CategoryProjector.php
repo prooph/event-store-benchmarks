@@ -9,14 +9,12 @@ use Ramsey\Uuid\Uuid;
 
 class CategoryProjector extends \Thread
 {
-    private $readEvents;
     private $driver;
     private $category;
     private $stopAt;
 
     public function __construct(string $driver, string $category, int $stopAt)
     {
-        $this->readEvents = 0;
         $this->driver = $driver;
         $this->category = $category;
         $this->stopAt = $stopAt;
@@ -27,39 +25,43 @@ class CategoryProjector extends \Thread
         $id = $this->getThreadId();
         echo "Projection $id started\n";
 
-        $connection = createConnection($this->driver);
-        $eventStore = createEventStore($this->driver, $connection);
-        $projectionManager = createProjectionManager($eventStore, $this->driver, $connection);
+        try {
+            $connection = createConnection($this->driver);
+            $eventStore = createEventStore($this->driver, $connection);
+            $projectionManager = createProjectionManager($eventStore, $this->driver, $connection);
 
-        $stopAt = $this->stopAt;
+            $stopAt = $this->stopAt;
 
-        $start = microtime(true);
-        $uuid = Uuid::uuid4()->toString();
+            $start = microtime(true);
+            $uuid = Uuid::uuid4()->toString();
 
-        $projection = $projectionManager->createProjection('category_projection_' . $uuid);
-        $projection
-            ->init(function (): array {
-                return ['count' => 0];
-            })
-            ->fromCategory($this->category)
-            ->whenAny(function (array $state, Message $event) use ($stopAt): array {
-                $state['count']++;
-                if ($state['count'] === $stopAt) {
-                    $this->stop();
-                }
+            $projection = $projectionManager->createProjection('category_projection_' . $uuid);
+            $projection
+                ->init(function (): array {
+                    return ['count' => 0];
+                })
+                ->fromCategory($this->category)
+                ->whenAny(function (array $state, Message $event) use ($stopAt): array {
+                    $state['count']++;
+                    if ($state['count'] === $stopAt) {
+                        $this->stop();
+                    }
 
-                return $state;
-            })
-            ->run();
+                    return $state;
+                })
+                ->run();
 
-        $readEvents = $projection->getState()['count'];
+            $readEvents = $projection->getState()['count'];
 
-        $end = microtime(true);
+            $end = microtime(true);
 
-        $time = $end - $start;
-        $avg = $this->stopAt / $time;
+            $time = $end - $start;
+            $avg = $this->stopAt / $time;
 
-        echo "Projection $id read $readEvents events\n";
-        echo "projection $id used $time seconds, avg $avg events/second\n";
+            echo "Projection $id read $readEvents events\n";
+            echo "projection $id used $time seconds, avg $avg events/second\n";
+        } catch (\Throwable $e) {
+            echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+        }
     }
 }
