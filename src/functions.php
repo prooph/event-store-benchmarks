@@ -37,7 +37,7 @@ function testDatabases(): array
         'mysql' => getenv('MYSQL_DB'),
         'mariadb' => getenv('MARIADB_DB'),
         'postgres' => getenv('POSTGRES_DB'),
-        'arangodb' => getenv('ARANGODB_DBNAME'),
+        'arangodb' => getenv('ARANGODB_DB'),
     ];
 }
 
@@ -83,7 +83,7 @@ function createConnection(string $driver)
                     ConnectionOptions::OPTION_AUTH_USER => getenv('ARANGODB_USERNAME'),
                     ConnectionOptions::OPTION_AUTH_PASSWD => getenv('ARANGODB_PASSWORD'),
                     ConnectionOptions::OPTION_ENDPOINT => getenv('ARANGODB_HOST'),
-                    ConnectionOptions::OPTION_DATABASE => getenv('ARANGODB_DBNAME'),
+                    ConnectionOptions::OPTION_DATABASE => getenv('ARANGODB_DB'),
                 ]
             );
     }
