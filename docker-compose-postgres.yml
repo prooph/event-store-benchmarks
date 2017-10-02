@@ -1,0 +1,24 @@
+version: '3'
+services:
+  # To run benchmark suite docker-compose run --rm php src/benchmark
+  php:
+    image: prooph/php:7.2-zts
+    environment:
+      DRIVER: "postgres"
+      POSTGRES_USER: "dev"
+      POSTGRES_PASSWORD: "dev"
+      POSTGRES_HOST: "postgres"
+      POSTGRES_PORT: "5432"
+      POSTGRES_CHARSET: "utf8"
+      POSTGRES_DB: "event_store_tests"
+    volumes:
+      - "./:/app"
+
+  postgres:
+    image: postgres:9.6
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: "event_store_tests"
+      POSTGRES_USER: "dev"
+      POSTGRES_PASSWORD: "dev"

@@ -56,7 +56,6 @@ foreach ($connections as $name => $connection) {
     echo "$name: recreating test-database $dbNames[$name]\n";
     recreateDatabase($connection, $name,  $dbNames[$name]);
 }
-
 echo "\n";
 
 $eventStores = createEventStores($connections);
@@ -222,6 +221,7 @@ $autoloader->loadClass(StreamNotFound::class);
 
 foreach ($connections as $name => $connection) {
     echo "$name: recreating test-database $dbNames[$name]\n";
+    recreateDatabase($connection, $name,  $dbNames[$name]);
 }
 
 echo "\n";

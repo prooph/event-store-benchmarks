@@ -1,0 +1,27 @@
+version: '3'
+services:
+  # To run benchmark suite docker-compose run --rm php src/benchmark
+  php:
+    image: prooph/php:7.2-zts
+    environment:
+      DRIVER: "mysql"
+      MYSQL_USER: "dev"
+      MYSQL_PASSWORD: "dev"
+      MYSQL_HOST: "mysql"
+      MYSQL_PORT: "3306"
+      MYSQL_CHARSET: "utf8"
+      MYSQL_DB: "event_store_tests"
+    volumes:
+      - "./:/app"
+
+  mysql:
+    # mysql 8.0 not working properly
+    # see https://github.com/docker-library/mysql/issues/303
+    image: mysql:5.7
+    ports:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "event_store_tests"
+      MYSQL_USER: "dev"
+      MYSQL_PASSWORD: "dev"

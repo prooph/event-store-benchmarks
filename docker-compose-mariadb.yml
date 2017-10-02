@@ -1,0 +1,25 @@
+version: '3'
+services:
+  # To run benchmark suite docker-compose run --rm php src/benchmark
+  php:
+    image: prooph/php:7.2-zts
+    environment:
+      DRIVER: "mariadb"
+      MARIADB_USER: "dev"
+      MARIADB_PASSWORD: "dev"
+      MARIADB_HOST: "mariadb"
+      MARIADB_PORT: "3306"
+      MARIADB_CHARSET: "utf8"
+      MARIADB_DB: "event_store_tests"
+    volumes:
+      - "./:/app"
+
+  mariadb:
+    image: mariadb:10.3
+    ports:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "event_store_tests"
+      MYSQL_USER: "dev"
+      MYSQL_PASSWORD: "dev"

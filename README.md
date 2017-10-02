@@ -25,6 +25,23 @@ They were running a notebook with Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz
 
 ## Usage
 
+### Docker and Docker Compose
+If you want to run the benchmark suite you need [Docker](https://docs.docker.com/engine/installation/ "Install Docker") 
+and [Docker Compose](https://docs.docker.com/compose/install/ "Install Docker Compose").
+
+Install dependencies with:
+
+```
+$ docker run --rm -rf -i prooph/composer:7.1 update
+```
+
+Then you can simply run the `bench.sh` script for each driver (`arangodb` `postgres` `mysql` `mariadb`):
+
+```
+$ . bench.sh --driver postgres
+```
+
+### Manual
 1) Have MySQL, MariaDB, Postgres, ArangoDB installed and running
 2) Edit `.env` file and change your db settings
 3) run `php src/benchmark.php`

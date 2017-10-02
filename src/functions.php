@@ -209,6 +209,10 @@ function createProjectionManager(EventStore $eventStore, string $driver, $connec
 
 function createConnections(): array
 {
+    if ($driver = getenv('DRIVER')) {
+        return [$driver => createConnection($driver)];
+    }
+
     return [
         'mysql' => createConnection('mysql'),
         'mariadb' => createConnection('mariadb'),
@@ -219,6 +223,10 @@ function createConnections(): array
 
 function createEventStores(array $connections): array
 {
+    if ($driver = getenv('DRIVER')) {
+        return [$driver => createEventStore($driver, $connections[$driver])];
+    }
+
     return [
         'mysql' => createEventStore('mysql', $connections['mysql']),
         'mariadb' => createEventStore('mariadb', $connections['mariadb']),
@@ -229,6 +237,10 @@ function createEventStores(array $connections): array
 
 function createProjectionManagers(array $eventStores, array $connections): array
 {
+    if ($driver = getenv('DRIVER')) {
+        return [$driver => createProjectionManager($eventStores[$driver], $driver, $connections[$driver])];
+    }
+
     return [
         'mysql' => createProjectionManager($eventStores['mysql'], 'mysql', $connections['mysql']),
         'mariadb' => createProjectionManager($eventStores['mariadb'], 'mariadb', $connections['mariadb']),
