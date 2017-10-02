@@ -36,6 +36,16 @@ if ($realWorldTest) {
     $content = file_get_contents($filename);
     $newContent = str_replace('private const', 'const', $content);
     file_put_contents($filename, $newContent);
+
+    $filenameArangoDb = '../vendor/triagens/arangodb/lib/ArangoDBClient/ConnectionOptions.php';
+    $contentArangoDb = file_get_contents($filenameArangoDb);
+    $newContentArangoDb = str_replace('DefaultValues::DEFAULT_CIPHERS', 'null', $contentArangoDb);
+    file_put_contents($filenameArangoDb, $newContentArangoDb);
+
+    $filenameArangoDbEventStore = '../vendor/prooph/arangodb-event-store/src/EventStore.php';
+    $contentArangoDbEventStore = file_get_contents($filenameArangoDbEventStore);
+    $newContentArangoDbEventStore = str_replace('private const', 'const', $contentArangoDbEventStore);
+    file_put_contents($filenameArangoDbEventStore, $newContentArangoDbEventStore);
 }
 
 $dotenv = new Dotenv('..');
@@ -276,5 +286,7 @@ foreach ($connections as $driver => $connection) {
 
 // revert patching of pdo-event-store projector
 file_put_contents($filename, $content);
+file_put_contents($filenameArangoDb, $contentArangoDb);
+file_put_contents($filenameArangoDbEventStore, $contentArangoDbEventStore);
 
 echo "all finished\n";

@@ -75,9 +75,9 @@ function createConnection(string $driver)
             return new Connection(
                 [
                     ConnectionOptions::OPTION_AUTH_TYPE => 'Basic',
-                    ConnectionOptions::OPTION_CONNECTION => 'Close',
+                    ConnectionOptions::OPTION_CONNECTION => 'Keep-Alive',
                     ConnectionOptions::OPTION_TIMEOUT => 3,
-                    ConnectionOptions::OPTION_RECONNECT => false,
+                    ConnectionOptions::OPTION_RECONNECT => true,
                     ConnectionOptions::OPTION_CREATE => false,
                     ConnectionOptions::OPTION_UPDATE_POLICY => UpdatePolicy::LAST,
                     ConnectionOptions::OPTION_AUTH_USER => getenv('ARANGODB_USERNAME'),
