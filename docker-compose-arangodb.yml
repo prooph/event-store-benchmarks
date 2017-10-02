@@ -9,7 +9,7 @@ services:
       ARANGODB_HOST: "tcp://arangodb:8529"
       ARANGODB_USERNAME: ""
       ARANGODB_PASSWORD: ""
-      ARANGODB_DBNAME: _system
+      ARANGODB_DB: _system
     volumes:
       - "./:/app"
 
