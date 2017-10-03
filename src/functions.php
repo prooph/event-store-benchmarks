@@ -122,6 +122,7 @@ function recreateDatabase($connection, string $driver, string $dbName): void
         default:
             throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));
     }
+    unset($connection);
     // give DB some time
     sleep(5);
 }
@@ -207,6 +208,20 @@ function createProjectionManager(EventStore $eventStore, string $driver, $connec
                 $connection
             );
     }
+}
+
+function getDatabases(): array
+{
+    if ($driver = getenv('DRIVER')) {
+        return [$driver => $driver];
+    }
+
+    return [
+        'mysql' => 'mysql',
+        'mariadb' => 'mariadb',
+        'postgres' => 'postgres',
+        'arangodb' => 'arangodb',
+    ];
 }
 
 function createConnections(): array

@@ -8,6 +8,7 @@ use Dotenv\Dotenv;
 use Prooph\Common\Messaging\Message;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStore\Exception\StreamNotFound;
+// this exception is needed, otherwise class is not found
 use Prooph\EventStore\Pdo\Exception\RuntimeException;
 use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStore\Stream;
@@ -67,6 +68,7 @@ foreach ($connections as $name => $connection) {
     echo "$name: recreating test-database $dbNames[$name]\n";
     recreateDatabase($connection, $name,  $dbNames[$name]);
 }
+
 echo "\n";
 
 $eventStores = createEventStores($connections);
@@ -229,11 +231,9 @@ echo "test 7 real world test\n\n";
 
 // loading classes for pthreads
 $autoloader->loadClass(StreamNotFound::class);
-$autoloader->loadClass(RuntimeException::class);
 
 foreach ($connections as $name => $connection) {
     echo "$name: recreating test-database $dbNames[$name]\n";
-    recreateDatabase($connection, $name,  $dbNames[$name]);
 }
 
 echo "\n";
