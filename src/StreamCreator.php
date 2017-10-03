@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Prooph\EventStoreBenchmarks;
 
-use ArrayIterator;
 use Prooph\EventStore\Stream;
 use Prooph\EventStore\StreamName;
 use Ramsey\Uuid\Uuid;
@@ -42,7 +41,7 @@ class StreamCreator extends \Thread
                 $streamName = $this->category . '-' . Uuid::uuid4()->toString();
                 $events = createTestEvents(testPayload(), $this->numberOfEvents);
 
-                $eventStore->create(new Stream(new StreamName($streamName), new ArrayIterator($events)));
+                $eventStore->create(new Stream(new StreamName($streamName), \SplFixedArray::fromArray($events)));
 
                 $this->eventsWritten += $this->numberOfEvents;
             }

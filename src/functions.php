@@ -122,6 +122,8 @@ function recreateDatabase($connection, string $driver, string $dbName): void
         default:
             throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));
     }
+    // give DB some time
+    sleep(5);
 }
 
 function destroyDatabase($connection, string $driver, string $dbName): void

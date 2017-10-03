@@ -81,10 +81,10 @@ foreach ($eventStores as $name => $eventStore) {
     $start = microtime(true);
     for ($i = 0; $i < 10; $i++) {
         $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
-        $eventStore->create(new Stream($streamName, new \ArrayIterator([createTestEvent($payload, 1)])));
+        $eventStore->create(new Stream($streamName, \SplFixedArray::fromArray([createTestEvent($payload, 1)])));
         $streamNamesTest1[$name][] = $streamName;
         for ($v = 2; $v <= 100; $v++) {
-            $eventStore->appendTo($streamName, new \ArrayIterator([createTestEvent($payload, $v)]));
+            $eventStore->appendTo($streamName, \SplFixedArray::fromArray([createTestEvent($payload, $v)]));
         }
     }
     $end = microtime(true);
@@ -104,11 +104,11 @@ foreach ($eventStores as $name => $eventStore) {
     $start = microtime(true);
     for ($i = 0; $i < 10; $i++) {
         $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
-        $eventStore->create(new Stream($streamName, new \ArrayIterator(createTestEvents($payload, 5))));
+        $eventStore->create(new Stream($streamName, \SplFixedArray::fromArray(createTestEvents($payload, 5))));
         $fromVersion = 5;
         for ($v = 6; $v <= 19; $v++) {
             $events = createTestEvents($payload, 5, $fromVersion);
-            $eventStore->appendTo($streamName, new \ArrayIterator($events));
+            $eventStore->appendTo($streamName, \SplFixedArray::fromArray($events));
             $fromVersion += 5;
         }
     }
@@ -128,7 +128,7 @@ foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
     $start = microtime(true);
     $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
-    $eventStore->create(new Stream($streamName, new \ArrayIterator(createTestEvents($payload, 2500))));
+    $eventStore->create(new Stream($streamName, \SplFixedArray::fromArray(createTestEvents($payload, 2500))));
     $end = microtime(true);
     $time = $end - $start;
     $eventsPerSecond = 2500 / $time;
