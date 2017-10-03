@@ -8,6 +8,7 @@ use Dotenv\Dotenv;
 use Prooph\Common\Messaging\Message;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStore\Exception\StreamNotFound;
+use Prooph\EventStore\Pdo\Exception\RuntimeException;
 use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStore\Stream;
 use Prooph\EventStore\StreamName;
@@ -36,6 +37,11 @@ if ($realWorldTest) {
     $content = file_get_contents($filename);
     $newContent = str_replace('private const', 'const', $content);
     file_put_contents($filename, $newContent);
+
+    $filenameConnectionOptions = '../vendor/triagens/arangodb/lib/ArangoDBClient/ConnectionOptions.php';
+    $contentConnectionOptions = file_get_contents($filenameConnectionOptions);
+    $newContentConnectionOptions = str_replace('DefaultValues::DEFAULT_CIPHERS', 'null', $contentConnectionOptions);
+    file_put_contents($filenameConnectionOptions, $newContentConnectionOptions);
 
     $filenameArangoDbEventStore = '../vendor/prooph/arangodb-event-store/src/EventStore.php';
     $contentArangoDbEventStore = file_get_contents($filenameArangoDbEventStore);
@@ -223,6 +229,7 @@ echo "test 7 real world test\n\n";
 
 // loading classes for pthreads
 $autoloader->loadClass(StreamNotFound::class);
+$autoloader->loadClass(RuntimeException::class);
 
 foreach ($connections as $name => $connection) {
     echo "$name: recreating test-database $dbNames[$name]\n";
@@ -282,5 +289,6 @@ foreach ($connections as $driver => $connection) {
 // revert patching of pdo-event-store projector
 file_put_contents($filename, $content);
 file_put_contents($filenameArangoDbEventStore, $contentArangoDbEventStore);
+file_put_contents($filenameConnectionOptions, $contentConnectionOptions);
 
 echo "all finished\n";
