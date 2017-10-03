@@ -18,11 +18,12 @@ services:
     #mem_reservation: phpmem_reservation
 
   arangodb:
-    image: arangodb:3.2.0
+    image: arangodb:3.2
     ports:
       - 8529:8529
     environment:
-      - ARANGO_NO_AUTH=1
+      ARANGO_NO_AUTH: 1
+      #ARANGO_STORAGE_ENGINE: rocksdb
     #cpuset: dbcpuset
     #cpu_count: dbcpu_count
     #mem_limit: dbmem_limit

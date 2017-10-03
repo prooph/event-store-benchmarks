@@ -33,7 +33,8 @@ if [[ -z ${DRIVER} ]]; then
 fi
 
 CPU=$[`grep -c ^processor /proc/cpuinfo`/2]
-MEM=$[`grep -E 'MemAvailable' /proc/meminfo | rev | cut -d " " -f 2 | rev`/1024/2-500]
+#MEM=$[`grep -E 'MemAvailable' /proc/meminfo | rev | cut -d " " -f 2 | rev`/1024/2-500]
+MEM=$[`grep -E 'MemAvailable' /proc/meminfo | rev | cut -d " " -f 2 | rev`/1024-800]
 PHP_CPU=
 DB_CPU=
 
@@ -52,8 +53,8 @@ done
 cp docker-compose-${DRIVER}.yml docker-compose.yml
 sed -i "s/#cpuset: phpcpuset/cpuset: ${PHP_CPU}/g" docker-compose.yml
 sed -i "s/#cpu_count: phpcpu_count/cpu_count: ${CPU}/g" docker-compose.yml
-sed -i "s/#mem_limit: phpmem_limit/mem_limit: ${MEM}M/g" docker-compose.yml
-sed -i "s/#mem_reservation: phpmem_reservation/mem_reservation: ${MEM}M/g" docker-compose.yml
+sed -i "s/#mem_limit: phpmem_limit/mem_limit: 512M/g" docker-compose.yml
+sed -i "s/#mem_reservation: phpmem_reservation/mem_reservation: 512M/g" docker-compose.yml
 
 sed -i "s/#cpuset: dbcpuset/cpuset: ${DB_CPU}/g" docker-compose.yml
 sed -i "s/#cpu_count: dbcpu_count/cpu_count: ${CPU}/g" docker-compose.yml
@@ -71,7 +72,7 @@ echo ""
 echo "${GREEN}Hardware Info${RESET}"
 lscpu
 
-echo "${GREEN}Using ${CPU} CPUs and ${MEM} MB memory for each service.${RESET}"
+echo "${GREEN}Using ${CPU} CPUs for each service and ${MEM} MB memory for database.${RESET}"
 
 echo "${GREEN}Waiting for ${DRIVER} database, lean back to enjoy the timer.${RESET}"
 until [ $IDLE_TIME -lt 1 ]; do
