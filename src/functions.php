@@ -76,7 +76,7 @@ function createConnection(string $driver)
                 [
                     ConnectionOptions::OPTION_AUTH_TYPE => 'Basic',
                     ConnectionOptions::OPTION_CONNECTION => 'Keep-Alive',
-                    ConnectionOptions::OPTION_TIMEOUT => 3,
+                    ConnectionOptions::OPTION_TIMEOUT => 30,
                     ConnectionOptions::OPTION_RECONNECT => true,
                     ConnectionOptions::OPTION_CREATE => false,
                     ConnectionOptions::OPTION_UPDATE_POLICY => UpdatePolicy::LAST,

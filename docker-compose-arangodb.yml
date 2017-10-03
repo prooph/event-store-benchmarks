@@ -1,4 +1,4 @@
-version: '2'
+version: '2.3'
 services:
   # To run benchmark suite docker-compose run --rm php src/benchmark
   php:
@@ -12,6 +12,10 @@ services:
       ARANGODB_DB: _system
     volumes:
       - "./:/app"
+    #cpuset: phpcpuset
+    #cpu_count: phpcpu_count
+    #mem_limit: phpmem_limit
+    #mem_reservation: phpmem_reservation
 
   arangodb:
     image: arangodb:3.2.0
@@ -19,3 +23,7 @@ services:
       - 8529:8529
     environment:
       - ARANGO_NO_AUTH=1
+    #cpuset: dbcpuset
+    #cpu_count: dbcpu_count
+    #mem_limit: dbmem_limit
+    #mem_reservation: dbmem_reservation

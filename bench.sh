@@ -32,16 +32,46 @@ if [[ -z ${DRIVER} ]]; then
     return 1
 fi
 
-COMPOSE_FILES=docker-compose-${DRIVER}.yml
+CPU=$[`grep -c ^processor /proc/cpuinfo`/2]
+MEM=$[`grep -E 'MemAvailable' /proc/meminfo | rev | cut -d " " -f 2 | rev`/1024/2-500]
+PHP_CPU=
+DB_CPU=
 
-# Docker Compose
-export COMPOSE_PROJECT_NAME=proophbenchmark
-export COMPOSE_FILE=${COMPOSE_FILES}
+COUNTER=0
+while [  $COUNTER -lt ${CPU} ]; do
+    if [ $COUNTER -ne 0 ]; then
+        PHP_CPU=${PHP_CPU},
+        DB_CPU=${DB_CPU},
+    fi
 
-echo "Using $COMPOSE_FILE"
+    PHP_CPU=${PHP_CPU}$[COUNTER*2]
+    DB_CPU=${DB_CPU}$[COUNTER*2+1]
+    let COUNTER=COUNTER+1
+done
+
+cp docker-compose-${DRIVER}.yml docker-compose.yml
+sed -i "s/#cpuset: phpcpuset/cpuset: ${PHP_CPU}/g" docker-compose.yml
+sed -i "s/#cpu_count: phpcpu_count/cpu_count: ${CPU}/g" docker-compose.yml
+sed -i "s/#mem_limit: phpmem_limit/mem_limit: ${MEM}M/g" docker-compose.yml
+sed -i "s/#mem_reservation: phpmem_reservation/mem_reservation: ${MEM}M/g" docker-compose.yml
+
+sed -i "s/#cpuset: dbcpuset/cpuset: ${DB_CPU}/g" docker-compose.yml
+sed -i "s/#cpu_count: dbcpu_count/cpu_count: ${CPU}/g" docker-compose.yml
+sed -i "s/#mem_limit: dbmem_limit/mem_limit: ${MEM}M/g" docker-compose.yml
+sed -i "s/#mem_reservation: dbmem_reservation/mem_reservation: ${MEM}M/g" docker-compose.yml
 
 docker-compose up -d --no-recreate
 docker-compose ps
+
+echo ""
+echo "${GREEN}Docker Info${RESET}"
+docker info
+
+echo ""
+echo "${GREEN}Hardware Info${RESET}"
+lscpu
+
+echo "${GREEN}Using ${CPU} CPUs and ${MEM} MB memory for each service.${RESET}"
 
 echo "${GREEN}Waiting for ${DRIVER} database, lean back to enjoy the timer.${RESET}"
 until [ $IDLE_TIME -lt 1 ]; do
@@ -49,6 +79,10 @@ until [ $IDLE_TIME -lt 1 ]; do
     printf "${IDLE_TIME} "
     sleep 1
 done
+
+echo ""
+echo "${GREEN}Starting benchmark warmup ${DRIVER}!${RESET}"
+docker-compose run --rm php php src/benchmark.php
 
 echo ""
 echo "${GREEN}Starting benchmark ${DRIVER}!${RESET}"

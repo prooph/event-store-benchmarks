@@ -1,4 +1,4 @@
-version: '3'
+version: '2.3'
 services:
   # To run benchmark suite docker-compose run --rm php src/benchmark
   php:
@@ -13,6 +13,10 @@ services:
       POSTGRES_DB: "event_store_tests"
     volumes:
       - "./:/app"
+    #cpuset: phpcpuset
+    #cpu_count: phpcpu_count
+    #mem_limit: phpmem_limit
+    #mem_reservation: phpmem_reservation
 
   postgres:
     image: postgres:9.6
@@ -22,3 +26,7 @@ services:
       POSTGRES_DB: "event_store_tests"
       POSTGRES_USER: "dev"
       POSTGRES_PASSWORD: "dev"
+    #cpuset: dbcpuset
+    #cpu_count: dbcpu_count
+    #mem_limit: dbmem_limit
+    #mem_reservation: dbmem_reservation
