@@ -52,7 +52,7 @@ function createConnection(string $driver)
             $username = getenv('MYSQL_USER');
             $password = getenv('MYSQL_PASSWORD');
 
-            return new PDO("mysql:host=$host;port=$port;dbname=$dbName;charset=$charset;", $username, $password);
+            return new PDO("mysql:host=$host;port=$port;charset=$charset;", $username, $password);
         case 'mariadb':
             $host = getenv('MARIADB_HOST');
             $port = getenv('MARIADB_PORT');
@@ -61,7 +61,7 @@ function createConnection(string $driver)
             $username = getenv('MARIADB_USER');
             $password = getenv('MARIADB_PASSWORD');
 
-            return new PDO("mysql:host=$host;port=$port;dbname=$dbName;charset=$charset", $username, $password);
+            return new PDO("mysql:host=$host;port=$port;charset=$charset", $username, $password);
         case 'postgres':
             $host = getenv('POSTGRES_HOST');
             $port = getenv('POSTGRES_PORT');
@@ -70,7 +70,7 @@ function createConnection(string $driver)
             $username = getenv('POSTGRES_USER');
             $password = getenv('POSTGRES_PASSWORD');
 
-            return new PDO("pgsql:host=$host;port=$port;dbname=$dbName;options='--client_encoding=\"$charset\"'", $username, $password);
+            return new PDO("pgsql:host=$host;port=$port;options='--client_encoding=\"$charset\"'", $username, $password);
         case 'arangodb':
             return new Connection(
                 [
@@ -118,6 +118,33 @@ function recreateDatabase($connection, string $driver, string $dbName): void
 
             eventStreamsBatch($connection)->process();
             projectionsBatch($connection)->process();
+            break;
+        default:
+            throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));
+    }
+}
+
+function destroyDatabase($connection, string $driver, string $dbName): void
+{
+    switch (strtolower($driver)) {
+        case 'mysql':
+        case 'mariadb':
+        case 'postgres':
+            $connection->exec("DROP DATABASE IF EXISTS $dbName");
+            break;
+        case 'arangodb':
+            $result = $connection->get(Urls::URL_COLLECTION . '?excludeSystem=1');
+
+            $collections = json_decode($result->getBody(), true);
+
+            if (count($collections['result']) > 1) {
+                execute($connection,
+                    null,
+                    ...array_map(function ($col) {
+                        return DeleteCollection::with($col['name']);
+                    }, $collections['result'])
+                );
+            }
             break;
         default:
             throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));

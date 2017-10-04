@@ -11,6 +11,7 @@ use Prooph\EventStore\Exception\StreamNotFound;
 use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStore\Stream;
 use Prooph\EventStore\StreamName;
+use Ramsey\Uuid\Uuid;
 
 chdir(__DIR__);
 
@@ -44,6 +45,13 @@ $connections = createConnections();
 $dbNames = testDatabases();
 $payload = testPayload();
 
+register_shutdown_function(function () use ($connections, $dbNames) {
+    foreach ($connections as $name => $connection) {
+        echo "$name: destroying test-database $dbNames[$name]\n";
+        destroyDatabase($connection, $name,  $dbNames[$name]);
+    }
+});
+
 foreach ($connections as $name => $connection) {
     echo "$name: recreating test-database $dbNames[$name]\n";
     recreateDatabase($connection, $name,  $dbNames[$name]);
@@ -62,7 +70,7 @@ foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
     $start = microtime(true);
     for ($i = 0; $i < 10; $i++) {
-        $streamName = new StreamName(uniqid('stream_'));
+        $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
         $eventStore->create(new Stream($streamName, new \ArrayIterator([createTestEvent($payload, 1)])));
         $streamNamesTest1[$name][] = $streamName;
         for ($v = 2; $v <= 100; $v++) {
@@ -85,7 +93,7 @@ foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
     $start = microtime(true);
     for ($i = 0; $i < 10; $i++) {
-        $streamName = new StreamName(uniqid('stream_'));
+        $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
         $eventStore->create(new Stream($streamName, new \ArrayIterator(createTestEvents($payload, 5))));
         $fromVersion = 5;
         for ($v = 6; $v <= 19; $v++) {
@@ -109,7 +117,7 @@ echo "test 3 create one stream with 2500 events using a single commit\n\n";
 foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
     $start = microtime(true);
-    $streamName = new StreamName(uniqid('stream_'));
+    $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
     $eventStore->create(new Stream($streamName, new \ArrayIterator(createTestEvents($payload, 2500))));
     $end = microtime(true);
     $time = $end - $start;

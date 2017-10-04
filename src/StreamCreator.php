@@ -49,7 +49,7 @@ class StreamCreator extends \Thread
         $time = $end - $start;
         $avg = ($this->executions * $this->numberOfEvents) / $time;
 
-        echo "Writer $id wrote $this->eventsWritten\n";
+        echo "Writer $id wrote $this->eventsWritten events\n";
         echo "Writer $id used $time seconds, avg $avg events/second\n";
     }
 }
