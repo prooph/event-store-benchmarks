@@ -52,7 +52,7 @@ function createConnection(string $driver)
             $username = getenv('MYSQL_USER');
             $password = getenv('MYSQL_PASSWORD');
 
-            return new PDO("mysql:host=$host;port=$port;charset=$charset;", $username, $password);
+            return new PDO("mysql:host=$host;port=$port;dbname=$dbName;charset=$charset;", $username, $password);
         case 'mariadb':
             $host = getenv('MARIADB_HOST');
             $port = getenv('MARIADB_PORT');
@@ -61,7 +61,7 @@ function createConnection(string $driver)
             $username = getenv('MARIADB_USER');
             $password = getenv('MARIADB_PASSWORD');
 
-            return new PDO("mysql:host=$host;port=$port;charset=$charset", $username, $password);
+            return new PDO("mysql:host=$host;port=$port;dbname=$dbName;charset=$charset", $username, $password);
         case 'postgres':
             $host = getenv('POSTGRES_HOST');
             $port = getenv('POSTGRES_PORT');
@@ -70,7 +70,7 @@ function createConnection(string $driver)
             $username = getenv('POSTGRES_USER');
             $password = getenv('POSTGRES_PASSWORD');
 
-            return new PDO("pgsql:host=$host;port=$port;options='--client_encoding=\"$charset\"'", $username, $password);
+            return new PDO("pgsql:host=$host;port=$port;dbname=$dbName;options='--client_encoding=\"$charset\"'", $username, $password);
         case 'arangodb':
             return new Connection(
                 [
@@ -89,18 +89,20 @@ function createConnection(string $driver)
     }
 }
 
-function recreateDatabase($connection, string $driver, string $dbName): void
+function createDatabase($connection, string $driver, string $dbName): void
 {
     switch (strtolower($driver)) {
         case 'mysql':
         case 'mariadb':
         case 'postgres':
-            $connection->exec("DROP DATABASE IF EXISTS $dbName");
-            $connection->exec("CREATE DATABASE $dbName");
-            $connection->exec("use $dbName");
-            $path = '../vendor/prooph/pdo-event-store/scripts/' . $driver . '/';
-            $connection->exec(file_get_contents($path . '01_event_streams_table.sql'));
-            $connection->exec(file_get_contents($path . '02_projections_table.sql'));
+            try {
+                $path = '../vendor/prooph/pdo-event-store/scripts/' . $driver . '/';
+                $connection->exec(file_get_contents($path . '01_event_streams_table.sql'));
+                $connection->exec(file_get_contents($path . '02_projections_table.sql'));
+            } catch (\Throwable $e) {
+                echo $e->getMessage();
+            }
+
             break;
         case 'arangodb':
             $result = $connection->get(Urls::URL_COLLECTION . '?excludeSystem=1');
@@ -124,7 +126,7 @@ function recreateDatabase($connection, string $driver, string $dbName): void
     }
     unset($connection);
     // give DB some time
-    sleep(5);
+    sleep(1);
 }
 
 function destroyDatabase($connection, string $driver, string $dbName): void
@@ -133,7 +135,14 @@ function destroyDatabase($connection, string $driver, string $dbName): void
         case 'mysql':
         case 'mariadb':
         case 'postgres':
-            $connection->exec("DROP DATABASE IF EXISTS $dbName");
+            /* @var PDO $connection */
+            $statement = $connection->query("SELECT stream_name FROM event_streams;");
+            $rows = $statement->fetchAll();
+            foreach ($rows as $row) {
+                $connection->exec('DROP TABLE ' . $row['stream_name'] . ';');
+            }
+            $connection->exec('DROP TABLE event_streams;');
+            $connection->exec('DROP TABLE projections;');
             break;
         case 'arangodb':
             $result = $connection->get(Urls::URL_COLLECTION . '?excludeSystem=1');

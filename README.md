@@ -48,10 +48,12 @@ $ . bench_all.sh > results.log
 ```
 
 ### Manual
+
 1) Have MySQL, MariaDB, Postgres, ArangoDB installed and running
 2) Edit `.env` file and change your db settings
-3) run `php src/benchmark.php`
-4) enjoy
+3) Create the test database according to your settings
+4) run `php src/benchmark.php` or `DRIVER=postgres php src/benchmark.php`
+5) enjoy
 
 ## Good to know
 

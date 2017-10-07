@@ -8,7 +8,6 @@ use Dotenv\Dotenv;
 use Prooph\Common\Messaging\Message;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStore\Exception\StreamNotFound;
-// this exception is needed, otherwise class is not found
 use Prooph\EventStore\Pdo\Exception\RuntimeException;
 use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStore\Stream;
@@ -59,14 +58,14 @@ $payload = testPayload();
 
 register_shutdown_function(function () use ($connections, $dbNames) {
     foreach ($connections as $name => $connection) {
-        echo "$name: destroying test-database $dbNames[$name]\n";
+        echo "$name: destroying event-store tables on database $dbNames[$name]\n";
         destroyDatabase($connection, $name,  $dbNames[$name]);
     }
 });
 
 foreach ($connections as $name => $connection) {
-    echo "$name: recreating test-database $dbNames[$name]\n";
-    recreateDatabase($connection, $name,  $dbNames[$name]);
+    echo "$name: set up event store tables on database $dbNames[$name]\n";
+    createDatabase($connection, $name,  $dbNames[$name]);
 }
 
 echo "\n";
@@ -231,9 +230,13 @@ echo "test 7 real world test\n\n";
 
 // loading classes for pthreads
 $autoloader->loadClass(StreamNotFound::class);
+$autoloader->loadClass(RuntimeException::class);
 
 foreach ($connections as $name => $connection) {
-    echo "$name: recreating test-database $dbNames[$name]\n";
+    echo "$name: destroying event-store tables on database $dbNames[$name]\n";
+    destroyDatabase($connection, $name,  $dbNames[$name]);
+    echo "$name: set up event store tables on database $dbNames[$name]\n";
+    createDatabase($connection, $name,  $dbNames[$name]);
 }
 
 echo "\n";
