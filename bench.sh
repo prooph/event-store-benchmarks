@@ -89,4 +89,9 @@ echo ""
 echo "${GREEN}Starting benchmark ${DRIVER}!${RESET}"
 
 docker-compose run --rm php php src/benchmark.php
+
+echo ""
+echo "${GREEN}Dumping logs ${DRIVER}!${RESET}"
+docker-compose logs
+
 docker-compose down -v
