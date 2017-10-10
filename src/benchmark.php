@@ -12,6 +12,7 @@ use Prooph\EventStore\Pdo\Exception\RuntimeException;
 use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStore\Stream;
 use Prooph\EventStore\StreamName;
+use Prooph\EventStore\TransactionalEventStore;
 use Ramsey\Uuid\Uuid;
 
 chdir(__DIR__);
@@ -81,11 +82,19 @@ foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
     $start = microtime(true);
     for ($i = 0; $i < 10; $i++) {
+        if ($eventStore instanceof TransactionalEventStore) {
+            $eventStore->beginTransaction();
+        }
+
         $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
         $eventStore->create(new Stream($streamName, \SplFixedArray::fromArray([createTestEvent($payload, 1)])));
         $streamNamesTest1[$name][] = $streamName;
         for ($v = 2; $v <= 100; $v++) {
             $eventStore->appendTo($streamName, \SplFixedArray::fromArray([createTestEvent($payload, $v)]));
+        }
+
+        if ($eventStore instanceof TransactionalEventStore) {
+            $eventStore->commit();
         }
     }
     $end = microtime(true);
@@ -104,6 +113,10 @@ foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
     $start = microtime(true);
     for ($i = 0; $i < 10; $i++) {
+        if ($eventStore instanceof TransactionalEventStore) {
+            $eventStore->beginTransaction();
+        }
+
         $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
         $eventStore->create(new Stream($streamName, \SplFixedArray::fromArray(createTestEvents($payload, 5))));
         $fromVersion = 5;
@@ -111,6 +124,10 @@ foreach ($eventStores as $name => $eventStore) {
             $events = createTestEvents($payload, 5, $fromVersion);
             $eventStore->appendTo($streamName, \SplFixedArray::fromArray($events));
             $fromVersion += 5;
+        }
+
+        if ($eventStore instanceof TransactionalEventStore) {
+            $eventStore->commit();
         }
     }
     $end = microtime(true);
@@ -129,7 +146,17 @@ foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
     $start = microtime(true);
     $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
+
+    if ($eventStore instanceof TransactionalEventStore) {
+        $eventStore->beginTransaction();
+    }
+
     $eventStore->create(new Stream($streamName, \SplFixedArray::fromArray(createTestEvents($payload, 2500))));
+
+    if ($eventStore instanceof TransactionalEventStore) {
+        $eventStore->commit();
+    }
+
     $end = microtime(true);
     $time = $end - $start;
     $eventsPerSecond = 2500 / $time;

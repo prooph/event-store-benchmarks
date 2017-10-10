@@ -6,6 +6,7 @@ namespace Prooph\EventStoreBenchmarks;
 
 use Prooph\EventStore\Stream;
 use Prooph\EventStore\StreamName;
+use Prooph\EventStore\TransactionalEventStore;
 use Ramsey\Uuid\Uuid;
 
 class StreamCreator extends \Thread
@@ -41,7 +42,15 @@ class StreamCreator extends \Thread
                 $streamName = $this->category . '-' . Uuid::uuid4()->toString();
                 $events = createTestEvents(testPayload(), $this->numberOfEvents);
 
+                if ($eventStore instanceof TransactionalEventStore) {
+                    $eventStore->beginTransaction();
+                }
+
                 $eventStore->create(new Stream(new StreamName($streamName), \SplFixedArray::fromArray($events)));
+
+                if ($eventStore instanceof TransactionalEventStore) {
+                    $eventStore->commit();
+                }
 
                 $this->eventsWritten += $this->numberOfEvents;
             }
