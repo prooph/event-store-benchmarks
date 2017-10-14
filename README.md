@@ -73,7 +73,7 @@ is patched in order to work with pthreads.
 
 ## Support
 
-- Ask questions on [prooph-users](https://groups.google.com/forum/?hl=de#!forum/prooph) mailing list.
+- Ask questions on Stack Overflow tagged with [#prooph](https://stackoverflow.com/questions/tagged/prooph).
 - File issues at [https://github.com/prooph/event-store-benchmarks/issues](https://github.com/prooph/event-store-benchmarks/issues).
 - Say hello in the [prooph gitter](https://gitter.im/prooph/improoph) chat.
 
