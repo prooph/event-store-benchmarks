@@ -1,23 +1,17 @@
-#!/bin/bash -ex
+#!/usr/bin/env sh
 
-GREEN=`tput setaf 2`
-RESET=`tput sgr0`
+USAGE="Usage: bench.sh --driver [arangodb | postgres | mysql | mariadb]"
 
-USAGE="Usage: ${BASH_SOURCE[0]} --driver [arangodb | postgres | mysql | mariadb]"
-
-IDLE_TIME=20
-PARAMETERS=
 DRIVER=
-COMPOSE_FILES=
 
-while [[ ${1} ]]; do
+while [ "${1}" ]; do
     case "${1}" in
         --driver)
             DRIVER=${2}
             shift
             ;;
         *)
-            echo ${USAGE} >&2
+            echo "${USAGE}" >&2
             return 1
     esac
 
@@ -27,71 +21,67 @@ while [[ ${1} ]]; do
     fi
 done
 
-if [[ -z ${DRIVER} ]]; then
-    echo ${USAGE} >&2
+if [ -z "${DRIVER}" ]; then
+    echo "${USAGE}" >&2
     return 1
 fi
 
-CPU=$[`grep -c ^processor /proc/cpuinfo`/2]
-#MEM=$[`grep -E 'MemAvailable' /proc/meminfo | rev | cut -d " " -f 2 | rev`/1024/2-500]
-MEM=$[`grep -E 'MemAvailable' /proc/meminfo | rev | cut -d " " -f 2 | rev`/1024-800]
-PHP_CPU=
-DB_CPU=
+echo ""
+echo "Starting benchmark ${DRIVER}!"
+php src/prepare.php
+php src/benchmark.php
+php src/cleanup.php
 
-COUNTER=0
-while [  $COUNTER -lt ${CPU} ]; do
-    if [ $COUNTER -ne 0 ]; then
-        PHP_CPU=${PHP_CPU},
-        DB_CPU=${DB_CPU},
-    fi
+echo ""
+echo "Starting real world benchmark ${DRIVER}!"
 
-    PHP_CPU=${PHP_CPU}$[COUNTER*2]
-    DB_CPU=${DB_CPU}$[COUNTER*2+1]
-    let COUNTER=COUNTER+1
+#real world test
+php src/prepare.php
+
+WRITER_COUNTER=0
+WRITER_ITERATIONS=10
+
+start=$(date +%s)
+
+while [  ${WRITER_COUNTER} -lt ${WRITER_ITERATIONS} ]; do
+    for type in user post todo blog comment
+    do
+        php src/writer.php writer${WRITER_COUNTER} ${type} >logs/writer${WRITER_COUNTER}${type}.log &
+    done
+    WRITER_COUNTER=$((WRITER_COUNTER + 1))
 done
 
-cp docker-compose-${DRIVER}.yml docker-compose.yml
-sed -i "s/#cpuset: phpcpuset/cpuset: ${PHP_CPU}/g" docker-compose.yml
-sed -i "s/#cpu_count: phpcpu_count/cpu_count: ${CPU}/g" docker-compose.yml
-sed -i "s/#mem_limit: phpmem_limit/mem_limit: 512M/g" docker-compose.yml
-sed -i "s/#mem_reservation: phpmem_reservation/mem_reservation: 512M/g" docker-compose.yml
+for type in user post todo blog comment all
+do
+    php src/projector.php projectors${type} ${type} >logs/projector${type}.log &
+done
 
-sed -i "s/#cpuset: dbcpuset/cpuset: ${DB_CPU}/g" docker-compose.yml
-sed -i "s/#cpu_count: dbcpu_count/cpu_count: ${CPU}/g" docker-compose.yml
-sed -i "s/#mem_limit: dbmem_limit/mem_limit: ${MEM}M/g" docker-compose.yml
-sed -i "s/#mem_reservation: dbmem_reservation/mem_reservation: ${MEM}M/g" docker-compose.yml
+echo "Waiting ... stay patient!"
+wait
 
-docker-compose up -d --no-recreate
-docker-compose ps
+end=$(date +%s)
 
-echo ""
-echo "${GREEN}Docker Info${RESET}"
-docker info
+WRITER_COUNTER=0
+while [  ${WRITER_COUNTER} -lt ${WRITER_ITERATIONS} ]; do
+    for type in user post todo blog comment
+    do
+        cat logs/writer${WRITER_COUNTER}${type}.log
+    done
 
-echo ""
-echo "${GREEN}Hardware Info${RESET}"
-lscpu
+    WRITER_COUNTER=$((WRITER_COUNTER + 1))
+done
 
-echo "${GREEN}Using ${CPU} CPUs for each service and ${MEM} MB memory for database.${RESET}"
-
-echo "${GREEN}Waiting for ${DRIVER} database, lean back to enjoy the timer.${RESET}"
-until [ $IDLE_TIME -lt 1 ]; do
-    let IDLE_TIME-=1
-    printf "${IDLE_TIME} "
-    sleep 1
+for type in user post todo blog comment all
+do
+   cat logs/projector${type}.log
 done
 
 echo ""
-echo "${GREEN}Starting benchmark warmup ${DRIVER}!${RESET}"
-docker-compose run --rm php php src/benchmark.php
+duration=$((end - start))
+printf "%s real world test duration %s seconds\\n" "${DRIVER}" "${duration}";
 
-echo ""
-echo "${GREEN}Starting benchmark ${DRIVER}!${RESET}"
+avgWriters=$((12500 / (end - start) ))
+printf "%s avg writes %s events/second\\n" "${DRIVER}" "${avgWriters}";
 
-docker-compose run --rm php php src/benchmark.php
-
-echo ""
-echo "${GREEN}Dumping logs ${DRIVER}!${RESET}"
-docker-compose logs
-
-docker-compose down -v
+avgReaders=$((25000 / (end - start) ))
+printf "%s avg reads %s events/second\\n" "${DRIVER}" "${avgReaders}";

@@ -1,23 +1,17 @@
-#!/bin/bash -ex
-
-GREEN=`tput setaf 2`
-RESET=`tput sgr0`
-
-declare -a arr=("arangodb" "postgres" "mariadb" "mysql")
-arr=( $(shuf -e "${arr[@]}") )
+#!/usr/bin/env sh
 
 echo ""
-printf "${GREEN}Testing databases are ${RESET}"
-for i in "${arr[@]}"
+printf "Testing databases are "
+
+for i in arangodb postgres mariadb mysql
 do
-   printf  ${i}
-   printf " "
+   printf  "%s " "${i}"
 done
 
 echo ""
 sleep 2;
 
-for i in "${arr[@]}"
+for i in arangodb postgres mariadb mysql
 do
-   bash bench.sh --driver ${i}
+   ./bench.sh --driver ${i}
 done

@@ -6,21 +6,22 @@ namespace Prooph\EventStoreBenchmarks;
 
 use Prooph\Common\Messaging\Message;
 
-class AllProjector extends \Thread
+class AllProjector
 {
+    private $id;
     private $driver;
     private $stopAt;
 
-    public function __construct(string $driver, int $stopAt)
+    public function __construct(string $id, string $driver, int $stopAt)
     {
+        $this->id = $id;
         $this->driver = $driver;
         $this->stopAt = $stopAt;
     }
 
     public function run()
     {
-        $id = $this->getThreadId();
-        echo "Projection $id started\n";
+        outputText("Projection $this->id started");
 
         try {
             $connection = createConnection($this->driver);
@@ -54,8 +55,8 @@ class AllProjector extends \Thread
             $time = $end - $start;
             $avg = $this->stopAt / $time;
 
-            echo "Projection $id read $readEvents events\n";
-            echo "projection $id used $time seconds, avg $avg events/second\n";
+            outputText("Projection $this->id read $readEvents events");
+            outputText("projection $this->id used $time seconds, avg $avg events/second");
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
         }

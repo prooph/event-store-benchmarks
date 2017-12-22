@@ -7,14 +7,16 @@ namespace Prooph\EventStoreBenchmarks;
 use Prooph\Common\Messaging\Message;
 use Ramsey\Uuid\Uuid;
 
-class CategoryProjector extends \Thread
+class CategoryProjector
 {
+    private $id;
     private $driver;
     private $category;
     private $stopAt;
 
-    public function __construct(string $driver, string $category, int $stopAt)
+    public function __construct(string $id, string $driver, string $category, int $stopAt)
     {
+        $this->id = $id;
         $this->driver = $driver;
         $this->category = $category;
         $this->stopAt = $stopAt;
@@ -22,8 +24,7 @@ class CategoryProjector extends \Thread
 
     public function run()
     {
-        $id = $this->getThreadId();
-        echo "Projection $id started\n";
+        outputText("Projection $this->id started");
 
         try {
             $connection = createConnection($this->driver);
@@ -58,8 +59,8 @@ class CategoryProjector extends \Thread
             $time = $end - $start;
             $avg = $this->stopAt / $time;
 
-            echo "Projection $id read $readEvents events\n";
-            echo "projection $id used $time seconds, avg $avg events/second\n";
+            outputText("Projection $this->id read $readEvents events");
+            outputText("projection $this->id used $time seconds, avg $avg events/second");
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
         }

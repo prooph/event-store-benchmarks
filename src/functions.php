@@ -308,3 +308,9 @@ function testPayload(): array
         'key7' => 7,
     ];
 }
+
+
+function outputText(string $text) {
+    $time = new \DateTime('now');
+    echo $time->format('Y-m-d\TH:i:s.u') . ': ' . $text . PHP_EOL;
+}
