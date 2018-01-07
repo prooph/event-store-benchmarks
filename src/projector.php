@@ -14,7 +14,11 @@ require 'functions.php';
 $dotenv = new Dotenv('..');
 $dotenv->load();
 
-$connections = createConnections();
+if (false === ($drivers = getenv('DRIVER'))) {
+    throw new \RuntimeException('No DRIVER environment variable set.');
+}
+
+$connections = createConnections(explode(',', $drivers));
 $name = $argv[1];
 $type = $argv[2];
 

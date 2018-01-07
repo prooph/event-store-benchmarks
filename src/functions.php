@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Prooph\EventStoreBenchmarks;
 
-use ArangoDBClient\Connection;
-use ArangoDBClient\ConnectionOptions;
-use ArangoDBClient\UpdatePolicy;
-use ArangoDBClient\Urls;
+use ArangoDb\Connection;
 use PDO;
 use Prooph\Common\Messaging\FQCNMessageFactory;
 use function Prooph\EventStore\ArangoDb\Fn\eventStreamsBatch;
@@ -72,20 +69,15 @@ function createConnection(string $driver)
 
             return new PDO("pgsql:host=$host;port=$port;dbname=$dbName;options='--client_encoding=\"$charset\"'", $username, $password);
         case 'arangodb':
-            return new Connection(
+            $connection = new Connection(
                 [
-                    ConnectionOptions::OPTION_AUTH_TYPE => 'Basic',
-                    ConnectionOptions::OPTION_CONNECTION => 'Keep-Alive',
-                    ConnectionOptions::OPTION_TIMEOUT => 30,
-                    ConnectionOptions::OPTION_RECONNECT => true,
-                    ConnectionOptions::OPTION_CREATE => false,
-                    ConnectionOptions::OPTION_UPDATE_POLICY => UpdatePolicy::LAST,
-                    ConnectionOptions::OPTION_AUTH_USER => getenv('ARANGODB_USERNAME'),
-                    ConnectionOptions::OPTION_AUTH_PASSWD => getenv('ARANGODB_PASSWORD'),
-                    ConnectionOptions::OPTION_ENDPOINT => getenv('ARANGODB_HOST'),
-                    ConnectionOptions::OPTION_DATABASE => getenv('ARANGODB_DB'),
+                    Connection::HOST => getenv('ARANGODB_HOST'),
+                    Connection::MAX_CHUNK_SIZE => 64,
+                    Connection::VST_VERSION => Connection::VST_VERSION_11,
                 ]
             );
+            $connection->connect();
+            return $connection;
     }
 }
 
@@ -105,7 +97,7 @@ function createDatabase($connection, string $driver, string $dbName): void
 
             break;
         case 'arangodb':
-            $result = $connection->get(Urls::URL_COLLECTION . '?excludeSystem=1');
+            $result = $connection->get('/_api/collection?excludeSystem=1');
 
             $collections = json_decode($result->getBody(), true);
 
@@ -118,8 +110,8 @@ function createDatabase($connection, string $driver, string $dbName): void
                 );
             }
 
-            eventStreamsBatch($connection)->process();
-            projectionsBatch($connection)->process();
+            execute($connection, null, ...eventStreamsBatch());
+            execute($connection, null, ...projectionsBatch());
             break;
         default:
             throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));
@@ -145,7 +137,7 @@ function destroyDatabase($connection, string $driver, string $dbName): void
             $connection->exec('DROP TABLE projections;');
             break;
         case 'arangodb':
-            $result = $connection->get(Urls::URL_COLLECTION . '?excludeSystem=1');
+            $result = $connection->get('/_api/collection?excludeSystem=1');
 
             $collections = json_decode($result->getBody(), true);
 
@@ -219,60 +211,34 @@ function createProjectionManager(EventStore $eventStore, string $driver, $connec
     }
 }
 
-function getDatabases(): array
+function createConnections(array $drivers): array
 {
-    if ($driver = getenv('DRIVER')) {
-        return [$driver => $driver];
+    $data = [];
+
+    foreach ($drivers as $driver) {
+        $data[$driver] = createConnection($driver);
     }
-
-    return [
-        'mysql' => 'mysql',
-        'mariadb' => 'mariadb',
-        'postgres' => 'postgres',
-        'arangodb' => 'arangodb',
-    ];
-}
-
-function createConnections(): array
-{
-    if ($driver = getenv('DRIVER')) {
-        return [$driver => createConnection($driver)];
-    }
-
-    return [
-        'mysql' => createConnection('mysql'),
-        'mariadb' => createConnection('mariadb'),
-        'postgres' => createConnection('postgres'),
-        'arangodb' => createConnection('arangodb'),
-    ];
+    return $data;
 }
 
 function createEventStores(array $connections): array
 {
-    if ($driver = getenv('DRIVER')) {
-        return [$driver => createEventStore($driver, $connections[$driver])];
-    }
+    $data = [];
 
-    return [
-        'mysql' => createEventStore('mysql', $connections['mysql']),
-        'mariadb' => createEventStore('mariadb', $connections['mariadb']),
-        'postgres' => createEventStore('postgres', $connections['postgres']),
-        'arangodb' => createEventStore('arangodb', $connections['arangodb']),
-    ];
+    foreach ($connections as $driver => $connection) {
+        $data[$driver] = createEventStore($driver, $connections[$driver]);
+    }
+    return $data;
 }
 
 function createProjectionManagers(array $eventStores, array $connections): array
 {
-    if ($driver = getenv('DRIVER')) {
-        return [$driver => createProjectionManager($eventStores[$driver], $driver, $connections[$driver])];
-    }
+    $data = [];
 
-    return [
-        'mysql' => createProjectionManager($eventStores['mysql'], 'mysql', $connections['mysql']),
-        'mariadb' => createProjectionManager($eventStores['mariadb'], 'mariadb', $connections['mariadb']),
-        'postgres' => createProjectionManager($eventStores['postgres'], 'postgres', $connections['postgres']),
-        'arangodb' => createProjectionManager($eventStores['arangodb'], 'arangodb', $connections['arangodb']),
-    ];
+    foreach ($connections as $driver => $connection) {
+        $data[$driver] = createProjectionManager($eventStores[$driver], $driver, $connections[$driver]);
+    }
+    return $data;
 }
 
 function createTestEvent(array $payload, int $version)

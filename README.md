@@ -52,7 +52,7 @@ $ . bench_docker_all.sh > results.log
 1) Have MySQL, MariaDB, Postgres, ArangoDB installed and running
 2) Edit `.env` file and change your db settings
 3) Create the test database according to your settings
-4) run `. bench.sh --driver postgres` or `. bench_all.sh > results.log`
+4) run `. bench.sh --driver postgres` or `. bench_all.sh > results.log` or `. bench.sh --driver postgres,arangodb`
 5) enjoy
 
 ## Good to know

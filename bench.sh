@@ -26,6 +26,8 @@ if [ -z "${DRIVER}" ]; then
     return 1
 fi
 
+export DRIVER=${DRIVER}
+
 echo ""
 echo "Starting benchmark ${DRIVER}!"
 php src/prepare.php
