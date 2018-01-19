@@ -35,16 +35,16 @@ Install dependencies with:
 $ docker run --rm -i -v $(pwd):/app prooph/composer:7.1 update -o
 ```
 
-Then you can simply run the `bench.sh` script for each driver (`arangodb` `postgres` `mysql` `mariadb`):
+Then you can simply run the `bench_docker.sh` script for each driver (`arangodb` `postgres` `mysql` `mariadb`):
 
 ```
-$ . bench.sh --driver postgres
+$ . bench_docker.sh --driver postgres
 ```
 
 Or to run all benchmarks
 
 ```
-$ . bench_all.sh > results.log
+$ . bench_docker_all.sh > results.log
 ```
 
 ### Manual
@@ -52,7 +52,7 @@ $ . bench_all.sh > results.log
 1) Have MySQL, MariaDB, Postgres, ArangoDB installed and running
 2) Edit `.env` file and change your db settings
 3) Create the test database according to your settings
-4) run `php src/benchmark.php` or `DRIVER=postgres php src/benchmark.php`
+4) run `. bench.sh --driver postgres` or `. bench_all.sh > results.log` or `. bench.sh --driver postgres,arangodb`
 5) enjoy
 
 ## Good to know
@@ -64,12 +64,6 @@ This is the most realistic test case that comes close to production usage:
 - 6 projections are reading events at the same time
 - a total of 12500 events are written
 - a total of 25000 events are read
-
-You need to have PHP 7.2 and pthreads extension installed for test7 (real world test).
-
-There is currently a bug in pthreads (https://github.com/krakjoe/pthreads/issues/760)
-and a suggested fix, but for now during benchmark the `\Prooph\EventStore\Pdo\Projection\PdoEventStoreProjector`
-is patched in order to work with pthreads.
 
 ## Support
 

@@ -2,11 +2,11 @@ version: '2.3'
 services:
   # To run benchmark suite docker-compose run --rm php src/benchmark
   php:
-    image: prooph/php:7.2-zts
+    image: prooph/php:7.2-cli
     environment:
       DRIVER: "arangodb"
       PHP_IDE_CONFIG: "serverName=application"
-      ARANGODB_HOST: "tcp://arangodb:8529"
+      ARANGODB_HOST: "tcp://database:8529"
       ARANGODB_USERNAME: ""
       ARANGODB_PASSWORD: ""
       ARANGODB_DB: _system
@@ -17,7 +17,7 @@ services:
     #mem_limit: phpmem_limit
     #mem_reservation: phpmem_reservation
 
-  arangodb:
+  database:
     image: arangodb:3.2
     ports:
       - 8529:8529

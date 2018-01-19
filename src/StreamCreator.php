@@ -9,16 +9,18 @@ use Prooph\EventStore\StreamName;
 use Prooph\EventStore\TransactionalEventStore;
 use Ramsey\Uuid\Uuid;
 
-class StreamCreator extends \Thread
+class StreamCreator
 {
+    private $id;
     private $eventsWritten;
     private $driver;
     private $category;
     private $executions;
     private $numberOfEvents;
 
-    public function __construct(string $driver, string $category, int $executions, int $numberOfEvents)
+    public function __construct(string $id, string $driver, string $category, int $executions, int $numberOfEvents)
     {
+        $this->id = $id;
         $this->eventsWritten = 0;
         $this->driver = $driver;
         $this->category = $category;
@@ -28,8 +30,7 @@ class StreamCreator extends \Thread
 
     public function run()
     {
-        $id = $this->getThreadId();
-        echo "Writer $id started\n";
+        outputText("Writer $this->id-$this->category started");
 
         try {
             $connection = createConnection($this->driver);
@@ -60,8 +61,8 @@ class StreamCreator extends \Thread
             $time = $end - $start;
             $avg = ($this->executions * $this->numberOfEvents) / $time;
 
-            echo "Writer $id wrote $this->eventsWritten events\n";
-            echo "Writer $id used $time seconds, avg $avg events/second\n";
+            outputText("Writer $this->id-$this->category wrote $this->eventsWritten events");
+            outputText("Writer $this->id-$this->category used $time seconds, avg $avg events/second");
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
         }

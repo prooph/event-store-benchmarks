@@ -7,3 +7,4 @@
 nbproject
 composer.lock
 docker-compose.yml
+logs/*.log
