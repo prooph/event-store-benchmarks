@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Prooph\EventStoreBenchmarks;
 
 use ArangoDb\Connection;
+use MongoDB\Client;
 use PDO;
 use Prooph\Common\Messaging\FQCNMessageFactory;
-use Prooph\EventStore\ArangoDb\EventStore as ArangoDbEventStore;
-use Prooph\EventStore\ArangoDb\Projection\ProjectionManager as ArangoDbProjectionManager;
 use Prooph\EventStore\ArangoDb\Type\DeleteCollection;
 use Prooph\EventStore\EventStore;
+use Prooph\EventStore\MongoDb\MongoDbEventStore;
+use Prooph\EventStore\MongoDb\Projection\MongoDbProjectionManager;
 use Prooph\EventStore\Pdo\MariaDbEventStore;
 use Prooph\EventStore\Pdo\MySqlEventStore;
 use Prooph\EventStore\Pdo\PostgresEventStore;
@@ -32,6 +33,7 @@ function testDatabases(): array
         'mariadb' => \getenv('MARIADB_DB'),
         'postgres' => \getenv('POSTGRES_DB'),
         'arangodb' => \getenv('ARANGODB_DB'),
+        'mongodb' => \getenv('MONGODB_DB'),
     ];
 }
 
@@ -68,6 +70,10 @@ function createStreamStrategy(string $driver)
             return new $class();
         case 'arangodb':
             $class = 'Prooph\EventStore\ArangoDb\PersistenceStrategy\\' . \getenv('STREAM_STRATEGY') . 'StreamStrategy';
+
+            return new $class();
+        case 'mongodb':
+            $class = 'Prooph\EventStore\MongoDb\PersistenceStrategy\MongoDb' . \getenv('STREAM_STRATEGY') . 'StreamStrategy';
 
             return new $class();
         default:
@@ -116,6 +122,14 @@ function createConnection(string $driver)
             $connection->connect();
 
             return $connection;
+        case 'mongodb':
+            return new Client(
+                \getenv('MONGODB_HOST'),
+                [],
+                ['typeMap' => ['root' => 'array', 'document' => 'array', 'array' => 'array']]
+            );
+        default:
+            throw new \RuntimeException(\sprintf('Driver "%s" not supported', $driver));
     }
 }
 
@@ -151,6 +165,10 @@ function createDatabase($connection, string $driver, string $dbName): void
             execute($connection, null, ...eventStreamsBatch());
             execute($connection, null, ...projectionsBatch());
             break;
+        case 'mongodb':
+            \Prooph\EventStore\MongoDb\MongoDbHelper::createProjectionCollection($connection, $dbName, 'projections');
+            \Prooph\EventStore\MongoDb\MongoDbHelper::createEventStreamsCollection($connection, $dbName, 'event_streams');
+            break;
         default:
             throw new \RuntimeException(\sprintf('Driver "%s" not supported', $driver));
     }
@@ -159,7 +177,7 @@ function createDatabase($connection, string $driver, string $dbName): void
     \sleep(1);
 }
 
-function destroyDatabase($connection, string $driver, string $dbName): void
+function destroyDatabase($connection, string $driver): void
 {
     switch (\strtolower($driver)) {
         case 'mysql':
@@ -187,6 +205,9 @@ function destroyDatabase($connection, string $driver, string $dbName): void
                     }, $collections['result'])
                 );
             }
+            break;
+        case 'mongodb':
+            $connection->dropDatabase(\getenv('MONGODB_DB'));
             break;
         default:
             throw new \RuntimeException(\sprintf('Driver "%s" not supported', $driver));
@@ -220,6 +241,15 @@ function createEventStore(string $driver, $connection): EventStore
                 $connection,
                 createStreamStrategy($driver)
             );
+        case 'mongodb':
+            return new MongoDbEventStore(
+                new FQCNMessageFactory(),
+                $connection,
+                \getenv('MONGODB_DB'),
+                createStreamStrategy($driver)
+            );
+        default:
+            throw new \RuntimeException(\sprintf('Driver "%s" not supported', $driver));
     }
 }
 
@@ -246,6 +276,16 @@ function createProjectionManager(EventStore $eventStore, string $driver, $connec
                 $eventStore,
                 $connection
             );
+        case 'mongodb':
+            return new MongoDbProjectionManager(
+                $eventStore,
+                $connection,
+                createStreamStrategy($driver),
+                new FQCNMessageFactory(),
+                \getenv('MONGODB_DB')
+            );
+        default:
+            throw new \RuntimeException(\sprintf('Driver "%s" not supported', $driver));
     }
 }
 
