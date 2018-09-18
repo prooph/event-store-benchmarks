@@ -7,9 +7,8 @@ namespace Prooph\EventStoreBenchmarks;
 use ArangoDb\Connection;
 use PDO;
 use Prooph\Common\Messaging\FQCNMessageFactory;
-use function Prooph\EventStore\ArangoDb\Fn\eventStreamsBatch;
-use function Prooph\EventStore\ArangoDb\Fn\execute;
-use function Prooph\EventStore\ArangoDb\Fn\projectionsBatch;
+use Prooph\EventStore\ArangoDb\EventStore as ArangoDbEventStore;
+use Prooph\EventStore\ArangoDb\Projection\ProjectionManager as ArangoDbProjectionManager;
 use Prooph\EventStore\ArangoDb\Type\DeleteCollection;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStore\Pdo\MariaDbEventStore;
@@ -22,16 +21,17 @@ use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStore\StreamName;
 use Prooph\EventStore\Util\Assertion;
 use ProophTest\EventStore\Mock\TestDomainEvent;
-use Prooph\EventStore\ArangoDb\Projection\ProjectionManager as ArangoDbProjectionManager;
-use Prooph\EventStore\ArangoDb\EventStore as ArangoDbEventStore;
+use function Prooph\EventStore\ArangoDb\Fn\eventStreamsBatch;
+use function Prooph\EventStore\ArangoDb\Fn\execute;
+use function Prooph\EventStore\ArangoDb\Fn\projectionsBatch;
 
 function testDatabases(): array
 {
     return [
-        'mysql' => getenv('MYSQL_DB'),
-        'mariadb' => getenv('MARIADB_DB'),
-        'postgres' => getenv('POSTGRES_DB'),
-        'arangodb' => getenv('ARANGODB_DB'),
+        'mysql' => \getenv('MYSQL_DB'),
+        'mariadb' => \getenv('MARIADB_DB'),
+        'postgres' => \getenv('POSTGRES_DB'),
+        'arangodb' => \getenv('ARANGODB_DB'),
     ];
 }
 
@@ -39,90 +39,96 @@ function checkWriteIntegrity(EventStore $eventStore, int $numberStreams, int $nu
 {
     $streamNames = $eventStore->fetchStreamNames(null, null, 100000);
     Assertion::eq(
-        count($streamNames),
+        \count($streamNames),
         $numberStreams,
         'Number of streams invalid: Value "%s" does not equal expected value "%s".'
     );
     $count = 0;
     foreach ($streamNames as $streamName) {
         $events = $eventStore->load($streamName);
-        $count += iterator_count($events);
+        $count += \iterator_count($events);
     }
     Assertion::eq($count, $numberEvents, 'Number of events invalid: Value "%s" does not equal expected value "%s".');
 }
 
-function createStreamStrategy(string $driver) {
-    switch (strtolower($driver)) {
+function createStreamStrategy(string $driver)
+{
+    switch (\strtolower($driver)) {
         case 'mysql':
-            $class = 'Prooph\EventStore\Pdo\PersistenceStrategy\MySql' . getenv('STREAM_STRATEGY') . 'StreamStrategy';
+            $class = 'Prooph\EventStore\Pdo\PersistenceStrategy\MySql' . \getenv('STREAM_STRATEGY') . 'StreamStrategy';
+
             return new $class();
         case 'mariadb':
-            $class = 'Prooph\EventStore\Pdo\PersistenceStrategy\MariaDb' . getenv('STREAM_STRATEGY') . 'StreamStrategy';
+            $class = 'Prooph\EventStore\Pdo\PersistenceStrategy\MariaDb' . \getenv('STREAM_STRATEGY') . 'StreamStrategy';
+
             return new $class();
         case 'postgres':
-            $class = 'Prooph\EventStore\Pdo\PersistenceStrategy\Postgres' . getenv('STREAM_STRATEGY') . 'StreamStrategy';
+            $class = 'Prooph\EventStore\Pdo\PersistenceStrategy\Postgres' . \getenv('STREAM_STRATEGY') . 'StreamStrategy';
+
             return new $class();
         case 'arangodb':
-            $class = 'Prooph\EventStore\ArangoDb\PersistenceStrategy\\' . getenv('STREAM_STRATEGY') . 'StreamStrategy';
+            $class = 'Prooph\EventStore\ArangoDb\PersistenceStrategy\\' . \getenv('STREAM_STRATEGY') . 'StreamStrategy';
+
             return new $class();
         default:
-            throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));
+            throw new \RuntimeException(\sprintf('Driver "%s" not supported', $driver));
     }
 }
 
 function createConnection(string $driver)
 {
-    switch (strtolower($driver)) {
+    switch (\strtolower($driver)) {
         case 'mysql':
-            $host = getenv('MYSQL_HOST');
-            $port = getenv('MYSQL_PORT');
-            $dbName = getenv('MYSQL_DB');
-            $charset = getenv('MYSQL_CHARSET');
-            $username = getenv('MYSQL_USER');
-            $password = getenv('MYSQL_PASSWORD');
+            $host = \getenv('MYSQL_HOST');
+            $port = \getenv('MYSQL_PORT');
+            $dbName = \getenv('MYSQL_DB');
+            $charset = \getenv('MYSQL_CHARSET');
+            $username = \getenv('MYSQL_USER');
+            $password = \getenv('MYSQL_PASSWORD');
 
             return new PDO("mysql:host=$host;port=$port;dbname=$dbName;charset=$charset;", $username, $password);
         case 'mariadb':
-            $host = getenv('MARIADB_HOST');
-            $port = getenv('MARIADB_PORT');
-            $dbName = getenv('MARIADB_DB');
-            $charset = getenv('MARIADB_CHARSET');
-            $username = getenv('MARIADB_USER');
-            $password = getenv('MARIADB_PASSWORD');
+            $host = \getenv('MARIADB_HOST');
+            $port = \getenv('MARIADB_PORT');
+            $dbName = \getenv('MARIADB_DB');
+            $charset = \getenv('MARIADB_CHARSET');
+            $username = \getenv('MARIADB_USER');
+            $password = \getenv('MARIADB_PASSWORD');
 
             return new PDO("mysql:host=$host;port=$port;dbname=$dbName;charset=$charset", $username, $password);
         case 'postgres':
-            $host = getenv('POSTGRES_HOST');
-            $port = getenv('POSTGRES_PORT');
-            $dbName = getenv('POSTGRES_DB');
-            $charset = getenv('POSTGRES_CHARSET');
-            $username = getenv('POSTGRES_USER');
-            $password = getenv('POSTGRES_PASSWORD');
+            $host = \getenv('POSTGRES_HOST');
+            $port = \getenv('POSTGRES_PORT');
+            $dbName = \getenv('POSTGRES_DB');
+            $charset = \getenv('POSTGRES_CHARSET');
+            $username = \getenv('POSTGRES_USER');
+            $password = \getenv('POSTGRES_PASSWORD');
 
             return new PDO("pgsql:host=$host;port=$port;dbname=$dbName;options='--client_encoding=\"$charset\"'", $username, $password);
         case 'arangodb':
             $connection = new Connection(
                 [
-                    Connection::HOST => getenv('ARANGODB_HOST'),
+                    Connection::HOST => \getenv('ARANGODB_HOST'),
                     Connection::MAX_CHUNK_SIZE => 64,
                     Connection::VST_VERSION => Connection::VST_VERSION_11,
                 ]
             );
             $connection->connect();
+
             return $connection;
     }
 }
 
 function createDatabase($connection, string $driver, string $dbName): void
 {
-    switch (strtolower($driver)) {
+    switch (\strtolower($driver)) {
         case 'mysql':
         case 'mariadb':
         case 'postgres':
             try {
                 $path = '../vendor/prooph/pdo-event-store/scripts/' . $driver . '/';
-                $connection->exec(file_get_contents($path . '01_event_streams_table.sql'));
-                $connection->exec(file_get_contents($path . '02_projections_table.sql'));
+                $connection->exec(\file_get_contents($path . '01_event_streams_table.sql'));
+                $connection->exec(\file_get_contents($path . '02_projections_table.sql'));
             } catch (\Throwable $e) {
                 echo $e->getMessage();
             }
@@ -131,12 +137,12 @@ function createDatabase($connection, string $driver, string $dbName): void
         case 'arangodb':
             $result = $connection->get('/_api/collection?excludeSystem=1');
 
-            $collections = json_decode($result->getBody(), true);
+            $collections = \json_decode($result->getBody(), true);
 
-            if (count($collections['result']) > 1) {
+            if (\count($collections['result']) > 1) {
                 execute($connection,
                     null,
-                    ...array_map(function ($col) {
+                    ...\array_map(function ($col) {
                         return DeleteCollection::with($col['name']);
                     }, $collections['result'])
                 );
@@ -146,21 +152,21 @@ function createDatabase($connection, string $driver, string $dbName): void
             execute($connection, null, ...projectionsBatch());
             break;
         default:
-            throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));
+            throw new \RuntimeException(\sprintf('Driver "%s" not supported', $driver));
     }
     unset($connection);
     // give DB some time
-    sleep(1);
+    \sleep(1);
 }
 
 function destroyDatabase($connection, string $driver, string $dbName): void
 {
-    switch (strtolower($driver)) {
+    switch (\strtolower($driver)) {
         case 'mysql':
         case 'mariadb':
         case 'postgres':
             /* @var PDO $connection */
-            $statement = $connection->query("SELECT stream_name FROM event_streams;");
+            $statement = $connection->query('SELECT stream_name FROM event_streams;');
             $rows = $statement->fetchAll();
             foreach ($rows as $row) {
                 $connection->exec('DROP TABLE ' . $row['stream_name'] . ';');
@@ -171,25 +177,25 @@ function destroyDatabase($connection, string $driver, string $dbName): void
         case 'arangodb':
             $result = $connection->get('/_api/collection?excludeSystem=1');
 
-            $collections = json_decode($result->getBody(), true);
+            $collections = \json_decode($result->getBody(), true);
 
-            if (count($collections['result']) > 1) {
+            if (\count($collections['result']) > 1) {
                 execute($connection,
                     null,
-                    ...array_map(function ($col) {
+                    ...\array_map(function ($col) {
                         return DeleteCollection::with($col['name']);
                     }, $collections['result'])
                 );
             }
             break;
         default:
-            throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));
+            throw new \RuntimeException(\sprintf('Driver "%s" not supported', $driver));
     }
 }
 
 function createEventStore(string $driver, $connection): EventStore
 {
-    switch (strtolower($driver)) {
+    switch (\strtolower($driver)) {
         case 'mysql':
             return new MySqlEventStore(
                 new FQCNMessageFactory(),
@@ -219,7 +225,7 @@ function createEventStore(string $driver, $connection): EventStore
 
 function createProjectionManager(EventStore $eventStore, string $driver, $connection): ProjectionManager
 {
-    switch (strtolower($driver)) {
+    switch (\strtolower($driver)) {
         case 'mysql':
             return new MySqlProjectionManager(
                 $eventStore,
@@ -250,6 +256,7 @@ function createConnections(array $drivers): array
     foreach ($drivers as $driver) {
         $data[$driver] = createConnection($driver);
     }
+
     return $data;
 }
 
@@ -260,6 +267,7 @@ function createEventStores(array $connections): array
     foreach ($connections as $driver => $connection) {
         $data[$driver] = createEventStore($driver, $connections[$driver]);
     }
+
     return $data;
 }
 
@@ -270,6 +278,7 @@ function createProjectionManagers(array $eventStores, array $connections): array
     foreach ($connections as $driver => $connection) {
         $data[$driver] = createProjectionManager($eventStores[$driver], $driver, $connections[$driver]);
     }
+
     return $data;
 }
 
@@ -277,12 +286,13 @@ function createTestEvent(array $payload, int $version)
 {
     $event = TestDomainEvent::with($payload, $version);
     $event = $event->withAddedMetadata('_aggregate_id', $event->uuid()->toString());
+
     return $event->withAddedMetadata('_aggregate_type', 'TestDomainEvent');
 }
 
 function createTestStreamName()
 {
-    return new StreamName(uniqid('stream'));
+    return new StreamName(\uniqid('stream'));
 }
 
 function createTestEvents(array $payload, int $amount, int $startFrom = 0)
@@ -309,8 +319,8 @@ function testPayload(): array
     ];
 }
 
-
-function outputText(string $text, bool $useDate = true, string $lineEnding = PHP_EOL) {
+function outputText(string $text, bool $useDate = true, string $lineEnding = PHP_EOL)
+{
     $time = new \DateTime('now');
     if ($useDate) {
         echo $time->format('Y-m-d\TH:i:s.u') . ': ' . $text . $lineEnding;

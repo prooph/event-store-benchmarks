@@ -39,7 +39,7 @@ class StreamCreator
 
             $eventStore = createEventStore($this->driver, $connection);
 
-            $start = microtime(true);
+            $start = \microtime(true);
 
             for ($i = 0; $i < $this->executions; $i++) {
                 $count += $this->numberOfEvents;
@@ -59,7 +59,7 @@ class StreamCreator
                 $this->eventsWritten += $this->numberOfEvents;
             }
 
-            $end = microtime(true);
+            $end = \microtime(true);
 
             $time = $end - $start;
             $avg = ($this->executions * $this->numberOfEvents) / $time;
@@ -67,7 +67,7 @@ class StreamCreator
             outputText("Writer $this->id-$this->category wrote $this->eventsWritten events");
             outputText("Writer $this->id-$this->category used $time seconds, avg $avg events/second");
             outputText("Writer $this->id checking integrity ...", true, '');
-            Assertion::eq($count, $this->numberOfEvents * $this->executions , 'Number of writer events invalid: Value "%s" does not equal expected value "%s".');
+            Assertion::eq($count, $this->numberOfEvents * $this->executions, 'Number of writer events invalid: Value "%s" does not equal expected value "%s".');
             outputText(" ok\n", false);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();

@@ -34,7 +34,7 @@ class CategoryProjector
 
             $stopAt = $this->stopAt;
 
-            $start = microtime(true);
+            $start = \microtime(true);
             $uuid = Uuid::uuid4()->toString();
 
             $projection = $projectionManager->createProjection('category_projection_' . $uuid);
@@ -55,7 +55,7 @@ class CategoryProjector
 
             $readEvents = $projection->getState()['count'];
 
-            $end = microtime(true);
+            $end = \microtime(true);
 
             $time = $end - $start;
             $avg = $this->stopAt / $time;

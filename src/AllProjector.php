@@ -31,7 +31,7 @@ class AllProjector
 
             $stopAt = $this->stopAt;
 
-            $start = microtime(true);
+            $start = \microtime(true);
 
             $projection = $projectionManager->createProjection('all_projection');
             $projection
@@ -51,7 +51,7 @@ class AllProjector
 
             $readEvents = $projection->getState()['count'];
 
-            $end = microtime(true);
+            $end = \microtime(true);
 
             $time = $end - $start;
             $avg = $this->stopAt / $time;

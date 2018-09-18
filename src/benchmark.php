@@ -14,7 +14,7 @@ use Prooph\EventStore\TransactionalEventStore;
 use Prooph\EventStore\Util\Assertion;
 use Ramsey\Uuid\Uuid;
 
-chdir(__DIR__);
+\chdir(__DIR__);
 
 require '../vendor/autoload.php';
 require 'functions.php';
@@ -22,14 +22,14 @@ require 'functions.php';
 $dotenv = new Dotenv('..');
 $dotenv->load();
 
-if (false === ($drivers = getenv('DRIVER'))) {
+if (false === ($drivers = \getenv('DRIVER'))) {
     throw new \RuntimeException('No DRIVER environment variable set.');
 }
-if (false === ($strategy = getenv('STREAM_STRATEGY'))) {
+if (false === ($strategy = \getenv('STREAM_STRATEGY'))) {
     throw new \RuntimeException('No STREAM_STRATEGY environment variable set.');
 }
 
-$connections = createConnections(explode(',', $drivers));
+$connections = createConnections(\explode(',', $drivers));
 $payload = testPayload();
 
 $eventStores = createEventStores($connections);
@@ -46,7 +46,7 @@ foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
     $numberStreams[$name] = 0;
     $numberEvents[$name] = 0;
-    $start = microtime(true);
+    $start = \microtime(true);
     for ($i = 0; $i < 10; $i++) {
         $numberStreams[$name]++;
         $numberEvents[$name]++;
@@ -66,7 +66,7 @@ foreach ($eventStores as $name => $eventStore) {
             $eventStore->commit();
         }
     }
-    $end = microtime(true);
+    $end = \microtime(true);
     $time = $end - $start;
     $eventsPerSecond = 1000 / $time;
 
@@ -83,7 +83,7 @@ outputText("test 2 create 10 streams with 100 events in each stream, using 5 eve
 
 foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
-    $start = microtime(true);
+    $start = \microtime(true);
     for ($i = 0; $i < 10; $i++) {
         $numberStreams[$name]++;
         $numberEvents[$name] += 5;
@@ -105,7 +105,7 @@ foreach ($eventStores as $name => $eventStore) {
             $eventStore->commit();
         }
     }
-    $end = microtime(true);
+    $end = \microtime(true);
     $time = $end - $start;
     $eventsPerSecond = 1000 / $time;
 
@@ -125,7 +125,7 @@ foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
     $numberStreams[$name]++;
     $numberEvents[$name] += $number;
-    $start = microtime(true);
+    $start = \microtime(true);
     $streamName = new StreamName('stream_' . Uuid::uuid4()->toString());
 
     if ($eventStore instanceof TransactionalEventStore) {
@@ -138,7 +138,7 @@ foreach ($eventStores as $name => $eventStore) {
         $eventStore->commit();
     }
 
-    $end = microtime(true);
+    $end = \microtime(true);
     $time = $end - $start;
     $eventsPerSecond = 2500 / $time;
 
@@ -158,16 +158,16 @@ outputText("test 4 load one stream with 2500 events\n");
 
 foreach ($eventStores as $name => $eventStore) {
     /* @var EventStore $eventStore */
-    $start = microtime(true);
+    $start = \microtime(true);
     $events = $eventStore->load($streamNamesTest3[$name]);
-    $end = microtime(true);
+    $end = \microtime(true);
     $time = $end - $start;
     $eventsPerSecond = 2500 / $time;
 
     outputText("test 4 using $name took $time seconds");
     outputText("test 4 using $name loads $eventsPerSecond events per second");
     outputText('test 4 checking integrity ...', true, '');
-    Assertion::eq(iterator_count($events), 2500, 'Number of events invalid: Value "%s" does not equal expected value "%s".');
+    Assertion::eq(\iterator_count($events), 2500, 'Number of events invalid: Value "%s" does not equal expected value "%s".');
     outputText(" ok\n", false);
 }
 
@@ -189,9 +189,9 @@ foreach ($projectionManagers as $name => $projectionManager) {
 
             return $state;
         });
-    $start = microtime(true);
+    $start = \microtime(true);
     $projection->run(false);
-    $end = microtime(true);
+    $end = \microtime(true);
     $time = $end - $start;
     $eventsPerSecond = 2500 / $time;
 
@@ -224,9 +224,9 @@ foreach ($projectionManagers as $name => $projectionManager) {
 
             return $state;
         });
-    $start = microtime(true);
+    $start = \microtime(true);
     $projection->run(false);
-    $end = microtime(true);
+    $end = \microtime(true);
     $time = $end - $start;
     $eventsPerSecond = 1000 / $time;
 
