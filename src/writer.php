@@ -6,20 +6,22 @@ namespace Prooph\EventStoreBenchmarks;
 
 use Dotenv\Dotenv;
 
-chdir(__DIR__);
+\chdir(__DIR__);
 
 require '../vendor/autoload.php';
 require 'functions.php';
 
-
 $dotenv = new Dotenv('..');
 $dotenv->load();
 
-if (false === ($drivers = getenv('DRIVER'))) {
+if (false === ($drivers = \getenv('DRIVER'))) {
     throw new \RuntimeException('No DRIVER environment variable set.');
 }
+if (false === ($strategy = \getenv('STREAM_STRATEGY'))) {
+    throw new \RuntimeException('No STREAM_STRATEGY environment variable set.');
+}
 
-$connections = createConnections(explode(',', $drivers));
+$connections = createConnections(\explode(',', $drivers));
 $name = $argv[1];
 $type = $argv[2];
 

@@ -1,30 +1,39 @@
 #!/usr/bin/env sh
 
-USAGE="Usage: bench_docker.sh --driver [arangodb | postgres | mysql | mariadb]"
+USAGE="Usage: bench_docker.sh --driver [arangodb | postgres | mysql | mariadb] [--strategy Single | Simple | Aggregate]"
 
 IDLE_TIME=20
 DRIVER=
+STREAM_STRATEGY=
 
-while [ "${1}" ]; do
+while [[ ${1} ]]; do
     case "${1}" in
         --driver)
             DRIVER=${2}
             shift
             ;;
+        --strategy)
+            STRATEGY=${2}
+            shift
+            ;;
         *)
-            echo "${USAGE}" >&2
+            echo ${USAGE} >&2
             return 1
     esac
 
     if ! shift; then
         echo "Missing parameter argument. $USAGE" >&2
-        return 1
+        exit 1
     fi
 done
 
 if [ -z "${DRIVER}" ]; then
     echo "${USAGE}" >&2
     return 1
+fi
+
+if [ -z "${STRATEGY}" ]; then
+    STRATEGY=Aggregate
 fi
 
 CPU=$(($(grep -c ^processor /proc/cpuinfo) / 2))
@@ -83,7 +92,7 @@ until [ $IDLE_TIME -lt 1 ]; do
     printf "%s " "${IDLE_TIME}"
     sleep 1
 done
-docker-compose run --rm --entrypoint=sh php ./bench.sh --driver "${DRIVER}"
+docker-compose run --rm --entrypoint=sh php ./bench.sh --driver "${DRIVER}" --strategy "${STRATEGY}"
 
 echo ""
 echo "Dumping logs ${DRIVER}!"

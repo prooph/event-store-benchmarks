@@ -1,13 +1,18 @@
 #!/usr/bin/env sh
 
-USAGE="Usage: bench.sh --driver [arangodb | postgres | mysql | mariadb]"
+USAGE="Usage: bench.sh --driver [arangodb | postgres | mysql | mariadb] [--strategy Single | Simple | Aggregate]"
 
 DRIVER=
+STREAM_STRATEGY=
 
-while [ "${1}" ]; do
+while [[ ${1} ]]; do
     case "${1}" in
         --driver)
             DRIVER=${2}
+            shift
+            ;;
+        --strategy)
+            STRATEGY=${2}
             shift
             ;;
         *)
@@ -26,7 +31,13 @@ if [ -z "${DRIVER}" ]; then
     return 1
 fi
 
+if [ -z "${STRATEGY}" ]; then
+    STRATEGY=Aggregate
+fi
+
+
 export DRIVER=${DRIVER}
+export STREAM_STRATEGY=${STRATEGY}
 
 echo ""
 echo "Starting benchmark ${DRIVER}!"
@@ -35,7 +46,7 @@ php src/benchmark.php
 php src/cleanup.php
 
 echo ""
-echo "Starting real world benchmark ${DRIVER}!"
+echo "Starting real world benchmark ${DRIVER} with strategy ${STRATEGY}!"
 
 #real world test
 php src/prepare.php
@@ -80,10 +91,10 @@ done
 
 echo ""
 duration=$((end - start))
-printf "%s real world test duration %s seconds\\n" "${DRIVER}" "${duration}";
+printf "%s real world test duration %s seconds\\n" "${DRIVER} - ${STRATEGY}" "${duration}";
 
 avgWriters=$((12500 / (end - start) ))
-printf "%s avg writes %s events/second\\n" "${DRIVER}" "${avgWriters}";
+printf "%s avg writes %s events/second\\n" "${DRIVER} - ${STRATEGY}" "${avgWriters}";
 
 avgReaders=$((25000 / (end - start) ))
-printf "%s avg reads %s events/second\\n" "${DRIVER}" "${avgReaders}";
+printf "%s avg reads %s events/second\\n" "${DRIVER} - ${STRATEGY}" "${avgReaders}";

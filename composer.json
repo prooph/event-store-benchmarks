@@ -13,7 +13,7 @@
   },
   "require-dev":{
     "malukenho/docheader": "^0.1.4",
-    "prooph/php-cs-fixer-config": "^0.1.1"
+    "prooph/php-cs-fixer-config": "^0.2.1"
   },
   "autoload": {
     "psr-4": {
@@ -29,6 +29,15 @@
     "preferred-install": {
       "prooph/*": "source"
     }
+  },
+  "scripts": {
+    "check": [
+      "@cs",
+      "@docheader"
+    ],
+    "docheader": "vendor/bin/docheader check examples/ src/ tests/",
+    "cs": "php-cs-fixer fix -v --diff --dry-run",
+    "cs-fix": "php-cs-fixer fix -v --diff"
   },
   "repositories": [
     {
