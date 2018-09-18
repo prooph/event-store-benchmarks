@@ -17,6 +17,9 @@ $dotenv->load();
 if (false === ($drivers = getenv('DRIVER'))) {
     throw new \RuntimeException('No DRIVER environment variable set.');
 }
+if (false === ($strategy = getenv('STREAM_STRATEGY'))) {
+    throw new \RuntimeException('No STREAM_STRATEGY environment variable set.');
+}
 
 $connections = createConnections(explode(',', $drivers));
 $name = $argv[1];

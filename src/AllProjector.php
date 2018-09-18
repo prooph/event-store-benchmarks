@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Prooph\EventStoreBenchmarks;
 
 use Prooph\Common\Messaging\Message;
+use Prooph\EventStore\Util\Assertion;
 
 class AllProjector
 {
@@ -56,7 +57,10 @@ class AllProjector
             $avg = $this->stopAt / $time;
 
             outputText("Projection $this->id read $readEvents events");
-            outputText("projection $this->id used $time seconds, avg $avg events/second");
+            outputText("Projection $this->id used $time seconds, avg $avg events/second");
+            outputText("Projection $this->id checking integrity ...", true, '');
+            Assertion::eq($readEvents, $stopAt, 'Number of all projected events invalid: Value "%s" does not equal expected value "%s".');
+            outputText(" ok\n", false);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
         }

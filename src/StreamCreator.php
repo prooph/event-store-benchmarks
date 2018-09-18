@@ -7,6 +7,7 @@ namespace Prooph\EventStoreBenchmarks;
 use Prooph\EventStore\Stream;
 use Prooph\EventStore\StreamName;
 use Prooph\EventStore\TransactionalEventStore;
+use Prooph\EventStore\Util\Assertion;
 use Ramsey\Uuid\Uuid;
 
 class StreamCreator
@@ -33,6 +34,7 @@ class StreamCreator
         outputText("Writer $this->id-$this->category started");
 
         try {
+            $count = 0;
             $connection = createConnection($this->driver);
 
             $eventStore = createEventStore($this->driver, $connection);
@@ -40,6 +42,7 @@ class StreamCreator
             $start = microtime(true);
 
             for ($i = 0; $i < $this->executions; $i++) {
+                $count += $this->numberOfEvents;
                 $streamName = $this->category . '-' . Uuid::uuid4()->toString();
                 $events = createTestEvents(testPayload(), $this->numberOfEvents);
 
@@ -63,6 +66,9 @@ class StreamCreator
 
             outputText("Writer $this->id-$this->category wrote $this->eventsWritten events");
             outputText("Writer $this->id-$this->category used $time seconds, avg $avg events/second");
+            outputText("Writer $this->id checking integrity ...", true, '');
+            Assertion::eq($count, $this->numberOfEvents * $this->executions , 'Number of writer events invalid: Value "%s" does not equal expected value "%s".');
+            outputText(" ok\n", false);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
         }

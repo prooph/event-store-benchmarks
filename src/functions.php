@@ -14,19 +14,16 @@ use Prooph\EventStore\ArangoDb\Type\DeleteCollection;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStore\Pdo\MariaDbEventStore;
 use Prooph\EventStore\Pdo\MySqlEventStore;
-use Prooph\EventStore\Pdo\PersistenceStrategy\MariaDbAggregateStreamStrategy;
-use Prooph\EventStore\Pdo\PersistenceStrategy\MySqlAggregateStreamStrategy;
-use Prooph\EventStore\Pdo\PersistenceStrategy\PostgresAggregateStreamStrategy;
 use Prooph\EventStore\Pdo\PostgresEventStore;
 use Prooph\EventStore\Pdo\Projection\MariaDbProjectionManager;
 use Prooph\EventStore\Pdo\Projection\MySqlProjectionManager;
 use Prooph\EventStore\Pdo\Projection\PostgresProjectionManager;
 use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStore\StreamName;
+use Prooph\EventStore\Util\Assertion;
 use ProophTest\EventStore\Mock\TestDomainEvent;
 use Prooph\EventStore\ArangoDb\Projection\ProjectionManager as ArangoDbProjectionManager;
 use Prooph\EventStore\ArangoDb\EventStore as ArangoDbEventStore;
-use Prooph\EventStore\ArangoDb\PersistenceStrategy\AggregateStreamStrategy as ArangoDbAggregateStreamStrategy;
 
 function testDatabases(): array
 {
@@ -36,6 +33,41 @@ function testDatabases(): array
         'postgres' => getenv('POSTGRES_DB'),
         'arangodb' => getenv('ARANGODB_DB'),
     ];
+}
+
+function checkWriteIntegrity(EventStore $eventStore, int $numberStreams, int $numberEvents)
+{
+    $streamNames = $eventStore->fetchStreamNames(null, null, 100000);
+    Assertion::eq(
+        count($streamNames),
+        $numberStreams,
+        'Number of streams invalid: Value "%s" does not equal expected value "%s".'
+    );
+    $count = 0;
+    foreach ($streamNames as $streamName) {
+        $events = $eventStore->load($streamName);
+        $count += iterator_count($events);
+    }
+    Assertion::eq($count, $numberEvents, 'Number of events invalid: Value "%s" does not equal expected value "%s".');
+}
+
+function createStreamStrategy(string $driver) {
+    switch (strtolower($driver)) {
+        case 'mysql':
+            $class = 'Prooph\EventStore\Pdo\PersistenceStrategy\MySql' . getenv('STREAM_STRATEGY') . 'StreamStrategy';
+            return new $class();
+        case 'mariadb':
+            $class = 'Prooph\EventStore\Pdo\PersistenceStrategy\MariaDb' . getenv('STREAM_STRATEGY') . 'StreamStrategy';
+            return new $class();
+        case 'postgres':
+            $class = 'Prooph\EventStore\Pdo\PersistenceStrategy\Postgres' . getenv('STREAM_STRATEGY') . 'StreamStrategy';
+            return new $class();
+        case 'arangodb':
+            $class = 'Prooph\EventStore\ArangoDb\PersistenceStrategy\\' . getenv('STREAM_STRATEGY') . 'StreamStrategy';
+            return new $class();
+        default:
+            throw new \RuntimeException(sprintf('Driver "%s" not supported', $driver));
+    }
 }
 
 function createConnection(string $driver)
@@ -162,25 +194,25 @@ function createEventStore(string $driver, $connection): EventStore
             return new MySqlEventStore(
                 new FQCNMessageFactory(),
                 $connection,
-                new MySqlAggregateStreamStrategy()
+                createStreamStrategy($driver)
             );
         case 'mariadb':
             return new MariaDbEventStore(
                 new FQCNMessageFactory(),
                 $connection,
-                new MariaDbAggregateStreamStrategy()
+                createStreamStrategy($driver)
             );
         case 'postgres':
             return new PostgresEventStore(
                 new FQCNMessageFactory(),
                 $connection,
-                new PostgresAggregateStreamStrategy()
+                createStreamStrategy($driver)
             );
         case 'arangodb':
             return new ArangoDbEventStore(
                 new FQCNMessageFactory(),
                 $connection,
-                new ArangoDbAggregateStreamStrategy()
+                createStreamStrategy($driver)
             );
     }
 }
@@ -243,7 +275,9 @@ function createProjectionManagers(array $eventStores, array $connections): array
 
 function createTestEvent(array $payload, int $version)
 {
-    return TestDomainEvent::with($payload, $version);
+    $event = TestDomainEvent::with($payload, $version);
+    $event = $event->withAddedMetadata('_aggregate_id', $event->uuid()->toString());
+    return $event->withAddedMetadata('_aggregate_type', 'TestDomainEvent');
 }
 
 function createTestStreamName()
@@ -276,7 +310,11 @@ function testPayload(): array
 }
 
 
-function outputText(string $text) {
+function outputText(string $text, bool $useDate = true, string $lineEnding = PHP_EOL) {
     $time = new \DateTime('now');
-    echo $time->format('Y-m-d\TH:i:s.u') . ': ' . $text . PHP_EOL;
+    if ($useDate) {
+        echo $time->format('Y-m-d\TH:i:s.u') . ': ' . $text . $lineEnding;
+    } else {
+        echo $text . $lineEnding;
+    }
 }
