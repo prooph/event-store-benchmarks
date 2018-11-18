@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-USAGE="Usage: bench_docker.sh --driver [arangodb | postgres | mysql | mariadb] [--strategy Single | Simple | Aggregate]"
+USAGE="Usage: bench_docker.sh --driver [arangodb | arangodb-vpack | postgres | mysql | mariadb] [--strategy Single | Simple | Aggregate]"
 
 IDLE_TIME=40
 DRIVER=

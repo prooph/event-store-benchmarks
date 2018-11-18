@@ -3,7 +3,7 @@
 GREEN=`tput setaf 2`
 RESET=`tput sgr0`
 
-declare -a arr=("arangodb" "postgres" "mariadb" "mysql")
+declare -a arr=("arangodb" "arangodb-vpack" "postgres" "mariadb" "mysql")
 arr=( $(shuf -e "${arr[@]}") )
 
 echo ""

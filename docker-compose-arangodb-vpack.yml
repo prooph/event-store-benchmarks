@@ -2,15 +2,18 @@ version: '2.3'
 services:
   # To run benchmark suite docker-compose run --rm php src/benchmark
   php:
-    image: prooph/php:7.2-cli
+    image: vpack72
+    build:
+      context: ./env
+      dockerfile: Dockerfile
     environment:
-      DRIVER: "postgres"
-      POSTGRES_USER: "dev"
-      POSTGRES_PASSWORD: "dev"
-      POSTGRES_HOST: "database"
-      POSTGRES_PORT: "5432"
-      POSTGRES_CHARSET: "utf8"
-      POSTGRES_DB: "event_store_tests"
+      USE_VPACK: "true"
+      DRIVER: "arangodb"
+      PHP_IDE_CONFIG: "serverName=application"
+      ARANGODB_HOST: "tcp://database:8529"
+      ARANGODB_USERNAME: ""
+      ARANGODB_PASSWORD: ""
+      ARANGODB_DB: event-store-bench
     volumes:
       - "./:/app"
     #cpuset: phpcpuset
@@ -19,14 +22,11 @@ services:
     #mem_reservation: phpmem_reservation
 
   database:
-    image: postgres:11.1
+    image: arangodb/arangodb-preview:devel
     ports:
-      - 5432:5432
+      - 8529:8529
     environment:
-      POSTGRES_DB: "event_store_tests"
-      POSTGRES_USER: "dev"
-      POSTGRES_PASSWORD: "dev"
-    command: "-c 'max_connections=200'"
+      ARANGO_NO_AUTH: 1
     #cpuset: dbcpuset
     #cpu_count: dbcpu_count
     #mem_limit: dbmem_limit

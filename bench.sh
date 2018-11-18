@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-USAGE="Usage: bench.sh --driver [arangodb | postgres | mysql | mariadb] [--strategy Single | Simple | Aggregate]"
+USAGE="Usage: bench.sh --driver [arangodb | arangodb-vpack | postgres | mysql | mariadb] [--strategy Single | Simple | Aggregate]"
 
 DRIVER=
 STREAM_STRATEGY=

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Prooph\EventStoreBenchmarks;
 
-use ArangoDb\Connection;
+use ArangoDb\Client;
+use ArangoDb\ClientOptions;
+use ArangoDb\TransactionalClient;
+use ArangoDb\Type\Batch;
+use ArangoDb\Type\Database;
 use PDO;
 use Prooph\Common\Messaging\FQCNMessageFactory;
-use Prooph\EventStore\ArangoDb\EventStore as ArangoDbEventStore;
+use Prooph\EventStore\ArangoDb\ArangoDbTransactionalEventStore as ArangoDbEventStore;
 use Prooph\EventStore\ArangoDb\Projection\ProjectionManager as ArangoDbProjectionManager;
-use Prooph\EventStore\ArangoDb\Type\DeleteCollection;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStore\Pdo\MariaDbEventStore;
 use Prooph\EventStore\Pdo\MySqlEventStore;
@@ -22,7 +25,6 @@ use Prooph\EventStore\StreamName;
 use Prooph\EventStore\Util\Assertion;
 use ProophTest\EventStore\Mock\TestDomainEvent;
 use function Prooph\EventStore\ArangoDb\Fn\eventStreamsBatch;
-use function Prooph\EventStore\ArangoDb\Fn\execute;
 use function Prooph\EventStore\ArangoDb\Fn\projectionsBatch;
 
 function testDatabases(): array
@@ -32,6 +34,7 @@ function testDatabases(): array
         'mariadb' => \getenv('MARIADB_DB'),
         'postgres' => \getenv('POSTGRES_DB'),
         'arangodb' => \getenv('ARANGODB_DB'),
+        'arangodb-vpack' => \getenv('ARANGODB_DB'),
     ];
 }
 
@@ -67,6 +70,7 @@ function createStreamStrategy(string $driver)
 
             return new $class();
         case 'arangodb':
+        case 'arangodb-vpack':
             $class = 'Prooph\EventStore\ArangoDb\PersistenceStrategy\\' . \getenv('STREAM_STRATEGY') . 'StreamStrategy';
 
             return new $class();
@@ -106,14 +110,21 @@ function createConnection(string $driver)
 
             return new PDO("pgsql:host=$host;port=$port;dbname=$dbName;options='--client_encoding=\"$charset\"'", $username, $password);
         case 'arangodb':
-            $connection = new Connection(
-                [
-                    Connection::HOST => \getenv('ARANGODB_HOST'),
-                    Connection::MAX_CHUNK_SIZE => 64,
-                    Connection::VST_VERSION => Connection::VST_VERSION_11,
-                ]
+        case 'arangodb-vpack':
+            $type = 'application/' . (\getenv('USE_VPACK') === 'true' ? 'x-velocypack' : 'json');
+
+            $connection = new TransactionalClient(
+                new Client(
+                    [
+                        ClientOptions::OPTION_ENDPOINT => getenv('ARANGODB_HOST'),
+                        ClientOptions::OPTION_DATABASE => getenv('ARANGODB_DB'),
+                    ],
+                    [
+                        'Content-Type' => [$type],
+                        'Accept' => [$type],
+                    ]
+                )
             );
-            $connection->connect();
 
             return $connection;
     }
@@ -135,21 +146,31 @@ function createDatabase($connection, string $driver, string $dbName): void
 
             break;
         case 'arangodb':
-            $result = $connection->get('/_api/collection?excludeSystem=1');
+        case 'arangodb-vpack':
+            $type = 'application/' . (\getenv('USE_VPACK') === 'true' ? 'x-velocypack' : 'json');
+            // need own client to create database
+            $client = new Client(
+                [
+                    ClientOptions::OPTION_ENDPOINT => getenv('ARANGODB_HOST'),
+                    ClientOptions::OPTION_DATABASE => '_system',
+                ],
+                [
+                    'Content-Type' => [$type],
+                    'Accept' => [$type],
+                ]
+            );
+            $response = $client->sendRequest(Database::create($dbName)->toRequest());
 
-            $collections = \json_decode($result->getBody(), true);
-
-            if (\count($collections['result']) > 1) {
-                execute($connection,
-                    null,
-                    ...\array_map(function ($col) {
-                        return DeleteCollection::with($col['name']);
-                    }, $collections['result'])
-                );
+            if ($response->getStatusCode() !== 201) {
+                throw new \RuntimeException('Database could not be created');
             }
-
-            execute($connection, null, ...eventStreamsBatch());
-            execute($connection, null, ...projectionsBatch());
+            $connection->sendRequest(
+                Batch::fromTypes(...eventStreamsBatch())->toRequest()
+            );
+            $connection->sendRequest(
+                Batch::fromTypes(...projectionsBatch())->toRequest()
+            );
+            sleep(10);
             break;
         default:
             throw new \RuntimeException(\sprintf('Driver "%s" not supported', $driver));
@@ -175,17 +196,23 @@ function destroyDatabase($connection, string $driver, string $dbName): void
             $connection->exec('DROP TABLE projections;');
             break;
         case 'arangodb':
-            $result = $connection->get('/_api/collection?excludeSystem=1');
+        case 'arangodb-vpack':
+            $type = 'application/' . (\getenv('USE_VPACK') === 'true' ? 'x-velocypack' : 'json');
+            // need own client to create database
+            $client = new Client(
+                [
+                    ClientOptions::OPTION_ENDPOINT => getenv('ARANGODB_HOST'),
+                    ClientOptions::OPTION_DATABASE => '_system',
+                ],
+                [
+                    'Content-Type' => [$type],
+                    'Accept' => [$type],
+                ]
+            );
+            $response = $client->sendRequest(Database::delete($dbName)->toRequest());
 
-            $collections = \json_decode($result->getBody(), true);
-
-            if (\count($collections['result']) > 1) {
-                execute($connection,
-                    null,
-                    ...\array_map(function ($col) {
-                        return DeleteCollection::with($col['name']);
-                    }, $collections['result'])
-                );
+            if ($response->getStatusCode() !== 200) {
+                throw new \RuntimeException('Database could not be created');
             }
             break;
         default:
@@ -215,6 +242,7 @@ function createEventStore(string $driver, $connection): EventStore
                 createStreamStrategy($driver)
             );
         case 'arangodb':
+        case 'arangodb-vpack':
             return new ArangoDbEventStore(
                 new FQCNMessageFactory(),
                 $connection,
@@ -242,6 +270,7 @@ function createProjectionManager(EventStore $eventStore, string $driver, $connec
                 $connection
             );
         case 'arangodb':
+        case 'arangodb-vpack':
             return new ArangoDbProjectionManager(
                 $eventStore,
                 $connection
