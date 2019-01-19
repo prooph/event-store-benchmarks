@@ -2,7 +2,7 @@
 
 USAGE="Usage: bench_docker.sh --driver [arangodb | postgres | mysql | mariadb] [--strategy Single | Simple | Aggregate]"
 
-IDLE_TIME=20
+IDLE_TIME=40
 DRIVER=
 STREAM_STRATEGY=
 

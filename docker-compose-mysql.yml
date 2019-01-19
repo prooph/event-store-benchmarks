@@ -21,7 +21,8 @@ services:
   database:
     # mysql 8.0 not working properly
     # see https://github.com/docker-library/mysql/issues/303
-    image: mysql:5.7
+    #image: mysql:8.0.13
+    image: mysql:5.7.24
     ports:
       - 3306
     environment:
@@ -29,7 +30,9 @@ services:
       MYSQL_DATABASE: "event_store_tests"
       MYSQL_USER: "dev"
       MYSQL_PASSWORD: "dev"
-    command: "--max_connections=2500 --innodb_buffer_pool_size=BUFFER_POOL_SIZE --query_cache_type=1 --query_cache_limit=256K --query_cache_min_res_unit=2k --query_cache_size=100M --tmp_table_size=64M --max_heap_table_size=64M --max_allowed_packet=256M"
+    volumes:
+      - "./env/mysql:/etc/mysql/conf.d:ro"
+    command: "--innodb_buffer_pool_size=BUFFER_POOL_SIZE"
     #cpuset: dbcpuset
     #cpu_count: dbcpu_count
     #mem_limit: dbmem_limit

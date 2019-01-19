@@ -54,7 +54,7 @@ php src/prepare.php
 WRITER_COUNTER=0
 WRITER_ITERATIONS=10
 
-start=$(date +%s)
+start=$(adjtimex | awk '/(time.tv_sec|time.tv_usec):/ { printf("%06d", $2) }')
 
 while [  ${WRITER_COUNTER} -lt ${WRITER_ITERATIONS} ]; do
     for type in user post todo blog comment
@@ -72,7 +72,7 @@ done
 echo "Waiting ... stay patient!"
 wait
 
-end=$(date +%s)
+end=$(adjtimex | awk '/(time.tv_sec|time.tv_usec):/ { printf("%06d", $2) }')
 
 WRITER_COUNTER=0
 while [  ${WRITER_COUNTER} -lt ${WRITER_ITERATIONS} ]; do
@@ -91,10 +91,11 @@ done
 
 echo ""
 duration=$((end - start))
+duration=$(echo ${duration} | awk '{print $1/1000000000.0}' )
 printf "%s real world test duration %s seconds\\n" "${DRIVER} - ${STRATEGY}" "${duration}";
 
-avgWriters=$((12500 / (end - start) ))
+avgWriters=$(echo ${duration} | awk '{print 12500/$1}' )
 printf "%s avg writes %s events/second\\n" "${DRIVER} - ${STRATEGY}" "${avgWriters}";
 
-avgReaders=$((25000 / (end - start) ))
+avgReaders=$(echo ${duration} | awk '{print 15000/$1}' )
 printf "%s avg reads %s events/second\\n" "${DRIVER} - ${STRATEGY}" "${avgReaders}";
