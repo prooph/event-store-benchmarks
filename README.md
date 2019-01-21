@@ -26,13 +26,13 @@ They were running a notebook with Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz
 ## Usage
 
 ### Docker and Docker Compose
-If you want to run the benchmark suite you need [Docker](https://docs.docker.com/engine/installation/ "Install Docker") 
+If you want to run the benchmark suite you need [Docker](https://docs.docker.com/engine/installation/ "Install Docker")
 and [Docker Compose](https://docs.docker.com/compose/install/ "Install Docker Compose").
 
 Install dependencies with:
 
 ```
-$ docker run --rm -i -v $(pwd):/app prooph/composer:7.1 update -o
+$ docker run --rm -i -v $(pwd):/app prooph/composer:7.2 update -o
 ```
 
 Then you can simply run the `bench_docker.sh` script for each driver (`arangodb` `postgres` `mysql` `mariadb`):
@@ -60,10 +60,10 @@ $ . bench_docker_all.sh > results.log
 ### Test 7 real world test
 
 This is the most realistic test case that comes close to production usage:
-- 50 threads are writing events at the same time
+- 50 processes are writing 250 events at the same time
 - 6 projections are reading events at the same time
 - a total of 12500 events are written
-- a total of 25000 events are read
+- a total of 15000 events are read
 
 ## Support
 
