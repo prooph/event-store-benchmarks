@@ -1,0 +1,1551 @@
+
+[32mTesting databases are (B[mmysql arangodb postgres mariadb 
+             Name                            Command               State            Ports         
+--------------------------------------------------------------------------------------------------
+eventstorebenchmarks_database_1   docker-entrypoint.sh --max ...   Up      0.0.0.0:32770->3306/tcp
+
+
+Docker Info
+Containers: 351
+ Running: 1
+ Paused: 0
+ Stopped: 350
+Images: 80
+Server Version: 17.09.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+runc version: 3f2f8b84a77f73d38244dd690525642a72156c64
+init version: 949e6fa
+Security Options:
+ apparmor
+ seccomp
+  Profile: default
+Kernel Version: 4.13.0-31-generic
+Operating System: Ubuntu 17.10
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 31.18GiB
+Name: codebook
+ID: QODG:6EEM:6T3U:CWGU:KMA6:NNP7:KM72:RYVB:2YGB:BW3E:454Y:EGKH
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+
+
+
+Hardware Info
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              8
+On-line CPU(s) list: 0-7
+Thread(s) pro Kern:  2
+Kern(e) pro Socket:  4
+Socket(s):           1
+NUMA-Knoten:         1
+Anbieterkennung:     GenuineIntel
+Prozessorfamilie:    6
+Modell:              158
+Model name:          Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+Stepping:            9
+CPU MHz:             2800.000
+CPU max MHz:         3800,0000
+CPU min MHz:         800,0000
+BogoMIPS:            5616.00
+Virtualisierung:     VT-x
+L1d Cache:           32K
+L1i Cache:           32K
+L2 Cache:            256K
+L3 Cache:            6144K
+NUMA node0 CPU(s):   0-7
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti intel_pt tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+
+
+Using 4 CPUs for each service and 25405 MB memory for database.
+Waiting for mysql database, lean back to enjoy the timer.
+19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 
+Starting benchmark mysql!
+2018-01-25T16:13:19.329016: mysql: set up event store tables on database event_store_tests
+
+2018-01-25T16:13:20.526824: test 1 create 10 streams with 100 events in each stream, using 1 event per commit
+
+2018-01-25T16:13:31.391768: test 1 using mysql took 10.864897012711 seconds
+2018-01-25T16:13:31.391838: test 1 using mysql writes 92.039528660983 events per second
+
+2018-01-25T16:13:31.391862: test 2 create 10 streams with 100 events in each stream, using 5 events per commit
+
+2018-01-25T16:13:34.107067: test 2 using mysql took 2.7151551246643 seconds
+2018-01-25T16:13:34.107122: test 2 using mysql writes 368.30308180776 events per second
+
+2018-01-25T16:13:34.107141: test 3 create one stream with 2500 events using a single commit
+
+2018-01-25T16:13:34.961839: test 3 using mysql took 0.85464000701904 seconds
+2018-01-25T16:13:34.961883: test 3 using mysql writes 2925.2082508048 events per second
+
+2018-01-25T16:13:34.961898: test 4 load one stream with 2500 events
+
+2018-01-25T16:13:34.996603: test 4 using mysql took 0.034682989120483 seconds
+2018-01-25T16:13:34.996626: test 4 using mysql loads 72081.445786445 events per second
+
+2018-01-25T16:13:34.996632: test 5 project 1 stream with 2500 events
+
+2018-01-25T16:13:35.165388: test 5 using mysql took 0.16731405258179 seconds
+2018-01-25T16:13:35.165438: test 5 using mysql loads 14941.96071055 events per second
+
+2018-01-25T16:13:35.165442: test 6 project 10 stream with 100 events
+
+2018-01-25T16:13:35.361180: test 6 using mysql took 0.19569897651672 seconds
+2018-01-25T16:13:35.361205: test 6 using mysql loads 5109.8887577194 events per second
+
+2018-01-25T16:13:35.379809: mysql: destroying event-store tables on database event_store_tests
+
+Starting real world benchmark mysql!
+2018-01-25T16:13:36.207215: mysql: set up event store tables on database event_store_tests
+
+Waiting ... stay patient!
+2018-01-25T16:13:37.438121: Writer writer0-user started
+2018-01-25T16:17:27.426572: Writer writer0-user wrote 250 events
+2018-01-25T16:17:27.426664: Writer writer0-user used 229.98367404938 seconds, avg 1.0870336819922 events/second
+2018-01-25T16:13:37.705581: Writer writer0-post started
+2018-01-25T16:17:34.138301: Writer writer0-post wrote 250 events
+2018-01-25T16:17:34.138371: Writer writer0-post used 236.41334199905 seconds, avg 1.0574699290914 events/second
+2018-01-25T16:13:37.439164: Writer writer0-todo started
+2018-01-25T16:17:42.460892: Writer writer0-todo wrote 250 events
+2018-01-25T16:17:42.460939: Writer writer0-todo used 244.99972486496 seconds, avg 1.0204093091851 events/second
+2018-01-25T16:13:37.618738: Writer writer0-blog started
+2018-01-25T16:17:39.148323: Writer writer0-blog wrote 250 events
+2018-01-25T16:17:39.148348: Writer writer0-blog used 241.51751899719 seconds, avg 1.0351215971331 events/second
+2018-01-25T16:13:37.745432: Writer writer0-comment started
+2018-01-25T16:17:42.717418: Writer writer0-comment wrote 250 events
+2018-01-25T16:17:42.717490: Writer writer0-comment used 244.96144509315 seconds, avg 1.0205687670765 events/second
+2018-01-25T16:13:37.746608: Writer writer1-user started
+2018-01-25T16:17:36.229473: Writer writer1-user wrote 250 events
+2018-01-25T16:17:36.229543: Writer writer1-user used 238.46680998802 seconds, avg 1.0483639212206 events/second
+2018-01-25T16:13:37.658078: Writer writer1-post started
+2018-01-25T16:17:37.600259: Writer writer1-post wrote 250 events
+2018-01-25T16:17:37.600332: Writer writer1-post used 239.92692303658 seconds, avg 1.0419839375921 events/second
+2018-01-25T16:13:37.618137: Writer writer1-todo started
+2018-01-25T16:17:42.387259: Writer writer1-todo wrote 250 events
+2018-01-25T16:17:42.387340: Writer writer1-todo used 244.75387501717 seconds, avg 1.021434287741 events/second
+2018-01-25T16:13:37.605240: Writer writer1-blog started
+2018-01-25T16:17:27.703972: Writer writer1-blog wrote 250 events
+2018-01-25T16:17:27.704050: Writer writer1-blog used 230.08928585052 seconds, avg 1.0865347296632 events/second
+2018-01-25T16:13:37.634884: Writer writer1-comment started
+2018-01-25T16:17:36.117284: Writer writer1-comment wrote 250 events
+2018-01-25T16:17:36.117361: Writer writer1-comment used 238.47601890564 seconds, avg 1.0483234379173 events/second
+2018-01-25T16:13:37.642075: Writer writer2-user started
+2018-01-25T16:17:18.239712: Writer writer2-user wrote 250 events
+2018-01-25T16:17:18.239764: Writer writer2-user used 220.58644509315 seconds, avg 1.1333425310627 events/second
+2018-01-25T16:13:37.726628: Writer writer2-post started
+2018-01-25T16:17:41.664024: Writer writer2-post wrote 250 events
+2018-01-25T16:17:41.664099: Writer writer2-post used 243.91574215889 seconds, avg 1.0249440966264 events/second
+2018-01-25T16:13:37.601056: Writer writer2-todo started
+2018-01-25T16:17:08.852471: Writer writer2-todo wrote 250 events
+2018-01-25T16:17:08.852545: Writer writer2-todo used 211.23473095894 seconds, avg 1.1835174966971 events/second
+2018-01-25T16:13:37.708120: Writer writer2-blog started
+2018-01-25T16:17:42.967189: Writer writer2-blog wrote 250 events
+2018-01-25T16:17:42.967251: Writer writer2-blog used 245.25423407555 seconds, avg 1.0193503934492 events/second
+2018-01-25T16:13:37.438660: Writer writer2-comment started
+2018-01-25T16:17:39.112286: Writer writer2-comment wrote 250 events
+2018-01-25T16:17:39.112377: Writer writer2-comment used 241.66296887398 seconds, avg 1.034498587702 events/second
+2018-01-25T16:13:37.626166: Writer writer3-user started
+2018-01-25T16:17:22.139368: Writer writer3-user wrote 250 events
+2018-01-25T16:17:22.139476: Writer writer3-user used 224.50502610207 seconds, avg 1.1135608157224 events/second
+2018-01-25T16:13:37.606469: Writer writer3-post started
+2018-01-25T16:16:54.764402: Writer writer3-post wrote 250 events
+2018-01-25T16:16:54.764482: Writer writer3-post used 197.13917589188 seconds, avg 1.2681396220156 events/second
+2018-01-25T16:13:37.635375: Writer writer3-todo started
+2018-01-25T16:17:12.432913: Writer writer3-todo wrote 250 events
+2018-01-25T16:17:12.432935: Writer writer3-todo used 214.78355002403 seconds, avg 1.1639625100341 events/second
+2018-01-25T16:13:37.630752: Writer writer3-blog started
+2018-01-25T16:17:31.744251: Writer writer3-blog wrote 250 events
+2018-01-25T16:17:31.744365: Writer writer3-blog used 234.05611491203 seconds, avg 1.0681199254032 events/second
+2018-01-25T16:13:37.726054: Writer writer3-comment started
+2018-01-25T16:17:22.964771: Writer writer3-comment wrote 250 events
+2018-01-25T16:17:22.964796: Writer writer3-comment used 225.21522521973 seconds, avg 1.1100492862154 events/second
+2018-01-25T16:13:37.709215: Writer writer4-user started
+2018-01-25T16:17:34.102788: Writer writer4-user wrote 250 events
+2018-01-25T16:17:34.102873: Writer writer4-user used 236.38797497749 seconds, avg 1.0575834072093 events/second
+2018-01-25T16:13:37.637647: Writer writer4-post started
+2018-01-25T16:17:34.146580: Writer writer4-post wrote 250 events
+2018-01-25T16:17:34.146647: Writer writer4-post used 236.48899412155 seconds, avg 1.0571316476212 events/second
+2018-01-25T16:13:37.636916: Writer writer4-todo started
+2018-01-25T16:17:25.091549: Writer writer4-todo wrote 250 events
+2018-01-25T16:17:25.091644: Writer writer4-todo used 227.40911006927 seconds, avg 1.0993403031384 events/second
+2018-01-25T16:13:37.606144: Writer writer4-blog started
+2018-01-25T16:17:05.709472: Writer writer4-blog wrote 250 events
+2018-01-25T16:17:05.709592: Writer writer4-blog used 208.08787298203 seconds, avg 1.2014155194022 events/second
+2018-01-25T16:13:37.638175: Writer writer4-comment started
+2018-01-25T16:17:37.975914: Writer writer4-comment wrote 250 events
+2018-01-25T16:17:37.975993: Writer writer4-comment used 240.32638311386 seconds, avg 1.0402519971416 events/second
+2018-01-25T16:13:37.663191: Writer writer5-user started
+2018-01-25T16:17:22.864686: Writer writer5-user wrote 250 events
+2018-01-25T16:17:22.864770: Writer writer5-user used 225.17524790764 seconds, avg 1.1102463628797 events/second
+2018-01-25T16:13:37.635680: Writer writer5-post started
+2018-01-25T16:17:25.126161: Writer writer5-post wrote 250 events
+2018-01-25T16:17:25.126240: Writer writer5-post used 227.48063111305 seconds, avg 1.09899466507 events/second
+2018-01-25T16:13:37.630089: Writer writer5-todo started
+2018-01-25T16:17:18.235572: Writer writer5-todo wrote 250 events
+2018-01-25T16:17:18.235653: Writer writer5-todo used 220.55134820938 seconds, avg 1.1335228826743 events/second
+2018-01-25T16:13:37.662178: Writer writer5-blog started
+2018-01-25T16:17:39.282429: Writer writer5-blog wrote 250 events
+2018-01-25T16:17:39.282531: Writer writer5-blog used 241.60484099388 seconds, avg 1.0347474784511 events/second
+2018-01-25T16:13:37.708467: Writer writer5-comment started
+2018-01-25T16:17:34.497557: Writer writer5-comment wrote 250 events
+2018-01-25T16:17:34.497588: Writer writer5-comment used 236.77765393257 seconds, avg 1.0558428797981 events/second
+2018-01-25T16:13:37.722047: Writer writer6-user started
+2018-01-25T16:17:18.234469: Writer writer6-user wrote 250 events
+2018-01-25T16:17:18.234562: Writer writer6-user used 220.49699187279 seconds, avg 1.1338023157442 events/second
+2018-01-25T16:13:37.716121: Writer writer6-post started
+2018-01-25T16:17:41.958128: Writer writer6-post wrote 250 events
+2018-01-25T16:17:41.958226: Writer writer6-post used 244.21683096886 seconds, avg 1.0236804687384 events/second
+2018-01-25T16:13:37.709599: Writer writer6-todo started
+2018-01-25T16:17:12.578333: Writer writer6-todo wrote 250 events
+2018-01-25T16:17:12.578411: Writer writer6-todo used 214.8549041748 seconds, avg 1.1635759535496 events/second
+2018-01-25T16:13:37.658642: Writer writer6-blog started
+2018-01-25T16:17:41.357546: Writer writer6-blog wrote 250 events
+2018-01-25T16:17:41.357642: Writer writer6-blog used 243.68403196335 seconds, avg 1.0259186783219 events/second
+2018-01-25T16:13:37.662885: Writer writer6-comment started
+2018-01-25T16:17:41.410591: Writer writer6-comment wrote 250 events
+2018-01-25T16:17:41.410641: Writer writer6-comment used 243.72924304008 seconds, avg 1.0257283733445 events/second
+2018-01-25T16:13:37.718982: Writer writer7-user started
+2018-01-25T16:17:33.676553: Writer writer7-user wrote 250 events
+2018-01-25T16:17:33.676580: Writer writer7-user used 235.93842792511 seconds, avg 1.0595984816825 events/second
+2018-01-25T16:13:37.734110: Writer writer7-post started
+2018-01-25T16:17:12.432548: Writer writer7-post wrote 250 events
+2018-01-25T16:17:12.432582: Writer writer7-post used 214.68209290504 seconds, avg 1.1645125898348 events/second
+2018-01-25T16:13:37.635232: Writer writer7-todo started
+2018-01-25T16:17:05.713974: Writer writer7-todo wrote 250 events
+2018-01-25T16:17:05.714050: Writer writer7-todo used 208.06423091888 seconds, avg 1.2015520346573 events/second
+2018-01-25T16:13:37.642076: Writer writer7-blog started
+2018-01-25T16:17:01.654502: Writer writer7-blog wrote 250 events
+2018-01-25T16:17:01.654587: Writer writer7-blog used 203.96084189415 seconds, avg 1.2257254759212 events/second
+2018-01-25T16:13:37.634802: Writer writer7-comment started
+2018-01-25T16:16:50.297743: Writer writer7-comment wrote 250 events
+2018-01-25T16:16:50.297802: Writer writer7-comment used 192.64417314529 seconds, avg 1.2977293624731 events/second
+2018-01-25T16:13:37.746091: Writer writer8-user started
+2018-01-25T16:17:34.102691: Writer writer8-user wrote 250 events
+2018-01-25T16:17:34.102785: Writer writer8-user used 236.34392309189 seconds, avg 1.0577805290251 events/second
+2018-01-25T16:13:37.754075: Writer writer8-post started
+2018-01-25T16:16:41.000672: Writer writer8-post wrote 250 events
+2018-01-25T16:16:41.000725: Writer writer8-post used 183.23774003983 seconds, avg 1.3643477590679 events/second
+2018-01-25T16:13:37.718482: Writer writer8-todo started
+2018-01-25T16:17:29.797565: Writer writer8-todo wrote 250 events
+2018-01-25T16:17:29.797634: Writer writer8-todo used 232.05248904228 seconds, avg 1.0773424626118 events/second
+2018-01-25T16:13:37.650051: Writer writer8-blog started
+2018-01-25T16:17:37.709137: Writer writer8-blog wrote 250 events
+2018-01-25T16:17:37.709217: Writer writer8-blog used 240.04777002335 seconds, avg 1.041459372756 events/second
+2018-01-25T16:13:37.709061: Writer writer8-comment started
+2018-01-25T16:17:40.463098: Writer writer8-comment wrote 250 events
+2018-01-25T16:17:40.463148: Writer writer8-comment used 242.72955203056 seconds, avg 1.0299528751593 events/second
+2018-01-25T16:13:37.710793: Writer writer9-user started
+2018-01-25T16:17:37.824824: Writer writer9-user wrote 250 events
+2018-01-25T16:17:37.824940: Writer writer9-user used 240.09143304825 seconds, avg 1.041269972968 events/second
+2018-01-25T16:13:37.711096: Writer writer9-post started
+2018-01-25T16:17:27.649297: Writer writer9-post wrote 250 events
+2018-01-25T16:17:27.649371: Writer writer9-post used 229.9068069458 seconds, avg 1.0873971211254 events/second
+2018-01-25T16:13:37.658078: Writer writer9-todo started
+2018-01-25T16:17:24.791352: Writer writer9-todo wrote 250 events
+2018-01-25T16:17:24.791416: Writer writer9-todo used 227.12440013885 seconds, avg 1.1007183721659 events/second
+2018-01-25T16:13:37.719690: Writer writer9-blog started
+2018-01-25T16:17:31.746939: Writer writer9-blog wrote 250 events
+2018-01-25T16:17:31.747025: Writer writer9-blog used 234.00744199753 seconds, avg 1.0683420914564 events/second
+2018-01-25T16:13:37.654124: Writer writer9-comment started
+2018-01-25T16:17:27.425364: Writer writer9-comment wrote 250 events
+2018-01-25T16:17:27.425464: Writer writer9-comment used 229.75610995293 seconds, avg 1.0881103447095 events/second
+2018-01-25T16:13:37.709402: Projection projectorsuser started
+2018-01-25T16:17:43.488169: Projection projectorsuser read 2500 events
+2018-01-25T16:17:43.488238: projection projectorsuser used 245.76129984856 seconds, avg 10.172472238471 events/second
+2018-01-25T16:13:37.703875: Projection projectorspost started
+2018-01-25T16:17:43.532387: Projection projectorspost read 2500 events
+2018-01-25T16:17:43.532447: projection projectorspost used 245.81440901756 seconds, avg 10.170274435871 events/second
+2018-01-25T16:13:37.704303: Projection projectorstodo started
+2018-01-25T16:17:43.629466: Projection projectorstodo read 2500 events
+2018-01-25T16:17:43.629550: projection projectorstodo used 245.91930294037 seconds, avg 10.165936427553 events/second
+2018-01-25T16:13:37.734079: Projection projectorsblog started
+2018-01-25T16:17:43.471280: Projection projectorsblog read 2500 events
+2018-01-25T16:17:43.471362: projection projectorsblog used 245.73249983788 seconds, avg 10.173664458911 events/second
+2018-01-25T16:13:37.723829: Projection projectorscomment started
+2018-01-25T16:17:43.549245: Projection projectorscomment read 2500 events
+2018-01-25T16:17:43.549303: projection projectorscomment used 245.81671500206 seconds, avg 10.170179029441 events/second
+2018-01-25T16:13:37.723510: Projection projectorsall started
+2018-01-25T16:17:43.119485: Projection projectorsall read 2500 events
+2018-01-25T16:17:43.119520: projection projectorsall used 245.39118289948 seconds, avg 10.187815105908 events/second
+
+mysql real world test duration 246 seconds
+mysql avg writes 50 events/second
+mysql avg reads 101 events/second
+
+Dumping logs mysql!
+Attaching to eventstorebenchmarks_database_1
+[36mdatabase_1  |[0m Initializing database
+[36mdatabase_1  |[0m 2018-01-25T16:12:57.655883Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+[36mdatabase_1  |[0m 2018-01-25T16:12:58.902820Z 0 [Warning] InnoDB: New log files created, LSN=45790
+[36mdatabase_1  |[0m 2018-01-25T16:12:59.019711Z 0 [Warning] InnoDB: Creating foreign key constraint system tables.
+[36mdatabase_1  |[0m 2018-01-25T16:12:59.053714Z 0 [Warning] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: 9c44e8f6-01ea-11e8-9a11-0242ac1e0002.
+[36mdatabase_1  |[0m 2018-01-25T16:12:59.062628Z 0 [Warning] Gtid table is not ready to be used. Table 'mysql.gtid_executed' cannot be opened.
+[36mdatabase_1  |[0m 2018-01-25T16:12:59.063470Z 1 [Warning] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+[36mdatabase_1  |[0m 2018-01-25T16:13:01.728250Z 1 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:01.728277Z 1 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:01.728284Z 1 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:01.728297Z 1 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:01.728301Z 1 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:01.728310Z 1 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:01.728336Z 1 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:01.728345Z 1 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m Database initialized
+[36mdatabase_1  |[0m Initializing certificates
+[36mdatabase_1  |[0m Generating a 2048 bit RSA private key
+[36mdatabase_1  |[0m ................................+++
+[36mdatabase_1  |[0m ...........................................+++
+[36mdatabase_1  |[0m unable to write 'random state'
+[36mdatabase_1  |[0m writing new private key to 'ca-key.pem'
+[36mdatabase_1  |[0m -----
+[36mdatabase_1  |[0m Generating a 2048 bit RSA private key
+[36mdatabase_1  |[0m ..................+++
+[36mdatabase_1  |[0m ..........................................................................................................................................................................................................+++
+[36mdatabase_1  |[0m unable to write 'random state'
+[36mdatabase_1  |[0m writing new private key to 'server-key.pem'
+[36mdatabase_1  |[0m -----
+[36mdatabase_1  |[0m Generating a 2048 bit RSA private key
+[36mdatabase_1  |[0m .......................................+++
+[36mdatabase_1  |[0m .................+++
+[36mdatabase_1  |[0m unable to write 'random state'
+[36mdatabase_1  |[0m writing new private key to 'client-key.pem'
+[36mdatabase_1  |[0m -----
+[36mdatabase_1  |[0m Certificates initialized
+[36mdatabase_1  |[0m MySQL init process in progress...
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.772894Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.773744Z 0 [Note] mysqld (mysqld 5.7.20) starting as process 94 ...
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.775831Z 0 [Note] InnoDB: PUNCH HOLE support available
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.775844Z 0 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.775846Z 0 [Note] InnoDB: Uses event mutexes
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.775848Z 0 [Note] InnoDB: GCC builtin __atomic_thread_fence() is used for memory barrier
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.775850Z 0 [Note] InnoDB: Compressed tables use zlib 1.2.3
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.775852Z 0 [Note] InnoDB: Using Linux native AIO
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.776555Z 0 [Note] InnoDB: Number of pools: 1
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.776640Z 0 [Note] InnoDB: Using CPU crc32 instructions
+[36mdatabase_1  |[0m 2018-01-25T16:13:05.777616Z 0 [Note] InnoDB: Initializing buffer pool, total size = 18G, instances = 8, chunk size = 128M
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.436320Z 0 [Note] InnoDB: Completed initialization of buffer pool
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.547374Z 0 [Note] InnoDB: If the mysqld execution user is authorized, page cleaner thread priority can be changed. See the man page of setpriority().
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.548533Z 0 [Note] InnoDB: Highest supported file format is Barracuda.
+[36mdatabase_1  |[0m MySQL init process in progress...
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.824778Z 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.824860Z 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.856841Z 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.857509Z 0 [Note] InnoDB: 96 redo rollback segment(s) found. 96 redo rollback segment(s) are active.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.857517Z 0 [Note] InnoDB: 32 non-redo rollback segment(s) are active.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.858040Z 0 [Note] InnoDB: Waiting for purge to start
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.908178Z 0 [Note] InnoDB: 5.7.20 started; log sequence number 2565377
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.908424Z 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/ib_buffer_pool
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.908516Z 0 [Note] Plugin 'FEDERATED' is disabled.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.910816Z 0 [Note] InnoDB: Buffer pool(s) load completed at 180125 16:13:06
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.915208Z 0 [Note] Found ca.pem, server-cert.pem and server-key.pem in data directory. Trying to enable SSL support using them.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.915512Z 0 [Warning] CA certificate ca.pem is self signed.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.928062Z 0 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.928100Z 0 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.928116Z 0 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.928140Z 0 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.928147Z 0 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.928161Z 0 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.929742Z 0 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.929765Z 0 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.938778Z 0 [Note] Event Scheduler: Loaded 0 events
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.939025Z 0 [Note] mysqld: ready for connections.
+[36mdatabase_1  |[0m Version: '5.7.20'  socket: '/var/run/mysqld/mysqld.sock'  port: 0  MySQL Community Server (GPL)
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.939046Z 0 [Note] Executing 'SELECT * FROM INFORMATION_SCHEMA.TABLES;' to get a list of tables using the deprecated partition engine. You may use the startup option '--disable-partition-engine-check' to skip this check. 
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.939053Z 0 [Note] Beginning of list of non-natively partitioned tables
+[36mdatabase_1  |[0m 2018-01-25T16:13:06.954121Z 0 [Note] End of list of non-natively partitioned tables
+[36mdatabase_1  |[0m Warning: Unable to load '/usr/share/zoneinfo/iso3166.tab' as time zone. Skipping it.
+[36mdatabase_1  |[0m Warning: Unable to load '/usr/share/zoneinfo/leap-seconds.list' as time zone. Skipping it.
+[36mdatabase_1  |[0m Warning: Unable to load '/usr/share/zoneinfo/zone.tab' as time zone. Skipping it.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.672500Z 5 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.672517Z 5 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.672526Z 5 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.672528Z 5 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.672533Z 5 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.672549Z 5 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.672572Z 5 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m mysql: [Warning] Using a password on the command line interface can be insecure.
+[36mdatabase_1  |[0m mysql: [Warning] Using a password on the command line interface can be insecure.
+[36mdatabase_1  |[0m mysql: [Warning] Using a password on the command line interface can be insecure.
+[36mdatabase_1  |[0m mysql: [Warning] Using a password on the command line interface can be insecure.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.682869Z 9 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.682887Z 9 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.682899Z 9 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.682902Z 9 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.682908Z 9 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.683019Z 9 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.683026Z 9 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.683561Z 0 [Note] Giving 0 client threads a chance to die gracefully
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.683571Z 0 [Note] Shutting down slave threads
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.683573Z 0 [Note] Forcefully disconnecting 0 remaining clients
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.683576Z 0 [Note] Event Scheduler: Purging the queue. 0 events
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.683595Z 0 [Note] Binlog end
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684053Z 0 [Note] Shutting down plugin 'ngram'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684058Z 0 [Note] Shutting down plugin 'BLACKHOLE'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684061Z 0 [Note] Shutting down plugin 'partition'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684062Z 0 [Note] Shutting down plugin 'ARCHIVE'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684063Z 0 [Note] Shutting down plugin 'INNODB_SYS_VIRTUAL'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684065Z 0 [Note] Shutting down plugin 'INNODB_SYS_DATAFILES'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684066Z 0 [Note] Shutting down plugin 'INNODB_SYS_TABLESPACES'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684067Z 0 [Note] Shutting down plugin 'INNODB_SYS_FOREIGN_COLS'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684068Z 0 [Note] Shutting down plugin 'INNODB_SYS_FOREIGN'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684070Z 0 [Note] Shutting down plugin 'INNODB_SYS_FIELDS'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684071Z 0 [Note] Shutting down plugin 'INNODB_SYS_COLUMNS'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684072Z 0 [Note] Shutting down plugin 'INNODB_SYS_INDEXES'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684073Z 0 [Note] Shutting down plugin 'INNODB_SYS_TABLESTATS'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684074Z 0 [Note] Shutting down plugin 'INNODB_SYS_TABLES'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684076Z 0 [Note] Shutting down plugin 'INNODB_FT_INDEX_TABLE'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684077Z 0 [Note] Shutting down plugin 'INNODB_FT_INDEX_CACHE'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684078Z 0 [Note] Shutting down plugin 'INNODB_FT_CONFIG'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684079Z 0 [Note] Shutting down plugin 'INNODB_FT_BEING_DELETED'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684080Z 0 [Note] Shutting down plugin 'INNODB_FT_DELETED'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684081Z 0 [Note] Shutting down plugin 'INNODB_FT_DEFAULT_STOPWORD'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684083Z 0 [Note] Shutting down plugin 'INNODB_METRICS'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684084Z 0 [Note] Shutting down plugin 'INNODB_TEMP_TABLE_INFO'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684085Z 0 [Note] Shutting down plugin 'INNODB_BUFFER_POOL_STATS'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684086Z 0 [Note] Shutting down plugin 'INNODB_BUFFER_PAGE_LRU'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684087Z 0 [Note] Shutting down plugin 'INNODB_BUFFER_PAGE'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684089Z 0 [Note] Shutting down plugin 'INNODB_CMP_PER_INDEX_RESET'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684090Z 0 [Note] Shutting down plugin 'INNODB_CMP_PER_INDEX'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684091Z 0 [Note] Shutting down plugin 'INNODB_CMPMEM_RESET'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684092Z 0 [Note] Shutting down plugin 'INNODB_CMPMEM'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684093Z 0 [Note] Shutting down plugin 'INNODB_CMP_RESET'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684094Z 0 [Note] Shutting down plugin 'INNODB_CMP'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684114Z 0 [Note] Shutting down plugin 'INNODB_LOCK_WAITS'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684115Z 0 [Note] Shutting down plugin 'INNODB_LOCKS'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684119Z 0 [Note] Shutting down plugin 'INNODB_TRX'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684121Z 0 [Note] Shutting down plugin 'InnoDB'
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684166Z 0 [Note] InnoDB: FTS optimize thread exiting.
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.684213Z 0 [Note] InnoDB: Starting shutdown...
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.784592Z 0 [Note] InnoDB: Dumping buffer pool(s) to /var/lib/mysql/ib_buffer_pool
+[36mdatabase_1  |[0m 2018-01-25T16:13:09.785174Z 0 [Note] InnoDB: Buffer pool(s) dump completed at 180125 16:13:09
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.033598Z 0 [Note] InnoDB: Shutdown completed; log sequence number 12169513
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.034927Z 0 [Note] InnoDB: Removed temporary tablespace data file: "ibtmp1"
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.034955Z 0 [Note] Shutting down plugin 'MRG_MYISAM'
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.034958Z 0 [Note] Shutting down plugin 'MyISAM'
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.034964Z 0 [Note] Shutting down plugin 'CSV'
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.034966Z 0 [Note] Shutting down plugin 'MEMORY'
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.034968Z 0 [Note] Shutting down plugin 'PERFORMANCE_SCHEMA'
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.035000Z 0 [Note] Shutting down plugin 'sha256_password'
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.035003Z 0 [Note] Shutting down plugin 'mysql_native_password'
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.035174Z 0 [Note] Shutting down plugin 'binlog'
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.036336Z 0 [Note] mysqld: Shutdown complete
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m MySQL init process done. Ready for start up.
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.261550Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.262585Z 0 [Note] mysqld (mysqld 5.7.20) starting as process 1 ...
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.264750Z 0 [Note] InnoDB: PUNCH HOLE support available
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.264763Z 0 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.264765Z 0 [Note] InnoDB: Uses event mutexes
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.264788Z 0 [Note] InnoDB: GCC builtin __atomic_thread_fence() is used for memory barrier
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.264790Z 0 [Note] InnoDB: Compressed tables use zlib 1.2.3
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.264794Z 0 [Note] InnoDB: Using Linux native AIO
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.265484Z 0 [Note] InnoDB: Number of pools: 1
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.265583Z 0 [Note] InnoDB: Using CPU crc32 instructions
+[36mdatabase_1  |[0m 2018-01-25T16:13:12.266545Z 0 [Note] InnoDB: Initializing buffer pool, total size = 18G, instances = 8, chunk size = 128M
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.013181Z 0 [Note] InnoDB: Completed initialization of buffer pool
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.127902Z 0 [Note] InnoDB: If the mysqld execution user is authorized, page cleaner thread priority can be changed. See the man page of setpriority().
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.139907Z 0 [Note] InnoDB: Highest supported file format is Barracuda.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.429343Z 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.429430Z 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.462576Z 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.463194Z 0 [Note] InnoDB: 96 redo rollback segment(s) found. 96 redo rollback segment(s) are active.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.463200Z 0 [Note] InnoDB: 32 non-redo rollback segment(s) are active.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.463756Z 0 [Note] InnoDB: 5.7.20 started; log sequence number 12169513
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.463886Z 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/ib_buffer_pool
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.463981Z 0 [Note] Plugin 'FEDERATED' is disabled.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.465913Z 0 [Note] InnoDB: Buffer pool(s) load completed at 180125 16:13:13
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.466757Z 0 [Note] Found ca.pem, server-cert.pem and server-key.pem in data directory. Trying to enable SSL support using them.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.466877Z 0 [Warning] CA certificate ca.pem is self signed.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.467963Z 0 [Note] Server hostname (bind-address): '*'; port: 3306
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.468001Z 0 [Note] IPv6 is available.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.468005Z 0 [Note]   - '::' resolves to '::';
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.468014Z 0 [Note] Server socket created on IP: '::'.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.477263Z 0 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.477282Z 0 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.477294Z 0 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.477296Z 0 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.477303Z 0 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.478476Z 0 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.478485Z 0 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.481883Z 0 [Note] Event Scheduler: Loaded 0 events
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.482032Z 0 [Note] mysqld: ready for connections.
+[36mdatabase_1  |[0m Version: '5.7.20'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server (GPL)
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.482042Z 0 [Note] Executing 'SELECT * FROM INFORMATION_SCHEMA.TABLES;' to get a list of tables using the deprecated partition engine. You may use the startup option '--disable-partition-engine-check' to skip this check. 
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.482044Z 0 [Note] Beginning of list of non-natively partitioned tables
+[36mdatabase_1  |[0m 2018-01-25T16:13:13.487841Z 0 [Note] End of list of non-natively partitioned tables
+             Name                        Command           State           Ports         
+-----------------------------------------------------------------------------------------
+eventstorebenchmarks_database_1   /entrypoint.sh arangod   Up      0.0.0.0:8529->8529/tcp
+
+
+Docker Info
+Containers: 351
+ Running: 1
+ Paused: 0
+ Stopped: 350
+Images: 80
+Server Version: 17.09.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+runc version: 3f2f8b84a77f73d38244dd690525642a72156c64
+init version: 949e6fa
+Security Options:
+ apparmor
+ seccomp
+  Profile: default
+Kernel Version: 4.13.0-31-generic
+Operating System: Ubuntu 17.10
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 31.18GiB
+Name: codebook
+ID: QODG:6EEM:6T3U:CWGU:KMA6:NNP7:KM72:RYVB:2YGB:BW3E:454Y:EGKH
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+
+
+
+Hardware Info
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              8
+On-line CPU(s) list: 0-7
+Thread(s) pro Kern:  2
+Kern(e) pro Socket:  4
+Socket(s):           1
+NUMA-Knoten:         1
+Anbieterkennung:     GenuineIntel
+Prozessorfamilie:    6
+Modell:              158
+Model name:          Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+Stepping:            9
+CPU MHz:             2800.000
+CPU max MHz:         3800,0000
+CPU min MHz:         800,0000
+BogoMIPS:            5616.00
+Virtualisierung:     VT-x
+L1d Cache:           32K
+L1i Cache:           32K
+L2 Cache:            256K
+L3 Cache:            6144K
+NUMA node0 CPU(s):   0-7
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti intel_pt tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+
+
+Using 4 CPUs for each service and 25357 MB memory for database.
+Waiting for arangodb database, lean back to enjoy the timer.
+19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 
+Starting benchmark arangodb!
+2018-01-25T16:18:17.639952: arangodb: set up event store tables on database _system
+
+2018-01-25T16:18:18.753039: test 1 create 10 streams with 100 events in each stream, using 1 event per commit
+
+2018-01-25T16:18:19.769010: test 1 using arangodb took 1.0159471035004 seconds
+2018-01-25T16:18:19.769037: test 1 using arangodb writes 984.3032147585 events per second
+
+2018-01-25T16:18:19.769043: test 2 create 10 streams with 100 events in each stream, using 5 events per commit
+
+2018-01-25T16:18:20.661547: test 2 using arangodb took 0.89249205589294 seconds
+2018-01-25T16:18:20.661580: test 2 using arangodb writes 1120.4581524252 events per second
+
+2018-01-25T16:18:20.661586: test 3 create one stream with 2500 events using a single commit
+
+2018-01-25T16:18:20.872991: test 3 using arangodb took 0.21137404441833 seconds
+2018-01-25T16:18:20.873016: test 3 using arangodb writes 11827.374580827 events per second
+
+2018-01-25T16:18:20.873022: test 4 load one stream with 2500 events
+
+2018-01-25T16:18:20.882452: test 4 using arangodb took 0.0094010829925537 seconds
+2018-01-25T16:18:20.882471: test 4 using arangodb loads 265926.80885598 events per second
+
+2018-01-25T16:18:20.882475: test 5 project 1 stream with 2500 events
+
+2018-01-25T16:18:20.966732: test 5 using arangodb took 0.082963943481445 seconds
+2018-01-25T16:18:20.966767: test 5 using arangodb loads 30133.572430283 events per second
+
+2018-01-25T16:18:20.966771: test 6 project 10 stream with 100 events
+
+2018-01-25T16:18:21.109264: test 6 using arangodb took 0.14241003990173 seconds
+2018-01-25T16:18:21.109319: test 6 using arangodb loads 7021.9768261425 events per second
+
+2018-01-25T16:18:21.133915: arangodb: destroying event-store tables on database _system
+
+Starting real world benchmark arangodb!
+2018-01-25T16:18:21.444816: arangodb: set up event store tables on database _system
+
+Waiting ... stay patient!
+2018-01-25T16:18:22.564721: Writer writer0-user started
+2018-01-25T16:19:02.797162: Writer writer0-user wrote 250 events
+2018-01-25T16:19:02.797209: Writer writer0-user used 40.228917121887 seconds, avg 6.2144352343002 events/second
+2018-01-25T16:18:22.729376: Writer writer0-post started
+2018-01-25T16:19:03.750481: Writer writer0-post wrote 250 events
+2018-01-25T16:19:03.750560: Writer writer0-post used 40.977488994598 seconds, avg 6.1009106739789 events/second
+2018-01-25T16:18:22.850807: Writer writer0-todo started
+2018-01-25T16:19:03.801423: Writer writer0-todo wrote 250 events
+2018-01-25T16:19:03.801502: Writer writer0-todo used 40.899092912674 seconds, avg 6.1126050040716 events/second
+2018-01-25T16:18:22.778219: Writer writer0-blog started
+2018-01-25T16:19:00.708342: Writer writer0-blog wrote 250 events
+2018-01-25T16:19:00.708385: Writer writer0-blog used 37.886403799057 seconds, avg 6.5986732688053 events/second
+2018-01-25T16:18:22.897903: Writer writer0-comment started
+2018-01-25T16:19:00.596950: Writer writer0-comment wrote 250 events
+2018-01-25T16:19:00.596998: Writer writer0-comment used 37.685659170151 seconds, avg 6.6338231970748 events/second
+2018-01-25T16:18:22.868174: Writer writer1-user started
+2018-01-25T16:19:00.288201: Writer writer1-user wrote 250 events
+2018-01-25T16:19:00.288241: Writer writer1-user used 37.372411966324 seconds, avg 6.6894264203572 events/second
+2018-01-25T16:18:22.899471: Writer writer1-post started
+2018-01-25T16:18:56.541465: Writer writer1-post wrote 250 events
+2018-01-25T16:18:56.541499: Writer writer1-post used 33.590372085571 seconds, avg 7.4426088333623 events/second
+2018-01-25T16:18:22.719184: Writer writer1-todo started
+2018-01-25T16:19:03.890771: Writer writer1-todo wrote 250 events
+2018-01-25T16:19:03.890849: Writer writer1-todo used 41.131945133209 seconds, avg 6.0780009112225 events/second
+2018-01-25T16:18:22.848427: Writer writer1-blog started
+2018-01-25T16:19:02.836551: Writer writer1-blog wrote 250 events
+2018-01-25T16:19:02.836583: Writer writer1-blog used 39.924501180649 seconds, avg 6.2618189985345 events/second
+2018-01-25T16:18:22.882110: Writer writer1-comment started
+2018-01-25T16:19:03.181888: Writer writer1-comment wrote 250 events
+2018-01-25T16:19:03.181936: Writer writer1-comment used 40.296172857285 seconds, avg 6.2040631224562 events/second
+2018-01-25T16:18:22.913991: Writer writer2-user started
+2018-01-25T16:19:04.595631: Writer writer2-user wrote 250 events
+2018-01-25T16:19:04.595698: Writer writer2-user used 41.678039073944 seconds, avg 5.9983628202003 events/second
+2018-01-25T16:18:22.759672: Writer writer2-post started
+2018-01-25T16:19:03.538871: Writer writer2-post wrote 250 events
+2018-01-25T16:19:03.538949: Writer writer2-post used 40.735574007034 seconds, avg 6.1371419476458 events/second
+2018-01-25T16:18:22.693322: Writer writer2-todo started
+2018-01-25T16:19:01.721827: Writer writer2-todo wrote 250 events
+2018-01-25T16:19:01.721880: Writer writer2-todo used 38.981487035751 seconds, avg 6.4133007489098 events/second
+2018-01-25T16:18:22.752551: Writer writer2-blog started
+2018-01-25T16:18:58.547187: Writer writer2-blog wrote 250 events
+2018-01-25T16:18:58.547226: Writer writer2-blog used 35.751142978668 seconds, avg 6.9927834237123 events/second
+2018-01-25T16:18:22.881079: Writer writer2-comment started
+2018-01-25T16:19:03.798342: Writer writer2-comment wrote 250 events
+2018-01-25T16:19:03.798409: Writer writer2-comment used 40.861472845078 seconds, avg 6.1182327163745 events/second
+2018-01-25T16:18:22.833680: Writer writer3-user started
+2018-01-25T16:19:02.247596: Writer writer3-user wrote 250 events
+2018-01-25T16:19:02.247635: Writer writer3-user used 39.410479068756 seconds, avg 6.3434905108321 events/second
+2018-01-25T16:18:22.908319: Writer writer3-post started
+2018-01-25T16:19:03.271282: Writer writer3-post wrote 250 events
+2018-01-25T16:19:03.271330: Writer writer3-post used 40.34036397934 seconds, avg 6.1972668399333 events/second
+2018-01-25T16:18:22.771606: Writer writer3-todo started
+2018-01-25T16:19:02.798221: Writer writer3-todo wrote 250 events
+2018-01-25T16:19:02.798267: Writer writer3-todo used 39.994696855545 seconds, avg 6.2508287261925 events/second
+2018-01-25T16:18:22.776205: Writer writer3-blog started
+2018-01-25T16:19:02.019743: Writer writer3-blog wrote 250 events
+2018-01-25T16:19:02.019792: Writer writer3-blog used 39.208029031754 seconds, avg 6.3762450236285 events/second
+2018-01-25T16:18:22.768699: Writer writer3-comment started
+2018-01-25T16:18:59.393906: Writer writer3-comment wrote 250 events
+2018-01-25T16:18:59.393956: Writer writer3-comment used 36.585725069046 seconds, avg 6.8332662405403 events/second
+2018-01-25T16:18:22.899225: Writer writer4-user started
+2018-01-25T16:19:01.866794: Writer writer4-user wrote 250 events
+2018-01-25T16:19:01.866845: Writer writer4-user used 38.911748170853 seconds, avg 6.4247948692078 events/second
+2018-01-25T16:18:22.937520: Writer writer4-post started
+2018-01-25T16:18:59.395763: Writer writer4-post wrote 250 events
+2018-01-25T16:18:59.395813: Writer writer4-post used 36.45408987999 seconds, avg 6.8579410656808 events/second
+2018-01-25T16:18:22.923326: Writer writer4-todo started
+2018-01-25T16:19:03.544459: Writer writer4-todo wrote 250 events
+2018-01-25T16:19:03.544536: Writer writer4-todo used 40.587938785553 seconds, avg 6.1594652864951 events/second
+2018-01-25T16:18:22.944015: Writer writer4-blog started
+2018-01-25T16:19:03.889440: Writer writer4-blog wrote 250 events
+2018-01-25T16:19:03.889528: Writer writer4-blog used 40.913235902786 seconds, avg 6.1104919834262 events/second
+2018-01-25T16:18:22.934400: Writer writer4-comment started
+2018-01-25T16:19:03.971293: Writer writer4-comment wrote 250 events
+2018-01-25T16:19:03.971357: Writer writer4-comment used 41.013495206833 seconds, avg 6.0955546153586 events/second
+2018-01-25T16:18:22.928046: Writer writer5-user started
+2018-01-25T16:19:04.308159: Writer writer5-user wrote 250 events
+2018-01-25T16:19:04.308225: Writer writer5-user used 41.341641902924 seconds, avg 6.0471715319638 events/second
+2018-01-25T16:18:22.926377: Writer writer5-post started
+2018-01-25T16:19:00.019761: Writer writer5-post wrote 250 events
+2018-01-25T16:19:00.019812: Writer writer5-post used 37.089572191238 seconds, avg 6.7404390298968 events/second
+2018-01-25T16:18:22.908319: Writer writer5-todo started
+2018-01-25T16:19:01.813424: Writer writer5-todo wrote 250 events
+2018-01-25T16:19:01.813446: Writer writer5-todo used 38.853356838226 seconds, avg 6.4344504656554 events/second
+2018-01-25T16:18:22.896009: Writer writer5-blog started
+2018-01-25T16:19:01.869391: Writer writer5-blog wrote 250 events
+2018-01-25T16:19:01.869444: Writer writer5-blog used 38.945760965347 seconds, avg 6.4191838547574 events/second
+2018-01-25T16:18:22.892574: Writer writer5-comment started
+2018-01-25T16:18:59.228225: Writer writer5-comment wrote 250 events
+2018-01-25T16:18:59.228268: Writer writer5-comment used 36.287981987 seconds, avg 6.8893332257926 events/second
+2018-01-25T16:18:22.863594: Writer writer6-user started
+2018-01-25T16:18:58.811305: Writer writer6-user wrote 250 events
+2018-01-25T16:18:58.811342: Writer writer6-user used 35.943964004517 seconds, avg 6.9552707088341 events/second
+2018-01-25T16:18:22.790501: Writer writer6-post started
+2018-01-25T16:19:03.319913: Writer writer6-post wrote 250 events
+2018-01-25T16:19:03.319956: Writer writer6-post used 40.489912986755 seconds, avg 6.1743773092764 events/second
+2018-01-25T16:18:22.757499: Writer writer6-todo started
+2018-01-25T16:19:03.698890: Writer writer6-todo wrote 250 events
+2018-01-25T16:19:03.698967: Writer writer6-todo used 40.901894807816 seconds, avg 6.1121862733907 events/second
+2018-01-25T16:18:22.949937: Writer writer6-blog started
+2018-01-25T16:19:00.534848: Writer writer6-blog wrote 250 events
+2018-01-25T16:19:00.534910: Writer writer6-blog used 37.58119392395 seconds, avg 6.6522633768875 events/second
+2018-01-25T16:18:22.886172: Writer writer6-comment started
+2018-01-25T16:19:00.635952: Writer writer6-comment wrote 250 events
+2018-01-25T16:19:00.635997: Writer writer6-comment used 37.746220827103 seconds, avg 6.6231796063805 events/second
+2018-01-25T16:18:22.909349: Writer writer7-user started
+2018-01-25T16:19:02.355883: Writer writer7-user wrote 250 events
+2018-01-25T16:19:02.355922: Writer writer7-user used 39.44297003746 seconds, avg 6.3382650891291 events/second
+2018-01-25T16:18:22.929014: Writer writer7-post started
+2018-01-25T16:19:03.756941: Writer writer7-post wrote 250 events
+2018-01-25T16:19:03.757007: Writer writer7-post used 40.819036006927 seconds, avg 6.124593436199 events/second
+2018-01-25T16:18:22.897383: Writer writer7-todo started
+2018-01-25T16:19:03.585222: Writer writer7-todo wrote 250 events
+2018-01-25T16:19:03.585295: Writer writer7-todo used 40.636120080948 seconds, avg 6.1521621528334 events/second
+2018-01-25T16:18:22.920833: Writer writer7-blog started
+2018-01-25T16:19:03.936136: Writer writer7-blog wrote 250 events
+2018-01-25T16:19:03.936207: Writer writer7-blog used 40.983820915222 seconds, avg 6.0999680951452 events/second
+2018-01-25T16:18:22.820417: Writer writer7-comment started
+2018-01-25T16:19:03.836531: Writer writer7-comment wrote 250 events
+2018-01-25T16:19:03.836596: Writer writer7-comment used 40.980073213577 seconds, avg 6.100525948235 events/second
+2018-01-25T16:18:22.884364: Writer writer8-user started
+2018-01-25T16:19:03.397704: Writer writer8-user wrote 250 events
+2018-01-25T16:19:03.397786: Writer writer8-user used 40.465598106384 seconds, avg 6.1780873556533 events/second
+2018-01-25T16:18:22.842846: Writer writer8-post started
+2018-01-25T16:19:04.624404: Writer writer8-post wrote 250 events
+2018-01-25T16:19:04.624491: Writer writer8-post used 41.754002094269 seconds, avg 5.987450003848 events/second
+2018-01-25T16:18:22.903737: Writer writer8-todo started
+2018-01-25T16:19:01.868501: Writer writer8-todo wrote 250 events
+2018-01-25T16:19:01.868550: Writer writer8-todo used 38.961124897003 seconds, avg 6.416652513522 events/second
+2018-01-25T16:18:22.891583: Writer writer8-blog started
+2018-01-25T16:19:03.067129: Writer writer8-blog wrote 250 events
+2018-01-25T16:19:03.067191: Writer writer8-blog used 40.119808912277 seconds, avg 6.231335761011 events/second
+2018-01-25T16:18:22.839027: Writer writer8-comment started
+2018-01-25T16:19:02.591767: Writer writer8-comment wrote 250 events
+2018-01-25T16:19:02.591809: Writer writer8-comment used 39.748537063599 seconds, avg 6.2895396527423 events/second
+2018-01-25T16:18:22.827861: Writer writer9-user started
+2018-01-25T16:19:04.641984: Writer writer9-user wrote 250 events
+2018-01-25T16:19:04.642041: Writer writer9-user used 41.781563043594 seconds, avg 5.9835004195308 events/second
+2018-01-25T16:18:22.765100: Writer writer9-post started
+2018-01-25T16:19:03.528701: Writer writer9-post wrote 250 events
+2018-01-25T16:19:03.528764: Writer writer9-post used 40.710300922394 seconds, avg 6.1409519049387 events/second
+2018-01-25T16:18:22.958184: Writer writer9-todo started
+2018-01-25T16:18:56.791040: Writer writer9-todo wrote 250 events
+2018-01-25T16:18:56.791111: Writer writer9-todo used 33.829195022583 seconds, avg 7.3900664746267 events/second
+2018-01-25T16:18:22.831988: Writer writer9-blog started
+2018-01-25T16:19:03.484842: Writer writer9-blog wrote 250 events
+2018-01-25T16:19:03.484904: Writer writer9-blog used 40.618093967438 seconds, avg 6.1548924526202 events/second
+2018-01-25T16:18:22.835781: Writer writer9-comment started
+2018-01-25T16:19:00.325268: Writer writer9-comment wrote 250 events
+2018-01-25T16:19:00.325308: Writer writer9-comment used 37.453517913818 seconds, avg 6.6749404041366 events/second
+2018-01-25T16:18:22.813164: Projection projectorsuser started
+2018-01-25T16:19:04.860740: Projection projectorsuser read 2500 events
+2018-01-25T16:19:04.860767: projection projectorsuser used 42.009256839752 seconds, avg 59.510693310678 events/second
+2018-01-25T16:18:22.816104: Projection projectorspost started
+2018-01-25T16:19:04.990297: Projection projectorspost read 2500 events
+2018-01-25T16:19:04.990320: projection projectorspost used 42.134042024612 seconds, avg 59.334445020481 events/second
+2018-01-25T16:18:22.966980: Projection projectorstodo started
+2018-01-25T16:19:04.754163: Projection projectorstodo read 2500 events
+2018-01-25T16:19:04.754195: projection projectorstodo used 41.782840967178 seconds, avg 59.833174148302 events/second
+2018-01-25T16:18:22.860500: Projection projectorsblog started
+2018-01-25T16:19:04.767903: Projection projectorsblog read 2500 events
+2018-01-25T16:19:04.767951: projection projectorsblog used 41.84427690506 seconds, avg 59.745326838177 events/second
+2018-01-25T16:18:22.926368: Projection projectorscomment started
+2018-01-25T16:19:04.862579: Projection projectorscomment read 2500 events
+2018-01-25T16:19:04.862602: projection projectorscomment used 41.91558098793 seconds, avg 59.643691941664 events/second
+2018-01-25T16:18:22.825149: Projection projectorsall started
+2018-01-25T16:18:48.101399: Projection projectorsall read 2500 events
+2018-01-25T16:18:48.101431: projection projectorsall used 25.272212982178 seconds, avg 98.922876352895 events/second
+
+arangodb real world test duration 42 seconds
+arangodb avg writes 297 events/second
+arangodb avg reads 595 events/second
+
+Dumping logs arangodb!
+Attaching to eventstorebenchmarks_database_1
+[36mdatabase_1  |[0m automaticaly choosing storage engine
+[36mdatabase_1  |[0m Initializing database...Hang on...
+[36mdatabase_1  |[0m Database initialized...Starting System...
+             Name                            Command               State           Ports         
+-------------------------------------------------------------------------------------------------
+eventstorebenchmarks_database_1   docker-entrypoint.sh -c ma ...   Up      0.0.0.0:5432->5432/tcp
+
+
+Docker Info
+Containers: 351
+ Running: 1
+ Paused: 0
+ Stopped: 350
+Images: 80
+Server Version: 17.09.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+runc version: 3f2f8b84a77f73d38244dd690525642a72156c64
+init version: 949e6fa
+Security Options:
+ apparmor
+ seccomp
+  Profile: default
+Kernel Version: 4.13.0-31-generic
+Operating System: Ubuntu 17.10
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 31.18GiB
+Name: codebook
+ID: QODG:6EEM:6T3U:CWGU:KMA6:NNP7:KM72:RYVB:2YGB:BW3E:454Y:EGKH
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+
+
+
+Hardware Info
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              8
+On-line CPU(s) list: 0-7
+Thread(s) pro Kern:  2
+Kern(e) pro Socket:  4
+Socket(s):           1
+NUMA-Knoten:         1
+Anbieterkennung:     GenuineIntel
+Prozessorfamilie:    6
+Modell:              158
+Model name:          Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+Stepping:            9
+CPU MHz:             2800.000
+CPU max MHz:         3800,0000
+CPU min MHz:         800,0000
+BogoMIPS:            5616.00
+Virtualisierung:     VT-x
+L1d Cache:           32K
+L1i Cache:           32K
+L2 Cache:            256K
+L3 Cache:            6144K
+NUMA node0 CPU(s):   0-7
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti intel_pt tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+
+
+Using 4 CPUs for each service and 25341 MB memory for database.
+Waiting for postgres database, lean back to enjoy the timer.
+19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 
+Starting benchmark postgres!
+2018-01-25T16:19:42.304231: postgres: set up event store tables on database event_store_tests
+
+2018-01-25T16:19:43.433146: test 1 create 10 streams with 100 events in each stream, using 1 event per commit
+
+2018-01-25T16:19:44.512306: test 1 using postgres took 1.0791218280792 seconds
+2018-01-25T16:19:44.512348: test 1 using postgres writes 926.67942949495 events per second
+
+2018-01-25T16:19:44.512366: test 2 create 10 streams with 100 events in each stream, using 5 events per commit
+
+2018-01-25T16:19:45.229419: test 2 using postgres took 0.7170250415802 seconds
+2018-01-25T16:19:45.229455: test 2 using postgres writes 1394.6514305779 events per second
+
+2018-01-25T16:19:45.229469: test 3 create one stream with 2500 events using a single commit
+
+2018-01-25T16:19:45.461239: test 3 using postgres took 0.23173689842224 seconds
+2018-01-25T16:19:45.461259: test 3 using postgres writes 10788.096401656 events per second
+
+2018-01-25T16:19:45.461264: test 4 load one stream with 2500 events
+
+2018-01-25T16:19:45.466662: test 4 using postgres took 0.0053689479827881 seconds
+2018-01-25T16:19:45.466679: test 4 using postgres loads 465640.57018518 events per second
+
+2018-01-25T16:19:45.466683: test 5 project 1 stream with 2500 events
+
+2018-01-25T16:19:45.565150: test 5 using postgres took 0.097209930419922 seconds
+2018-01-25T16:19:45.565195: test 5 using postgres loads 25717.537181651 events per second
+
+2018-01-25T16:19:45.565209: test 6 project 10 stream with 100 events
+
+2018-01-25T16:19:45.729478: test 6 using postgres took 0.16418600082397 seconds
+2018-01-25T16:19:45.729496: test 6 using postgres loads 6090.653252905 events per second
+
+2018-01-25T16:19:45.749706: postgres: destroying event-store tables on database event_store_tests
+
+Starting real world benchmark postgres!
+2018-01-25T16:19:45.911615: postgres: set up event store tables on database event_store_tests
+
+Waiting ... stay patient!
+2018-01-25T16:19:47.313110: Writer writer0-user started
+2018-01-25T16:19:57.929597: Writer writer0-user wrote 250 events
+2018-01-25T16:19:57.929617: Writer writer0-user used 10.531270980835 seconds, avg 23.738825109994 events/second
+2018-01-25T16:19:47.364257: Writer writer0-post started
+2018-01-25T16:19:57.979922: Writer writer0-post wrote 250 events
+2018-01-25T16:19:57.979941: Writer writer0-post used 10.604973077774 seconds, avg 23.573845795418 events/second
+2018-01-25T16:19:47.305961: Writer writer0-todo started
+2018-01-25T16:19:57.665002: Writer writer0-todo wrote 250 events
+2018-01-25T16:19:57.665020: Writer writer0-todo used 10.347061872482 seconds, avg 24.161448252752 events/second
+2018-01-25T16:19:47.297501: Writer writer0-blog started
+2018-01-25T16:19:57.443009: Writer writer0-blog wrote 250 events
+2018-01-25T16:19:57.443041: Writer writer0-blog used 10.134130954742 seconds, avg 24.66911086076 events/second
+2018-01-25T16:19:47.310054: Writer writer0-comment started
+2018-01-25T16:19:57.504229: Writer writer0-comment wrote 250 events
+2018-01-25T16:19:57.504253: Writer writer0-comment used 10.175456047058 seconds, avg 24.568923382287 events/second
+2018-01-25T16:19:47.389394: Writer writer1-user started
+2018-01-25T16:19:57.757667: Writer writer1-user wrote 250 events
+2018-01-25T16:19:57.757686: Writer writer1-user used 10.34476518631 seconds, avg 24.166812440639 events/second
+2018-01-25T16:19:47.280808: Writer writer1-post started
+2018-01-25T16:19:57.506009: Writer writer1-post wrote 250 events
+2018-01-25T16:19:57.506035: Writer writer1-post used 10.208947181702 seconds, avg 24.488323384423 events/second
+2018-01-25T16:19:47.345128: Writer writer1-todo started
+2018-01-25T16:19:57.757608: Writer writer1-todo wrote 250 events
+2018-01-25T16:19:57.757658: Writer writer1-todo used 10.363176107407 seconds, avg 24.1238783756 events/second
+2018-01-25T16:19:47.323293: Writer writer1-blog started
+2018-01-25T16:19:57.792823: Writer writer1-blog wrote 250 events
+2018-01-25T16:19:57.792850: Writer writer1-blog used 10.400485038757 seconds, avg 24.037340476754 events/second
+2018-01-25T16:19:47.314228: Writer writer1-comment started
+2018-01-25T16:19:57.964196: Writer writer1-comment wrote 250 events
+2018-01-25T16:19:57.964218: Writer writer1-comment used 10.589532136917 seconds, avg 23.608219585873 events/second
+2018-01-25T16:19:47.344304: Writer writer2-user started
+2018-01-25T16:19:57.789796: Writer writer2-user wrote 250 events
+2018-01-25T16:19:57.789836: Writer writer2-user used 10.388623952866 seconds, avg 24.064784819845 events/second
+2018-01-25T16:19:47.326784: Writer writer2-post started
+2018-01-25T16:19:57.591254: Writer writer2-post wrote 250 events
+2018-01-25T16:19:57.591276: Writer writer2-post used 10.245784044266 seconds, avg 24.400280048838 events/second
+2018-01-25T16:19:47.406215: Writer writer2-todo started
+2018-01-25T16:19:57.817162: Writer writer2-todo wrote 250 events
+2018-01-25T16:19:57.817190: Writer writer2-todo used 10.397094964981 seconds, avg 24.045178085036 events/second
+2018-01-25T16:19:47.312843: Writer writer2-blog started
+2018-01-25T16:19:57.743600: Writer writer2-blog wrote 250 events
+2018-01-25T16:19:57.743623: Writer writer2-blog used 10.365057229996 seconds, avg 24.119500206571 events/second
+2018-01-25T16:19:47.321335: Writer writer2-comment started
+2018-01-25T16:19:57.984179: Writer writer2-comment wrote 250 events
+2018-01-25T16:19:57.984199: Writer writer2-comment used 10.646459817886 seconds, avg 23.481984084512 events/second
+2018-01-25T16:19:47.323602: Writer writer3-user started
+2018-01-25T16:19:57.871252: Writer writer3-user wrote 250 events
+2018-01-25T16:19:57.871284: Writer writer3-user used 10.529412984848 seconds, avg 23.74301400845 events/second
+2018-01-25T16:19:47.337622: Writer writer3-post started
+2018-01-25T16:19:57.790088: Writer writer3-post wrote 250 events
+2018-01-25T16:19:57.790108: Writer writer3-post used 10.414020061493 seconds, avg 24.006099328002 events/second
+2018-01-25T16:19:47.317872: Writer writer3-todo started
+2018-01-25T16:19:57.664912: Writer writer3-todo wrote 250 events
+2018-01-25T16:19:57.664932: Writer writer3-todo used 10.236349105835 seconds, avg 24.422770014506 events/second
+2018-01-25T16:19:47.319387: Writer writer3-blog started
+2018-01-25T16:19:57.664632: Writer writer3-blog wrote 250 events
+2018-01-25T16:19:57.664649: Writer writer3-blog used 10.313665866852 seconds, avg 24.239683855136 events/second
+2018-01-25T16:19:47.350580: Writer writer3-comment started
+2018-01-25T16:19:57.757924: Writer writer3-comment wrote 250 events
+2018-01-25T16:19:57.757943: Writer writer3-comment used 10.344588041306 seconds, avg 24.167226283131 events/second
+2018-01-25T16:19:47.316900: Writer writer4-user started
+2018-01-25T16:19:57.603339: Writer writer4-user wrote 250 events
+2018-01-25T16:19:57.603362: Writer writer4-user used 10.196046829224 seconds, avg 24.519306765388 events/second
+2018-01-25T16:19:47.362149: Writer writer4-post started
+2018-01-25T16:19:57.916548: Writer writer4-post wrote 250 events
+2018-01-25T16:19:57.916574: Writer writer4-post used 10.530316829681 seconds, avg 23.740976083012 events/second
+2018-01-25T16:19:47.316181: Writer writer4-todo started
+2018-01-25T16:19:57.737091: Writer writer4-todo wrote 250 events
+2018-01-25T16:19:57.737114: Writer writer4-todo used 10.40466094017 seconds, avg 24.027693111536 events/second
+2018-01-25T16:19:47.314707: Writer writer4-blog started
+2018-01-25T16:19:58.028462: Writer writer4-blog wrote 250 events
+2018-01-25T16:19:58.028486: Writer writer4-blog used 10.671414136887 seconds, avg 23.427073187597 events/second
+2018-01-25T16:19:47.324322: Writer writer4-comment started
+2018-01-25T16:19:57.552637: Writer writer4-comment wrote 250 events
+2018-01-25T16:19:57.552665: Writer writer4-comment used 10.216861963272 seconds, avg 24.469352810942 events/second
+2018-01-25T16:19:47.383203: Writer writer5-user started
+2018-01-25T16:19:57.854272: Writer writer5-user wrote 250 events
+2018-01-25T16:19:57.854292: Writer writer5-user used 10.41517496109 seconds, avg 24.003437381894 events/second
+2018-01-25T16:19:47.315791: Writer writer5-post started
+2018-01-25T16:19:57.681597: Writer writer5-post wrote 250 events
+2018-01-25T16:19:57.681629: Writer writer5-post used 10.295825958252 seconds, avg 24.281684734543 events/second
+2018-01-25T16:19:47.342429: Writer writer5-todo started
+2018-01-25T16:19:57.866487: Writer writer5-todo wrote 250 events
+2018-01-25T16:19:57.866514: Writer writer5-todo used 10.474960803986 seconds, avg 23.866437753627 events/second
+2018-01-25T16:19:47.390491: Writer writer5-blog started
+2018-01-25T16:19:57.790234: Writer writer5-blog wrote 250 events
+2018-01-25T16:19:57.790257: Writer writer5-blog used 10.366936922073 seconds, avg 24.115126954009 events/second
+2018-01-25T16:19:47.345598: Writer writer5-comment started
+2018-01-25T16:19:57.664564: Writer writer5-comment wrote 250 events
+2018-01-25T16:19:57.664584: Writer writer5-comment used 10.234425067902 seconds, avg 24.427361414182 events/second
+2018-01-25T16:19:47.327622: Writer writer6-user started
+2018-01-25T16:19:57.758229: Writer writer6-user wrote 250 events
+2018-01-25T16:19:57.758245: Writer writer6-user used 10.387507200241 seconds, avg 24.067372005691 events/second
+2018-01-25T16:19:47.314365: Writer writer6-post started
+2018-01-25T16:19:57.758118: Writer writer6-post wrote 250 events
+2018-01-25T16:19:57.758135: Writer writer6-post used 10.346052885056 seconds, avg 24.163804571414 events/second
+2018-01-25T16:19:47.350147: Writer writer6-todo started
+2018-01-25T16:19:57.835784: Writer writer6-todo wrote 250 events
+2018-01-25T16:19:57.835809: Writer writer6-todo used 10.466233968735 seconds, avg 23.886337793213 events/second
+2018-01-25T16:19:47.423477: Writer writer6-blog started
+2018-01-25T16:19:57.872099: Writer writer6-blog wrote 250 events
+2018-01-25T16:19:57.872130: Writer writer6-blog used 10.430717945099 seconds, avg 23.967669465885 events/second
+2018-01-25T16:19:47.314003: Writer writer6-comment started
+2018-01-25T16:19:57.929538: Writer writer6-comment wrote 250 events
+2018-01-25T16:19:57.929555: Writer writer6-comment used 10.585400104523 seconds, avg 23.617435102258 events/second
+2018-01-25T16:19:47.316412: Writer writer7-user started
+2018-01-25T16:19:57.591378: Writer writer7-user wrote 250 events
+2018-01-25T16:19:57.591401: Writer writer7-user used 10.231574058533 seconds, avg 24.434168053694 events/second
+2018-01-25T16:19:47.350154: Writer writer7-post started
+2018-01-25T16:19:57.682029: Writer writer7-post wrote 250 events
+2018-01-25T16:19:57.682048: Writer writer7-post used 10.321521997452 seconds, avg 24.221234044913 events/second
+2018-01-25T16:19:47.355238: Writer writer7-todo started
+2018-01-25T16:19:57.979776: Writer writer7-todo wrote 250 events
+2018-01-25T16:19:57.979799: Writer writer7-todo used 10.608399868011 seconds, avg 23.566230827502 events/second
+2018-01-25T16:19:47.328220: Writer writer7-blog started
+2018-01-25T16:19:58.053211: Writer writer7-blog wrote 250 events
+2018-01-25T16:19:58.053235: Writer writer7-blog used 10.627808094025 seconds, avg 23.523194791272 events/second
+2018-01-25T16:19:47.347483: Writer writer7-comment started
+2018-01-25T16:19:57.866647: Writer writer7-comment wrote 250 events
+2018-01-25T16:19:57.866669: Writer writer7-comment used 10.488222122192 seconds, avg 23.836261006622 events/second
+2018-01-25T16:19:47.315056: Writer writer8-user started
+2018-01-25T16:19:57.664388: Writer writer8-user wrote 250 events
+2018-01-25T16:19:57.664410: Writer writer8-user used 10.302640914917 seconds, avg 24.265622966441 events/second
+2018-01-25T16:19:47.341696: Writer writer8-post started
+2018-01-25T16:19:58.020538: Writer writer8-post wrote 250 events
+2018-01-25T16:19:58.020559: Writer writer8-post used 10.647042036057 seconds, avg 23.480700006008 events/second
+2018-01-25T16:19:47.350599: Writer writer8-todo started
+2018-01-25T16:19:57.929452: Writer writer8-todo wrote 250 events
+2018-01-25T16:19:57.929478: Writer writer8-todo used 10.538285970688 seconds, avg 23.723022956045 events/second
+2018-01-25T16:19:47.339242: Writer writer8-blog started
+2018-01-25T16:19:57.871422: Writer writer8-blog wrote 250 events
+2018-01-25T16:19:57.871445: Writer writer8-blog used 10.513433933258 seconds, avg 23.779100300346 events/second
+2018-01-25T16:19:47.329579: Writer writer8-comment started
+2018-01-25T16:19:57.664528: Writer writer8-comment wrote 250 events
+2018-01-25T16:19:57.664550: Writer writer8-comment used 10.309818983078 seconds, avg 24.248728363741 events/second
+2018-01-25T16:19:47.327524: Writer writer9-user started
+2018-01-25T16:19:57.984124: Writer writer9-user wrote 250 events
+2018-01-25T16:19:57.984149: Writer writer9-user used 10.638465881348 seconds, avg 23.499628873964 events/second
+2018-01-25T16:19:47.353793: Writer writer9-post started
+2018-01-25T16:19:57.609746: Writer writer9-post wrote 250 events
+2018-01-25T16:19:57.609771: Writer writer9-post used 10.200340986252 seconds, avg 24.508984585609 events/second
+2018-01-25T16:19:47.305576: Writer writer9-todo started
+2018-01-25T16:19:57.591196: Writer writer9-todo wrote 250 events
+2018-01-25T16:19:57.591218: Writer writer9-todo used 10.273626804352 seconds, avg 24.334152365171 events/second
+2018-01-25T16:19:47.329083: Writer writer9-blog started
+2018-01-25T16:19:57.790157: Writer writer9-blog wrote 250 events
+2018-01-25T16:19:57.790178: Writer writer9-blog used 10.387938976288 seconds, avg 24.066371642216 events/second
+2018-01-25T16:19:47.352349: Writer writer9-comment started
+2018-01-25T16:19:57.503966: Writer writer9-comment wrote 250 events
+2018-01-25T16:19:57.503992: Writer writer9-comment used 10.140404939651 seconds, avg 24.653847798764 events/second
+2018-01-25T16:19:47.345195: Projection projectorsuser started
+2018-01-25T16:19:58.285361: Projection projectorsuser read 2500 events
+2018-01-25T16:19:58.285384: projection projectorsuser used 10.878667831421 seconds, avg 229.80754985268 events/second
+2018-01-25T16:19:47.354608: Projection projectorspost started
+2018-01-25T16:19:58.369925: Projection projectorspost read 2500 events
+2018-01-25T16:19:58.369943: projection projectorspost used 10.953092098236 seconds, avg 228.24604938752 events/second
+2018-01-25T16:19:47.336872: Projection projectorstodo started
+2018-01-25T16:19:58.288835: Projection projectorstodo read 2500 events
+2018-01-25T16:19:58.288857: projection projectorstodo used 10.884165048599 seconds, avg 229.69148196827 events/second
+2018-01-25T16:19:47.308667: Projection projectorsblog started
+2018-01-25T16:19:58.471588: Projection projectorsblog read 2500 events
+2018-01-25T16:19:58.471605: projection projectorsblog used 11.087175130844 seconds, avg 225.48575002167 events/second
+2018-01-25T16:19:47.370137: Projection projectorscomment started
+2018-01-25T16:19:58.328517: Projection projectorscomment read 2500 events
+2018-01-25T16:19:58.328540: projection projectorscomment used 10.923866033554 seconds, avg 228.85670625408 events/second
+2018-01-25T16:19:47.328381: Projection projectorsall started
+2018-01-25T16:19:49.956267: Projection projectorsall read 2500 events
+2018-01-25T16:19:49.956290: projection projectorsall used 2.5748090744019 seconds, avg 970.94577802075 events/second
+
+postgres real world test duration 11 seconds
+postgres avg writes 1136 events/second
+postgres avg reads 2272 events/second
+
+Dumping logs postgres!
+Attaching to eventstorebenchmarks_database_1
+[36mdatabase_1  |[0m The files belonging to this database system will be owned by user "postgres".
+[36mdatabase_1  |[0m This user must also own the server process.
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m The database cluster will be initialized with locale "en_US.utf8".
+[36mdatabase_1  |[0m The default database encoding has accordingly been set to "UTF8".
+[36mdatabase_1  |[0m The default text search configuration will be set to "english".
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m Data page checksums are disabled.
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m fixing permissions on existing directory /var/lib/postgresql/data ... ok
+[36mdatabase_1  |[0m creating subdirectories ... ok
+[36mdatabase_1  |[0m selecting default max_connections ... 100
+[36mdatabase_1  |[0m selecting default shared_buffers ... 128MB
+[36mdatabase_1  |[0m selecting dynamic shared memory implementation ... posix
+[36mdatabase_1  |[0m creating configuration files ... ok
+[36mdatabase_1  |[0m running bootstrap script ... ok
+[36mdatabase_1  |[0m performing post-bootstrap initialization ... ok
+[36mdatabase_1  |[0m syncing data to disk ... ok
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m Success. You can now start the database server using:
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m     pg_ctl -D /var/lib/postgresql/data -l logfile start
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m WARNING: enabling "trust" authentication for local connections
+[36mdatabase_1  |[0m You can change this by editing pg_hba.conf or using the option -A, or
+[36mdatabase_1  |[0m --auth-local and --auth-host, the next time you run initdb.
+[36mdatabase_1  |[0m waiting for server to start....LOG:  could not bind IPv6 socket: Cannot assign requested address
+[36mdatabase_1  |[0m HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+[36mdatabase_1  |[0m LOG:  database system was shut down at 2018-01-25 16:19:21 UTC
+[36mdatabase_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
+[36mdatabase_1  |[0m LOG:  autovacuum launcher started
+[36mdatabase_1  |[0m LOG:  database system is ready to accept connections
+[36mdatabase_1  |[0m  done
+[36mdatabase_1  |[0m server started
+[36mdatabase_1  |[0m CREATE DATABASE
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m CREATE ROLE
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m LOG:  received fast shutdown request
+[36mdatabase_1  |[0m LOG:  aborting any active transactions
+[36mdatabase_1  |[0m waiting for server to shut down....LOG:  autovacuum launcher shutting down
+[36mdatabase_1  |[0m LOG:  shutting down
+[36mdatabase_1  |[0m LOG:  database system is shut down
+[36mdatabase_1  |[0m  done
+[36mdatabase_1  |[0m server stopped
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m PostgreSQL init process complete; ready for start up.
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m LOG:  database system was shut down at 2018-01-25 16:19:22 UTC
+[36mdatabase_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
+[36mdatabase_1  |[0m LOG:  database system is ready to accept connections
+[36mdatabase_1  |[0m LOG:  autovacuum launcher started
+             Name                            Command               State            Ports         
+--------------------------------------------------------------------------------------------------
+eventstorebenchmarks_database_1   docker-entrypoint.sh --max ...   Up      0.0.0.0:32771->3306/tcp
+
+
+Docker Info
+Containers: 351
+ Running: 1
+ Paused: 0
+ Stopped: 350
+Images: 80
+Server Version: 17.09.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+ Supports d_type: true
+ Native Overlay Diff: true
+Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge host macvlan null overlay
+ Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Init Binary: docker-init
+containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+runc version: 3f2f8b84a77f73d38244dd690525642a72156c64
+init version: 949e6fa
+Security Options:
+ apparmor
+ seccomp
+  Profile: default
+Kernel Version: 4.13.0-31-generic
+Operating System: Ubuntu 17.10
+OSType: linux
+Architecture: x86_64
+CPUs: 8
+Total Memory: 31.18GiB
+Name: codebook
+ID: QODG:6EEM:6T3U:CWGU:KMA6:NNP7:KM72:RYVB:2YGB:BW3E:454Y:EGKH
+Docker Root Dir: /var/lib/docker
+Debug Mode (client): false
+Debug Mode (server): false
+Registry: https://index.docker.io/v1/
+Experimental: false
+Insecure Registries:
+ 127.0.0.0/8
+Live Restore Enabled: false
+
+
+
+Hardware Info
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              8
+On-line CPU(s) list: 0-7
+Thread(s) pro Kern:  2
+Kern(e) pro Socket:  4
+Socket(s):           1
+NUMA-Knoten:         1
+Anbieterkennung:     GenuineIntel
+Prozessorfamilie:    6
+Modell:              158
+Model name:          Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+Stepping:            9
+CPU MHz:             2800.000
+CPU max MHz:         3800,0000
+CPU min MHz:         800,0000
+BogoMIPS:            5616.00
+Virtualisierung:     VT-x
+L1d Cache:           32K
+L1i Cache:           32K
+L2 Cache:            256K
+L3 Cache:            6144K
+NUMA node0 CPU(s):   0-7
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti intel_pt tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+
+
+Using 4 CPUs for each service and 25336 MB memory for database.
+Waiting for mariadb database, lean back to enjoy the timer.
+19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 
+Starting benchmark mariadb!
+2018-01-25T16:20:34.944255: mariadb: set up event store tables on database event_store_tests
+
+2018-01-25T16:20:36.116373: test 1 create 10 streams with 100 events in each stream, using 1 event per commit
+
+2018-01-25T16:20:47.122018: test 1 using mariadb took 11.005595207214 seconds
+2018-01-25T16:20:47.122075: test 1 using mariadb writes 90.862873036116 events per second
+
+2018-01-25T16:20:47.122100: test 2 create 10 streams with 100 events in each stream, using 5 events per commit
+
+2018-01-25T16:20:49.759974: test 2 using mariadb took 2.6378419399261 seconds
+2018-01-25T16:20:49.759994: test 2 using mariadb writes 379.09777112271 events per second
+
+2018-01-25T16:20:49.759998: test 3 create one stream with 2500 events using a single commit
+
+2018-01-25T16:20:50.520440: test 3 using mariadb took 0.76042318344116 seconds
+2018-01-25T16:20:50.520472: test 3 using mariadb writes 3287.6430577599 events per second
+
+2018-01-25T16:20:50.520482: test 4 load one stream with 2500 events
+
+2018-01-25T16:20:50.529451: test 4 using mariadb took 0.0089530944824219 seconds
+2018-01-25T16:20:50.529472: test 4 using mariadb loads 279233.0634853 events per second
+
+2018-01-25T16:20:50.529479: test 5 project 1 stream with 2500 events
+
+2018-01-25T16:20:50.662838: test 5 using mariadb took 0.1318838596344 seconds
+2018-01-25T16:20:50.662888: test 5 using mariadb loads 18956.072463532 events per second
+
+2018-01-25T16:20:50.662905: test 6 project 10 stream with 100 events
+
+2018-01-25T16:20:50.874589: test 6 using mariadb took 0.21159100532532 seconds
+2018-01-25T16:20:50.874640: test 6 using mariadb loads 4726.0988172088 events per second
+
+2018-01-25T16:20:50.920586: mariadb: destroying event-store tables on database event_store_tests
+
+Starting real world benchmark mariadb!
+2018-01-25T16:20:51.783749: mariadb: set up event store tables on database event_store_tests
+
+Waiting ... stay patient!
+2018-01-25T16:20:53.243205: Writer writer0-user started
+2018-01-25T16:24:28.373791: Writer writer0-user wrote 250 events
+2018-01-25T16:24:28.373884: Writer writer0-user used 215.12653398514 seconds, avg 1.1621067627914 events/second
+2018-01-25T16:20:53.155186: Writer writer0-post started
+2018-01-25T16:24:21.261344: Writer writer0-post wrote 250 events
+2018-01-25T16:24:21.261386: Writer writer0-post used 208.06711292267 seconds, avg 1.2015353915778 events/second
+2018-01-25T16:20:53.154052: Writer writer0-todo started
+2018-01-25T16:24:23.024188: Writer writer0-todo wrote 250 events
+2018-01-25T16:24:23.024270: Writer writer0-todo used 209.86504602432 seconds, avg 1.191241727653 events/second
+2018-01-25T16:20:53.145244: Writer writer0-blog started
+2018-01-25T16:24:02.465429: Writer writer0-blog wrote 250 events
+2018-01-25T16:24:02.465507: Writer writer0-blog used 189.313560009 seconds, avg 1.320560450018 events/second
+2018-01-25T16:20:53.162357: Writer writer0-comment started
+2018-01-25T16:24:15.096878: Writer writer0-comment wrote 250 events
+2018-01-25T16:24:15.096914: Writer writer0-comment used 201.89767289162 seconds, avg 1.2382510230032 events/second
+2018-01-25T16:20:53.166062: Writer writer1-user started
+2018-01-25T16:24:10.443457: Writer writer1-user wrote 250 events
+2018-01-25T16:24:10.443485: Writer writer1-user used 197.27018284798 seconds, avg 1.2672974516005 events/second
+2018-01-25T16:20:53.118087: Writer writer1-post started
+2018-01-25T16:24:16.374454: Writer writer1-post wrote 250 events
+2018-01-25T16:24:16.374542: Writer writer1-post used 203.24363613129 seconds, avg 1.230050813687 events/second
+2018-01-25T16:20:53.202083: Writer writer1-todo started
+2018-01-25T16:24:08.958429: Writer writer1-todo wrote 250 events
+2018-01-25T16:24:08.958475: Writer writer1-todo used 195.74537682533 seconds, avg 1.2771693720413 events/second
+2018-01-25T16:20:53.214084: Writer writer1-blog started
+2018-01-25T16:24:09.195418: Writer writer1-blog wrote 250 events
+2018-01-25T16:24:09.195450: Writer writer1-blog used 195.9690079689 seconds, avg 1.2757119229775 events/second
+2018-01-25T16:20:53.262395: Writer writer1-comment started
+2018-01-25T16:23:53.486274: Writer writer1-comment wrote 250 events
+2018-01-25T16:23:53.486357: Writer writer1-comment used 180.18110895157 seconds, avg 1.3874928479167 events/second
+2018-01-25T16:20:53.300372: Writer writer2-user started
+2018-01-25T16:24:23.026338: Writer writer2-user wrote 250 events
+2018-01-25T16:24:23.026410: Writer writer2-user used 209.71640586853 seconds, avg 1.1920860409782 events/second
+2018-01-25T16:20:53.243384: Writer writer2-post started
+2018-01-25T16:24:31.817140: Writer writer2-post wrote 250 events
+2018-01-25T16:24:31.817216: Writer writer2-post used 218.56261396408 seconds, avg 1.1438369786385 events/second
+2018-01-25T16:20:53.250510: Writer writer2-todo started
+2018-01-25T16:24:29.064291: Writer writer2-todo wrote 250 events
+2018-01-25T16:24:29.064332: Writer writer2-todo used 215.79678177834 seconds, avg 1.1584973507937 events/second
+2018-01-25T16:20:53.277055: Writer writer2-blog started
+2018-01-25T16:24:32.316271: Writer writer2-blog wrote 250 events
+2018-01-25T16:24:32.316332: Writer writer2-blog used 219.03523206711 seconds, avg 1.141368891391 events/second
+2018-01-25T16:20:53.278722: Writer writer2-comment started
+2018-01-25T16:24:32.179041: Writer writer2-comment wrote 250 events
+2018-01-25T16:24:32.179067: Writer writer2-comment used 218.8816280365 seconds, avg 1.1421698670768 events/second
+2018-01-25T16:20:53.155663: Writer writer3-user started
+2018-01-25T16:24:10.825712: Writer writer3-user wrote 250 events
+2018-01-25T16:24:10.825735: Writer writer3-user used 197.63917207718 seconds, avg 1.2649314271686 events/second
+2018-01-25T16:20:53.223185: Writer writer3-post started
+2018-01-25T16:24:15.187708: Writer writer3-post wrote 250 events
+2018-01-25T16:24:15.187729: Writer writer3-post used 201.90976309776 seconds, avg 1.2381768774547 events/second
+2018-01-25T16:20:53.228124: Writer writer3-todo started
+2018-01-25T16:24:16.777147: Writer writer3-todo wrote 250 events
+2018-01-25T16:24:16.777214: Writer writer3-todo used 203.53091812134 seconds, avg 1.2283146084516 events/second
+2018-01-25T16:20:53.159191: Writer writer3-blog started
+2018-01-25T16:24:29.760713: Writer writer3-blog wrote 250 events
+2018-01-25T16:24:29.760750: Writer writer3-blog used 216.59126806259 seconds, avg 1.1542478246526 events/second
+2018-01-25T16:20:53.268762: Writer writer3-comment started
+2018-01-25T16:24:30.960142: Writer writer3-comment wrote 250 events
+2018-01-25T16:24:30.960233: Writer writer3-comment used 217.68722987175 seconds, avg 1.1484366820566 events/second
+2018-01-25T16:20:53.282447: Writer writer4-user started
+2018-01-25T16:24:08.113474: Writer writer4-user wrote 250 events
+2018-01-25T16:24:08.113548: Writer writer4-user used 194.82302284241 seconds, avg 1.2832158969334 events/second
+2018-01-25T16:20:53.190174: Writer writer4-post started
+2018-01-25T16:24:23.024250: Writer writer4-post wrote 250 events
+2018-01-25T16:24:23.024324: Writer writer4-post used 209.82283186913 seconds, avg 1.1914813930065 events/second
+2018-01-25T16:20:53.302796: Writer writer4-todo started
+2018-01-25T16:24:28.371320: Writer writer4-todo wrote 250 events
+2018-01-25T16:24:28.371429: Writer writer4-todo used 215.05735707283 seconds, avg 1.1624805744978 events/second
+2018-01-25T16:20:53.184530: Writer writer4-blog started
+2018-01-25T16:24:12.494175: Writer writer4-blog wrote 250 events
+2018-01-25T16:24:12.494208: Writer writer4-blog used 199.29657006264 seconds, avg 1.2544119546133 events/second
+2018-01-25T16:20:53.274054: Writer writer4-comment started
+2018-01-25T16:24:05.034401: Writer writer4-comment wrote 250 events
+2018-01-25T16:24:05.034473: Writer writer4-comment used 191.75024700165 seconds, avg 1.3037792853422 events/second
+2018-01-25T16:20:53.176848: Writer writer5-user started
+2018-01-25T16:24:15.202880: Writer writer5-user wrote 250 events
+2018-01-25T16:24:15.202946: Writer writer5-user used 202.01354002953 seconds, avg 1.2375408102024 events/second
+2018-01-25T16:20:53.250682: Writer writer5-post started
+2018-01-25T16:24:00.051657: Writer writer5-post wrote 250 events
+2018-01-25T16:24:00.051707: Writer writer5-post used 186.77825212479 seconds, avg 1.3384855953839 events/second
+2018-01-25T16:20:53.282765: Writer writer5-todo started
+2018-01-25T16:24:18.642834: Writer writer5-todo wrote 250 events
+2018-01-25T16:24:18.642949: Writer writer5-todo used 205.3466629982 seconds, avg 1.2174534338656 events/second
+2018-01-25T16:20:53.281896: Writer writer5-blog started
+2018-01-25T16:24:28.373775: Writer writer5-blog wrote 250 events
+2018-01-25T16:24:28.373884: Writer writer5-blog used 215.0722990036 seconds, avg 1.1623998123339 events/second
+2018-01-25T16:20:53.302482: Writer writer5-comment started
+2018-01-25T16:24:31.008909: Writer writer5-comment wrote 250 events
+2018-01-25T16:24:31.009008: Writer writer5-comment used 217.70221304893 seconds, avg 1.148357641839 events/second
+2018-01-25T16:20:53.234376: Writer writer6-user started
+2018-01-25T16:24:21.261300: Writer writer6-user wrote 250 events
+2018-01-25T16:24:21.261346: Writer writer6-user used 208.01429581642 seconds, avg 1.2018404745635 events/second
+2018-01-25T16:20:53.274195: Writer writer6-post started
+2018-01-25T16:23:51.007706: Writer writer6-post wrote 250 events
+2018-01-25T16:23:51.007746: Writer writer6-post used 177.71339392662 seconds, avg 1.4067594708322 events/second
+2018-01-25T16:20:53.235837: Writer writer6-todo started
+2018-01-25T16:24:13.577866: Writer writer6-todo wrote 250 events
+2018-01-25T16:24:13.577897: Writer writer6-todo used 200.3130569458 seconds, avg 1.2480464519477 events/second
+2018-01-25T16:20:53.175922: Writer writer6-blog started
+2018-01-25T16:24:23.082473: Writer writer6-blog wrote 250 events
+2018-01-25T16:24:23.082532: Writer writer6-blog used 209.90136885643 seconds, avg 1.1910355866759 events/second
+2018-01-25T16:20:53.170251: Writer writer6-comment started
+2018-01-25T16:24:31.008909: Writer writer6-comment wrote 250 events
+2018-01-25T16:24:31.009003: Writer writer6-comment used 217.81756591797 seconds, avg 1.147749489103 events/second
+2018-01-25T16:20:53.177352: Writer writer7-user started
+2018-01-25T16:24:26.759980: Writer writer7-user wrote 250 events
+2018-01-25T16:24:26.760104: Writer writer7-user used 213.5663228035 seconds, avg 1.170596546863 events/second
+2018-01-25T16:20:53.310061: Writer writer7-post started
+2018-01-25T16:24:29.064256: Writer writer7-post wrote 250 events
+2018-01-25T16:24:29.064298: Writer writer7-post used 215.7428021431 seconds, avg 1.1587872110523 events/second
+2018-01-25T16:20:53.158756: Writer writer7-todo started
+2018-01-25T16:24:15.203667: Writer writer7-todo wrote 250 events
+2018-01-25T16:24:15.203719: Writer writer7-todo used 202.02996492386 seconds, avg 1.2374401990033 events/second
+2018-01-25T16:20:53.228585: Writer writer7-blog started
+2018-01-25T16:24:31.541195: Writer writer7-blog wrote 250 events
+2018-01-25T16:24:31.541218: Writer writer7-blog used 218.25886106491 seconds, avg 1.1454288672644 events/second
+2018-01-25T16:20:53.269327: Writer writer7-comment started
+2018-01-25T16:24:29.760725: Writer writer7-comment wrote 250 events
+2018-01-25T16:24:29.760750: Writer writer7-comment used 216.47425889969 seconds, avg 1.1548717213341 events/second
+2018-01-25T16:20:53.250225: Writer writer8-user started
+2018-01-25T16:24:31.473021: Writer writer8-user wrote 250 events
+2018-01-25T16:24:31.473058: Writer writer8-user used 218.21154618263 seconds, avg 1.1456772309874 events/second
+2018-01-25T16:20:53.273975: Writer writer8-post started
+2018-01-25T16:24:31.570573: Writer writer8-post wrote 250 events
+2018-01-25T16:24:31.570604: Writer writer8-post used 218.28118395805 seconds, avg 1.1453117280509 events/second
+2018-01-25T16:20:53.279048: Writer writer8-todo started
+2018-01-25T16:24:09.195418: Writer writer8-todo wrote 250 events
+2018-01-25T16:24:09.195450: Writer writer8-todo used 195.90195894241 seconds, avg 1.2761485456789 events/second
+2018-01-25T16:20:53.274662: Writer writer8-blog started
+2018-01-25T16:24:25.635435: Writer writer8-blog wrote 250 events
+2018-01-25T16:24:25.635501: Writer writer8-blog used 212.35240292549 seconds, avg 1.1772883026321 events/second
+2018-01-25T16:20:53.234876: Writer writer8-comment started
+2018-01-25T16:24:14.602682: Writer writer8-comment wrote 250 events
+2018-01-25T16:24:14.602707: Writer writer8-comment used 201.34312701225 seconds, avg 1.2416614547999 events/second
+2018-01-25T16:20:53.302060: Writer writer9-user started
+2018-01-25T16:24:02.464379: Writer writer9-user wrote 250 events
+2018-01-25T16:24:02.464472: Writer writer9-user used 189.15141105652 seconds, avg 1.3216924928215 events/second
+2018-01-25T16:20:53.227757: Writer writer9-post started
+2018-01-25T16:24:10.442570: Writer writer9-post wrote 250 events
+2018-01-25T16:24:10.442599: Writer writer9-post used 197.17639899254 seconds, avg 1.267900221717 events/second
+2018-01-25T16:20:53.251141: Writer writer9-todo started
+2018-01-25T16:24:30.459757: Writer writer9-todo wrote 250 events
+2018-01-25T16:24:30.459836: Writer writer9-todo used 217.20476698875 seconds, avg 1.1509876300871 events/second
+2018-01-25T16:20:53.156345: Writer writer9-blog started
+2018-01-25T16:24:26.764182: Writer writer9-blog wrote 250 events
+2018-01-25T16:24:26.764249: Writer writer9-blog used 213.60021996498 seconds, avg 1.1704107797313 events/second
+2018-01-25T16:20:53.159771: Writer writer9-comment started
+2018-01-25T16:24:16.069972: Writer writer9-comment wrote 250 events
+2018-01-25T16:24:16.070045: Writer writer9-comment used 202.85549998283 seconds, avg 1.2324043470409 events/second
+2018-01-25T16:20:53.309239: Projection projectorsuser started
+2018-01-25T16:24:32.586078: Projection projectorsuser read 2500 events
+2018-01-25T16:24:32.586107: projection projectorsuser used 219.26849102974 seconds, avg 11.401546972205 events/second
+2018-01-25T16:20:53.270175: Projection projectorspost started
+2018-01-25T16:24:32.594350: Projection projectorspost read 2500 events
+2018-01-25T16:24:32.594374: projection projectorspost used 219.29303479195 seconds, avg 11.400270885812 events/second
+2018-01-25T16:20:53.198129: Projection projectorstodo started
+2018-01-25T16:24:32.535896: Projection projectorstodo read 2500 events
+2018-01-25T16:24:32.535925: projection projectorstodo used 219.32417702675 seconds, avg 11.398652140822 events/second
+2018-01-25T16:20:53.176272: Projection projectorsblog started
+2018-01-25T16:24:32.602517: Projection projectorsblog read 2500 events
+2018-01-25T16:24:32.602540: projection projectorsblog used 219.38318586349 seconds, avg 11.395586175668 events/second
+2018-01-25T16:20:53.294091: Projection projectorscomment started
+2018-01-25T16:24:32.602517: Projection projectorscomment read 2500 events
+2018-01-25T16:24:32.602540: projection projectorscomment used 219.29714393616 seconds, avg 11.400057269911 events/second
+2018-01-25T16:20:53.235374: Projection projectorsall started
+Error 22001. 
+Error-Info: Data too long for column 'position' at row 1
+#0 /app/vendor/prooph/pdo-event-store/src/Projection/PdoEventStoreProjector.php(827): Prooph\EventStore\Pdo\Exception\RuntimeException::fromStatementErrorInfo(Array)
+#1 /app/vendor/prooph/pdo-event-store/src/Projection/PdoEventStoreProjector.php(502): Prooph\EventStore\Pdo\Projection\PdoEventStoreProjector->persist()
+#2 /app/src/AllProjector.php(49): Prooph\EventStore\Pdo\Projection\PdoEventStoreProjector->run()
+#3 /app/src/projector.php(28): Prooph\EventStoreBenchmarks\AllProjector->run()
+#4 {main}
+mariadb real world test duration 220 seconds
+mariadb avg writes 56 events/second
+mariadb avg reads 113 events/second
+
+Dumping logs mariadb!
+Attaching to eventstorebenchmarks_database_1
+[36mdatabase_1  |[0m Initializing database
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m PLEASE REMEMBER TO SET A PASSWORD FOR THE MariaDB root USER !
+[36mdatabase_1  |[0m To do so, start the server, then issue the following commands:
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m '/usr/bin/mysqladmin' -u root password 'new-password'
+[36mdatabase_1  |[0m '/usr/bin/mysqladmin' -u root -h  password 'new-password'
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m Alternatively you can run:
+[36mdatabase_1  |[0m '/usr/bin/mysql_secure_installation'
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m which will also give you the option of removing the test
+[36mdatabase_1  |[0m databases and anonymous user created by default.  This is
+[36mdatabase_1  |[0m strongly recommended for production servers.
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m See the MariaDB Knowledgebase at http://mariadb.com/kb or the
+[36mdatabase_1  |[0m MySQL manual for more instructions.
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m Please report any problems at http://mariadb.org/jira
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m The latest information about MariaDB is available at http://mariadb.org/.
+[36mdatabase_1  |[0m You can find additional information about the MySQL part at:
+[36mdatabase_1  |[0m http://dev.mysql.com
+[36mdatabase_1  |[0m Consider joining MariaDB's strong and vibrant community:
+[36mdatabase_1  |[0m https://mariadb.org/get-involved/
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m Database initialized
+[36mdatabase_1  |[0m MySQL init process in progress...
+[36mdatabase_1  |[0m 2018-01-25 16:20:16 0 [Note] mysqld (mysqld 10.3.2-MariaDB-10.3.2+maria~jessie) starting as process 99 ...
+[36mdatabase_1  |[0m 2018-01-25 16:20:16 0 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+[36mdatabase_1  |[0m 2018-01-25 16:20:16 0 [Note] InnoDB: Uses event mutexes
+[36mdatabase_1  |[0m 2018-01-25 16:20:16 0 [Note] InnoDB: Compressed tables use zlib 1.2.8
+[36mdatabase_1  |[0m 2018-01-25 16:20:16 0 [Note] InnoDB: Using Linux native AIO
+[36mdatabase_1  |[0m 2018-01-25 16:20:16 0 [Note] InnoDB: Number of pools: 1
+[36mdatabase_1  |[0m 2018-01-25 16:20:16 0 [Note] InnoDB: Using SSE2 crc32 instructions
+[36mdatabase_1  |[0m 2018-01-25 16:20:16 0 [Note] InnoDB: Initializing buffer pool, total size = 18G, instances = 8, chunk size = 128M
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: Completed initialization of buffer pool
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: If the mysqld execution user is authorized, page cleaner thread priority can be changed. See the man page of setpriority().
+[36mdatabase_1  |[0m MySQL init process in progress...
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: 128 out of 128 rollback segments are active.
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: Waiting for purge to start
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: 5.7.19 started; log sequence number 1622303
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/ib_buffer_pool
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] Plugin 'FEEDBACK' is disabled.
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] InnoDB: Buffer pool(s) load completed at 180125 16:20:17
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Warning] 'user' entry 'root@a196dc1622c3' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Warning] 'proxies_priv' entry '@% root@a196dc1622c3' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] Reading of all Master_info entries succeded
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] Added new Master_info '' to hash table
+[36mdatabase_1  |[0m 2018-01-25 16:20:17 0 [Note] mysqld: ready for connections.
+[36mdatabase_1  |[0m Version: '10.3.2-MariaDB-10.3.2+maria~jessie'  socket: '/var/run/mysqld/mysqld.sock'  port: 0  mariadb.org binary distribution
+[36mdatabase_1  |[0m Warning: Unable to load '/usr/share/zoneinfo/leap-seconds.list' as time zone. Skipping it.
+[36mdatabase_1  |[0m 2018-01-25 16:20:19 10 [Warning] 'proxies_priv' entry '@% root@a196dc1622c3' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25 16:20:19 14 [Warning] 'proxies_priv' entry '@% root@a196dc1622c3' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m 2018-01-25 16:20:19 0 [Note] mysqld (unknown): Normal shutdown
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m 2018-01-25 16:20:19 0 [Note] Event Scheduler: Purging the queue. 0 events
+[36mdatabase_1  |[0m 2018-01-25 16:20:19 0 [Note] InnoDB: FTS optimize thread exiting.
+[36mdatabase_1  |[0m 2018-01-25 16:20:19 0 [Note] InnoDB: Starting shutdown...
+[36mdatabase_1  |[0m 2018-01-25 16:20:19 0 [Note] InnoDB: Dumping buffer pool(s) to /var/lib/mysql/ib_buffer_pool
+[36mdatabase_1  |[0m 2018-01-25 16:20:19 0 [Note] InnoDB: Buffer pool(s) dump completed at 180125 16:20:19
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] InnoDB: Shutdown completed; log sequence number 1622322
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] InnoDB: Removed temporary tablespace data file: "ibtmp1"
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] mysqld: Shutdown complete
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m MySQL init process done. Ready for start up.
+[36mdatabase_1  |[0m 
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] mysqld (mysqld 10.3.2-MariaDB-10.3.2+maria~jessie) starting as process 1 ...
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] InnoDB: Uses event mutexes
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] InnoDB: Compressed tables use zlib 1.2.8
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] InnoDB: Using Linux native AIO
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] InnoDB: Number of pools: 1
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] InnoDB: Using SSE2 crc32 instructions
+[36mdatabase_1  |[0m 2018-01-25 16:20:20 0 [Note] InnoDB: Initializing buffer pool, total size = 18G, instances = 8, chunk size = 128M
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: Completed initialization of buffer pool
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: If the mysqld execution user is authorized, page cleaner thread priority can be changed. See the man page of setpriority().
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: 128 out of 128 rollback segments are active.
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: Waiting for purge to start
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: 5.7.19 started; log sequence number 1622322
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/ib_buffer_pool
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] Plugin 'FEEDBACK' is disabled.
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] InnoDB: Buffer pool(s) load completed at 180125 16:20:21
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] Server socket created on IP: '::'.
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Warning] 'proxies_priv' entry '@% root@a196dc1622c3' ignored in --skip-name-resolve mode.
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] Reading of all Master_info entries succeded
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] Added new Master_info '' to hash table
+[36mdatabase_1  |[0m 2018-01-25 16:20:21 0 [Note] mysqld: ready for connections.
+[36mdatabase_1  |[0m Version: '10.3.2-MariaDB-10.3.2+maria~jessie'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  mariadb.org binary distribution
