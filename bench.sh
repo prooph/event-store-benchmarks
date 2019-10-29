@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-USAGE="Usage: bench.sh --driver [arangodb | postgres | mysql | mariadb] [--strategy Single | Simple | Aggregate]"
+USAGE="Usage: bench.sh --driver [arangodb | postgres | mysql | mariadb | mongodb] [--strategy Single | Simple | Aggregate]"
 
 DRIVER=
 STREAM_STRATEGY=
@@ -40,7 +40,7 @@ export DRIVER=${DRIVER}
 export STREAM_STRATEGY=${STRATEGY}
 
 echo ""
-echo "Starting benchmark ${DRIVER}!"
+echo "Starting benchmark ${DRIVER} with strategy ${STRATEGY}!"
 php src/prepare.php
 php src/benchmark.php
 php src/cleanup.php

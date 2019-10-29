@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-USAGE="Usage: bench_docker.sh --driver [arangodb | postgres | mysql | mariadb] [--strategy Single | Simple | Aggregate]"
+USAGE="Usage: bench_docker.sh --driver [arangodb | postgres | mysql | mariadb | mongodb] [--strategy Single | Simple | Aggregate]"
 
 IDLE_TIME=40
 DRIVER=
@@ -68,8 +68,16 @@ sed -i "s/#mem_reservation: dbmem_reservation/mem_reservation: ${MEM}M/g" docker
 
 sed -i "s/BUFFER_POOL_SIZE/${BUFFER_POOL_SIZE}M/g" docker-compose.yml
 
-docker-compose up -d --no-recreate database
+docker-compose up -d --no-recreate
 docker-compose ps
+
+if [ ${DRIVER} == "mongodb" ]; then
+    sleep 2
+    docker-compose exec mongodb0 sh init.sh
+    sleep 1
+    docker-compose exec mongodb0 sh status.sh
+    sleep 1
+fi
 
 echo ""
 echo ""

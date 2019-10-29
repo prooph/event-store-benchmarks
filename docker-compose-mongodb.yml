@@ -1,0 +1,59 @@
+version: '2.3'
+services:
+  # To run benchmark suite docker-compose run --rm php src/benchmark
+  php:
+    image: prooph/php:7.2-cli
+    environment:
+      DRIVER: "arangodb"
+      PHP_IDE_CONFIG: "serverName=application"
+      MONGODB_HOST: "mongodb://node0.mongodb.local:27017,node1.mongodb.local:27017,node2.mongodb.local:27017/replicaSet=cluster"
+      MONGODB_DB: event_store_bench
+    volumes:
+      - "./:/app"
+    #cpuset: phpcpuset
+    #cpu_count: phpcpu_count
+    #mem_limit: phpmem_limit
+    #mem_reservation: phpmem_reservation
+
+  mongodb0:
+    build: ./env/docker/mongo
+    command: ['mongod', '--config', '/etc/mongod.conf']
+    ports:
+    - "27017:27017"
+    hostname: node0.mongodb.local
+    networks:
+      default:
+        aliases:
+        - node0.mongodb.local
+    #cpuset: dbcpuset
+    #cpu_count: dbcpu_count
+    #mem_limit: dbmem_limit
+    #mem_reservation: dbmem_reservation
+
+  mongodb1:
+    build: ./env/docker/mongo
+    command: ['mongod', '--config', '/etc/mongod.conf']
+    ports:
+    - "27018:27017"
+    hostname: node1.mongodb.local
+    networks:
+      default:
+        aliases:
+        - node1.mongodb.local
+    #cpuset: dbcpuset
+    #cpu_count: dbcpu_count
+    #mem_limit: dbmem_limit
+
+  mongodb2:
+    build: ./env/docker/mongo
+    command: ['mongod', '--config', '/etc/mongod.conf']
+    ports:
+    - "27019:27017"
+    hostname: node2.mongodb.local
+    networks:
+      default:
+        aliases:
+        - node2.mongodb.local
+    #cpuset: dbcpuset
+    #cpu_count: dbcpu_count
+    #mem_limit: dbmem_limit
