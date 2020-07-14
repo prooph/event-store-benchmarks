@@ -74,16 +74,6 @@ wait
 
 end=$(adjtimex | awk '/(time.tv_sec|time.tv_usec):/ { printf("%07d", $2) }')
 
-WRITER_COUNTER=0
-while [  ${WRITER_COUNTER} -lt ${WRITER_ITERATIONS} ]; do
-    for type in user post todo blog comment
-    do
-        cat logs/writer${WRITER_COUNTER}${type}.log
-    done
-
-    WRITER_COUNTER=$((WRITER_COUNTER + 1))
-done
-
 echo ""
 duration=$((end - start))
 duration=$(printf ${duration} | awk '{ printf("%.08f\n", $1/1000000000.0) }' )
