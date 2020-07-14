@@ -59,14 +59,14 @@ start=$(adjtimex | awk '/(time.tv_sec|time.tv_usec):/ { printf("%07d", $2) }')
 while [  ${WRITER_COUNTER} -lt ${WRITER_ITERATIONS} ]; do
     for type in user post todo blog comment
     do
-        php src/writer.php writer${WRITER_COUNTER} ${type} >logs/writer${WRITER_COUNTER}${type}.log &
+        php src/writer.php writer${WRITER_COUNTER} ${type} | tee logs/writer${WRITER_COUNTER}${type}.log &
     done
     WRITER_COUNTER=$((WRITER_COUNTER + 1))
 done
 
 for type in user post todo blog comment all
 do
-    php src/projector.php projectors${type} ${type} >logs/projector${type}.log &
+    php src/projector.php projectors${type} ${type} | tee logs/writer${WRITER_COUNTER}${type}.log &
 done
 
 echo "Waiting ... stay patient!"
@@ -82,11 +82,6 @@ while [  ${WRITER_COUNTER} -lt ${WRITER_ITERATIONS} ]; do
     done
 
     WRITER_COUNTER=$((WRITER_COUNTER + 1))
-done
-
-for type in user post todo blog comment all
-do
-   cat logs/projector${type}.log
 done
 
 echo ""
