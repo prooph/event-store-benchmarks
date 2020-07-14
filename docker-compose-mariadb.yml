@@ -2,7 +2,7 @@ version: '2.3'
 services:
   # To run benchmark suite docker-compose run --rm php src/benchmark
   php:
-    image: prooph/php:7.2-cli
+    image: prooph/php:7.4-cli
     environment:
       DRIVER: "mariadb"
       MARIADB_USER: "dev"
