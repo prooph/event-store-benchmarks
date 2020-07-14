@@ -19,7 +19,7 @@ services:
     #mem_reservation: phpmem_reservation
 
   database:
-    image: mariadb:10.4.1
+    image: mariadb:10.5.4
     ports:
       - 3306
     environment:

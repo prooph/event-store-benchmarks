@@ -19,10 +19,9 @@ services:
     #mem_reservation: phpmem_reservation
 
   database:
-    # mysql 8.0 not working properly
-    # see https://github.com/docker-library/mysql/issues/303
-    #image: mysql:8.0.13
-    image: mysql:5.7.24
+    image: mysql:8.0.21
+    cap_add:
+      - SYS_NICE
     ports:
       - 3306
     environment:
