@@ -71,6 +71,7 @@ class StreamCreator
             outputText(" ok\n", false);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            throw $e;
         }
     }
 }

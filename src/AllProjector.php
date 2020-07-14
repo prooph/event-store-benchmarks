@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Prooph\EventStoreBenchmarks;
 
 use Prooph\Common\Messaging\Message;
+use Prooph\EventStore\Pdo\Projection\PdoEventStoreProjector;
 use Prooph\EventStore\Util\Assertion;
 
 class AllProjector
@@ -33,7 +34,15 @@ class AllProjector
 
             $start = \microtime(true);
 
-            $projection = $projectionManager->createProjection('all_projection');
+            $projection = $projectionManager->createProjection(
+                'all_projection',
+                [
+                    PdoEventStoreProjector::OPTION_PERSIST_BLOCK_SIZE => 50,
+                    PdoEventStoreProjector::OPTION_CACHE_SIZE => 50,
+                    PdoEventStoreProjector::OPTION_SLEEP => 10000,
+                    PdoEventStoreProjector::OPTION_PCNTL_DISPATCH => true,
+                ]
+            );
             $projection
                 ->init(function (): array {
                     return ['count' => 0];
@@ -63,6 +72,7 @@ class AllProjector
             outputText(" ok\n", false);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            throw $e;
         }
     }
 }

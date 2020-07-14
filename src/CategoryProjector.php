@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Prooph\EventStoreBenchmarks;
 
 use Prooph\Common\Messaging\Message;
+use Prooph\EventStore\Pdo\Projection\PdoEventStoreProjector;
 use Prooph\EventStore\Util\Assertion;
 use Ramsey\Uuid\Uuid;
 
@@ -37,7 +38,15 @@ class CategoryProjector
             $start = \microtime(true);
             $uuid = Uuid::uuid4()->toString();
 
-            $projection = $projectionManager->createProjection('category_projection_' . $uuid);
+            $projection = $projectionManager->createProjection(
+                'category_projection_' . $uuid,
+                [
+                    PdoEventStoreProjector::OPTION_PERSIST_BLOCK_SIZE => 50,
+                    PdoEventStoreProjector::OPTION_CACHE_SIZE => 50,
+                    PdoEventStoreProjector::OPTION_SLEEP => 10000,
+                    PdoEventStoreProjector::OPTION_PCNTL_DISPATCH => true,
+                ]
+            );
             $projection
                 ->init(function (): array {
                     return ['count' => 0];
@@ -67,6 +76,7 @@ class CategoryProjector
             outputText(" ok\n", false);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            throw $e;
         }
     }
 }

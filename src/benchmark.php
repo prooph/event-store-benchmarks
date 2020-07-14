@@ -7,6 +7,7 @@ namespace Prooph\EventStoreBenchmarks;
 use Dotenv\Dotenv;
 use Prooph\Common\Messaging\Message;
 use Prooph\EventStore\EventStore;
+use Prooph\EventStore\Pdo\Projection\PdoEventStoreProjector;
 use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStore\Stream;
 use Prooph\EventStore\StreamName;
@@ -143,7 +144,7 @@ foreach ($eventStores as $name => $eventStore) {
     $eventsPerSecond = 2500 / $time;
 
     outputText("test 3 using $name took $time seconds");
-    outputText("test 3 using $name writes $eventsPerSecond events per second\n");
+    outputText("test 3 using $name writes $eventsPerSecond events per second");
     outputText('test 3 checking integrity ...', true, '');
     checkWriteIntegrity($eventStore, $numberStreams[$name], $numberEvents[$name]);
     outputText(" ok\n", false);
@@ -178,7 +179,15 @@ outputText("test 5 project 1 stream with 2500 events\n");
 
 foreach ($projectionManagers as $name => $projectionManager) {
     /* @var ProjectionManager $projectionManager */
-    $projection = $projectionManager->createProjection('test_projection_5');
+    $projection = $projectionManager->createProjection(
+        'test_projection_5',
+        [
+            PdoEventStoreProjector::OPTION_PERSIST_BLOCK_SIZE => 50,
+            PdoEventStoreProjector::OPTION_CACHE_SIZE => 50,
+            PdoEventStoreProjector::OPTION_SLEEP => 10000,
+            PdoEventStoreProjector::OPTION_PCNTL_DISPATCH => true,
+        ]
+    );
     $projection
         ->init(function (): array {
             return ['count' => 0];
@@ -213,7 +222,15 @@ foreach ($projectionManagers as $name => $projectionManager) {
     foreach ($streamNamesTest1[$name] as $streamName) {
         $streamNames[] = $streamName->toString();
     }
-    $projection = $projectionManager->createProjection('test_projection_6');
+    $projection = $projectionManager->createProjection(
+        'test_projection_6',
+        [
+            PdoEventStoreProjector::OPTION_PERSIST_BLOCK_SIZE => 50,
+            PdoEventStoreProjector::OPTION_CACHE_SIZE => 50,
+            PdoEventStoreProjector::OPTION_SLEEP => 10000,
+            PdoEventStoreProjector::OPTION_PCNTL_DISPATCH => true,
+        ]
+    );
     $projection
         ->init(function (): array {
             return ['count' => 0];
