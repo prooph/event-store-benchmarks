@@ -66,7 +66,7 @@ done
 
 for type in user post todo blog comment all
 do
-    php src/projector.php projectors${type} ${type} | tee logs/writer${WRITER_COUNTER}${type}.log &
+    php src/projector.php projectors${type} ${type} | tee logs/projector${type}.log &
 done
 
 echo "Waiting ... stay patient!"
