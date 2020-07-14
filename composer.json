@@ -5,7 +5,7 @@
   "prefer-stable": true,
   "require":{
     "prooph/pdo-event-store":"^1.10",
-    "prooph/arangodb-event-store":"^0.2.0",
+    "prooph/arangodb-event-store":"^0.2.1",
     "vlucas/phpdotenv": "^2.4",
     "laminas/laminas-diactoros": "^2.3.0",
     "filp/whoops": "^2.7"
