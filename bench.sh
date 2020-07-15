@@ -40,6 +40,7 @@ export DRIVER=${DRIVER}
 export STREAM_STRATEGY=${STRATEGY}
 
 echo ""
+php -v
 echo "Starting benchmark ${DRIVER}!"
 php src/prepare.php
 php src/benchmark.php
@@ -54,7 +55,8 @@ php src/prepare.php
 WRITER_COUNTER=0
 WRITER_ITERATIONS=10
 
-start=$(adjtimex | awk '/(time.tv_sec|time.tv_usec):/ { printf("%07d", $2) }')
+read up rest </proc/uptime;
+start=${up%.*}${up#*.}
 
 while [  ${WRITER_COUNTER} -lt ${WRITER_ITERATIONS} ]; do
     for type in user post todo blog comment
@@ -72,11 +74,14 @@ done
 echo "Waiting ... stay patient!"
 wait
 
-end=$(adjtimex | awk '/(time.tv_sec|time.tv_usec):/ { printf("%07d", $2) }')
+read up rest </proc/uptime;
+end=${up%.*}${up#*.}
 
 echo ""
-duration=$((end - start))
-duration=$(printf ${duration} | awk '{ printf("%.08f\n", $1/1000000000.0) }' )
+# it's in ms
+duration=$((10*(end - start)))
+
+duration=$(printf ${duration} | awk '{ printf("%.08f\n", $1/1000.0) }' )
 printf "%s real world test duration %s seconds\\n" "${DRIVER} - ${STRATEGY}" "${duration}";
 
 avgWriters=$(printf ${duration} | awk '{ printf("%.08f\n", 12500/$1) }' )
