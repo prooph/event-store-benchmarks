@@ -41,16 +41,24 @@ class StreamCreator
 
             $start = \microtime(true);
 
+            $streamName = new StreamName($this->category . '-' . $this->id);
+
             for ($i = 0; $i < $this->executions; $i++) {
                 $count += $this->numberOfEvents;
-                $streamName = $this->category . '-' . Uuid::uuid4()->toString();
                 $events = createTestEvents(testPayload(), $this->numberOfEvents);
 
                 if ($eventStore instanceof TransactionalEventStore) {
                     $eventStore->beginTransaction();
                 }
 
-                $eventStore->create(new Stream(new StreamName($streamName), \SplFixedArray::fromArray($events)));
+                if (getenv('STREAM_STRATEGY') === 'Aggregate') {
+                    $streamName = $this->category . '-' . Uuid::uuid4()->toString();
+                    $eventStore->create(new Stream(new StreamName($streamName), \SplFixedArray::fromArray($events)));
+                } elseif ($i === 0 && $eventStore->hasStream($streamName) === false) {
+                    $eventStore->create(new Stream($streamName, \SplFixedArray::fromArray($events)));
+                } else {
+                    $eventStore->appendTo($streamName, \SplFixedArray::fromArray($events));
+                }
 
                 if ($eventStore instanceof TransactionalEventStore) {
                     $eventStore->commit();
