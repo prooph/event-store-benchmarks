@@ -252,4 +252,5 @@ foreach ($projectionManagers as $name => $projectionManager) {
     outputText('test 6 checking integrity ...', true, '');
     Assertion::eq($projection->getState()['count'], 1000, 'Number of projected events invalid: Value "%s" does not equal expected value "%s".');
     outputText(" ok\n", false);
+    outputText( "Mem usage/peak: " . getMemoryConsumption() . PHP_EOL, false);
 }

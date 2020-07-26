@@ -73,7 +73,7 @@ class StreamCreator
             $avg = ($this->executions * $this->numberOfEvents) / $time;
 
             outputText("Writer $this->id-$this->category wrote $this->eventsWritten events");
-            outputText("Writer $this->id-$this->category used $time seconds, avg $avg events/second");
+            outputText("Writer $this->id-$this->category used $time seconds, avg $avg events/second " . getMemoryConsumption());
             outputText("Writer $this->id checking integrity ...", true, '');
             Assertion::eq($count, $this->numberOfEvents * $this->executions, 'Number of writer events invalid: Value "%s" does not equal expected value "%s".');
             outputText(" ok\n", false);

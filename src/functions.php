@@ -400,3 +400,11 @@ function getStreamHandlerFactory(): StreamHandlerFactoryInterface
 {
     return new ArrayStreamHandlerFactory();
 }
+
+function getMemoryConsumption(): string
+{
+    $memUsage = memory_get_usage();
+    $memPeak = memory_get_peak_usage();
+
+    return '(' . round($memUsage / 1024 / 1024, 2) . 'MB / ' . round($memPeak / 1024 / 1024, 2) . ' MB)';
+}
