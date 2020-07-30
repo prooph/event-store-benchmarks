@@ -4,9 +4,9 @@ USAGE="Usage: bench_docker.sh --driver [arangodb | postgres | mysql | mariadb] [
 
 IDLE_TIME=40
 DRIVER=
-STREAM_STRATEGY=
+STRATEGY=
 
-while [[ ${1} ]]; do
+while [ ${1} ]; do
     case "${1}" in
         --driver)
             DRIVER=${2}

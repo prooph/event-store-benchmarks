@@ -5,7 +5,7 @@ USAGE="Usage: bench.sh --driver [arangodb | postgres | mysql | mariadb] [--strat
 DRIVER=
 STREAM_STRATEGY=
 
-while [[ ${1} ]]; do
+while [ ${1} ]; do
     case "${1}" in
         --driver)
             DRIVER=${2}
@@ -41,6 +41,7 @@ export STREAM_STRATEGY=${STRATEGY}
 
 echo ""
 php -v
+
 echo "Starting benchmark ${DRIVER}!"
 php src/prepare.php
 php src/benchmark.php
