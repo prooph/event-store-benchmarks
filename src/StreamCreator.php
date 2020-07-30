@@ -41,16 +41,24 @@ class StreamCreator
 
             $start = \microtime(true);
 
+            $streamName = new StreamName($this->category . '-' . $this->id);
+
             for ($i = 0; $i < $this->executions; $i++) {
                 $count += $this->numberOfEvents;
-                $streamName = $this->category . '-' . Uuid::uuid4()->toString();
                 $events = createTestEvents(testPayload(), $this->numberOfEvents);
 
                 if ($eventStore instanceof TransactionalEventStore) {
                     $eventStore->beginTransaction();
                 }
 
-                $eventStore->create(new Stream(new StreamName($streamName), \SplFixedArray::fromArray($events)));
+                if (getenv('STREAM_STRATEGY') === 'Aggregate') {
+                    $streamName = $this->category . '-' . Uuid::uuid4()->toString();
+                    $eventStore->create(new Stream(new StreamName($streamName), \SplFixedArray::fromArray($events)));
+                } elseif ($i === 0 && $eventStore->hasStream($streamName) === false) {
+                    $eventStore->create(new Stream($streamName, \SplFixedArray::fromArray($events)));
+                } else {
+                    $eventStore->appendTo($streamName, \SplFixedArray::fromArray($events));
+                }
 
                 if ($eventStore instanceof TransactionalEventStore) {
                     $eventStore->commit();
@@ -65,12 +73,13 @@ class StreamCreator
             $avg = ($this->executions * $this->numberOfEvents) / $time;
 
             outputText("Writer $this->id-$this->category wrote $this->eventsWritten events");
-            outputText("Writer $this->id-$this->category used $time seconds, avg $avg events/second");
+            outputText("Writer $this->id-$this->category used $time seconds, avg $avg events/second " . getMemoryConsumption());
             outputText("Writer $this->id checking integrity ...", true, '');
             Assertion::eq($count, $this->numberOfEvents * $this->executions, 'Number of writer events invalid: Value "%s" does not equal expected value "%s".');
             outputText(" ok\n", false);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            throw $e;
         }
     }
 }
